@@ -214,7 +214,7 @@ SETTLE_PG.pay({
 
 ### 📋 요청/응답 헤더
 
-```
+```http
 Content-type: application/json; charset=UTF-8
 ```
 
@@ -261,13 +261,13 @@ fetch('https://tbgw.settlebank.co.kr/spay/APICard.do', {
 ### 🖥️ 서버 IP 주소
 
 **테스트베드 환경:**
-```
+```bash
 203.238.37.3    tbnpg.settlebank.co.kr
 203.238.37.3    tbgw.settlebank.co.kr
 ```
 
 **상용 환경:**
-```
+```bash
 203.238.37.4    npg.settlebank.co.kr
 203.238.37.4    gw.settlebank.co.kr
 ```
@@ -277,7 +277,7 @@ fetch('https://tbgw.settlebank.co.kr/spay/APICard.do', {
 **Windows:** `C:\Windows\System32\drivers\etc\hosts`
 **Linux/Mac:** `/etc/hosts`
 
-```
+```bash
 203.238.37.3    tbnpg.settlebank.co.kr
 203.238.37.3    tbgw.settlebank.co.kr
 ```
@@ -303,6 +303,154 @@ fetch('https://tbgw.settlebank.co.kr/spay/APICard.do', {
 
 ---
 
+## 🧪 테스트베드 환경
+
+### 🌐 테스트베드 서버 정보
+
+테스트 및 개발을 위한 환경 정보입니다:
+
+<ParameterCard
+  name="테스트베드 도메인"
+  type="URL"
+  required={true}
+  description="헥토파이낸셜 테스트베드 결제창 서버 도메인입니다."
+  example="tbnpg.settlebank.co.kr"
+/>
+
+<ParameterCard
+  name="테스트베드 IP (결제창)"
+  type="IP Address"
+  required={false}
+  description="테스트베드 결제창 서버의 IP 주소입니다. 방화벽 설정 시 참고하세요."
+  example="61.252.169.51"
+  note="HTTPS(TCP/443) 포트를 사용합니다."
+/>
+
+<ParameterCard
+  name="API 서버 도메인"
+  type="URL"
+  required={true}
+  description="Non-UI API 서비스를 위한 테스트베드 도메인입니다."
+  example="tbgw.settlebank.co.kr"
+/>
+
+<ParameterCard
+  name="API 서버 IP (테스트베드)"
+  type="IP Address"
+  required={false}
+  description="테스트베드 API 서버의 IP 주소입니다."
+  example="61.252.169.42"
+  note="취소 및 기타 API 서비스용 IP입니다."
+/>
+
+### 🌐 운영 환경 서버 정보
+
+**운영 환경 사용 시 참고하세요:**
+
+<ParameterCard
+  name="운영 결제창 도메인"
+  type="URL"
+  required={false}
+  description="운영 환경 결제창 서버 도메인입니다."
+  example="npg.settlebank.co.kr"
+/>
+
+<ParameterCard
+  name="운영 API 서버 도메인"
+  type="URL"
+  required={false}
+  description="운영 환경 API 서버 도메인입니다."
+  example="gw.settlebank.co.kr"
+  note="취소 및 기타 API 서비스용 도메인입니다."
+/>
+
+<ParameterCard
+  name="운영 결제창 IP"
+  type="IP Address"
+  required={false}
+  description="운영 환경 결제창 서버 IP 주소입니다. Primary/Secondary 구성되어 있습니다."
+  example="14.34.14.25 (Primary), 61.252.169.58 (Secondary)"
+  note="IDC 센터 이중화 구성으로 GLB 시스템 운영됩니다."
+/>
+
+<ParameterCard
+  name="운영 API 서버 IP"
+  type="IP Address"
+  required={false}
+  description="운영 환경 API 서버 IP 주소입니다."
+  example="14.34.14.21 (Primary), 61.252.169.53 (Secondary)"
+  note="취소 및 기타 API 서비스용 IP입니다."
+/>
+
+### 🔑 테스트용 인증 정보
+
+**⚠️ 주의: 다음 정보는 테스트 전용입니다. 운영 환경에서는 절대 사용하지 마세요!**
+
+<ParameterCard
+  name="테스트용 암호화키"
+  type="string(32)"
+  required={true}
+  description="개인정보 및 중요정보 암호화에 사용되는 테스트용 공용 키입니다."
+  example="pgSettle30y739r82jtd709yOfZ2yK5K"
+  note="AES-256/ECB/PKCS5Padding 알고리즘 + Base64 인코딩을 사용합니다."
+/>
+
+<ParameterCard
+  name="테스트용 해시키"
+  type="string(21)"
+  required={true}
+  description="위변조 방지를 위한 해시 생성에 사용되는 테스트용 인증 키입니다."
+  example="ST1009281328226982205"
+  note="SHA-256 알고리즘 + Hex 인코딩(소문자)을 사용하여 해시를 생성합니다."
+/>
+
+### 💡 테스트 환경 사용법
+
+```javascript
+// 테스트베드 환경 설정 예시
+const testConfig = {
+  // 결제창 환경
+  env: "https://tbnpg.settlebank.co.kr",
+  
+  // API 서버 환경  
+  apiUrl: "https://tbgw.settlebank.co.kr",
+  
+  // 암호화키 (실제로는 환경변수에서 가져오세요)
+  encryptionKey: "pgSettle30y739r82jtd709yOfZ2yK5K",
+  
+  // 해시키 (실제로는 환경변수에서 가져오세요)
+  hashKey: "ST1009281328226982205"
+};
+
+// 운영 환경 설정 예시
+const prodConfig = {
+  // 결제창 환경
+  env: "https://npg.settlebank.co.kr",
+  
+  // API 서버 환경
+  apiUrl: "https://gw.settlebank.co.kr",
+  
+  // 암호화키 (헥토파이낸셜에서 발급받은 고유 키)
+  encryptionKey: process.env.HECTO_ENCRYPTION_KEY,
+  
+  // 해시키 (헥토파이낸셜에서 발급받은 고유 키)  
+  hashKey: process.env.HECTO_HASH_KEY
+};
+
+// 상점아이디는 각 결제 수단별로 다릅니다:
+// - 신용카드 인증: nxca_jt_il (테스트), 실제상점ID (운영)
+// - 신용카드 비인증: nxca_jt_bi (테스트), 실제상점ID (운영)  
+// - 신용카드 구인증: nxca_jt_gu (테스트), 실제상점ID (운영)
+// (자세한 내용은 각 결제 수단 챕터를 참고하세요)
+```
+
+**🚨 중요 사항:**
+- 테스트베드에서 발생하는 모든 거래는 **실제 결제되지 않습니다**
+- 운영 환경 이행 시 **헥토파이낸셜에서 별도 제공하는 고유 키**를 사용해야 합니다
+- 테스트용 키를 운영 환경에 사용하면 **보안 문제**가 발생할 수 있습니다
+
+---
+
 ## 🔒 중요 정보 보안
 
 ### 🔐 개인정보 암복호화
@@ -319,26 +467,29 @@ fetch('https://tbgw.settlebank.co.kr/spay/APICard.do', {
 
 ### 🔑 AES 암호화 방식
 
+**알고리즘**: AES-256/ECB/PKCS5Padding + **Base64 인코딩**
+
 ```javascript
-// AES-128-ECB 암호화 예시
+// AES-256-ECB 암호화 예시 (Base64 인코딩)
 const CryptoJS = require('crypto-js');
 
 function encryptAES(plainText, secretKey) {
     const key = CryptoJS.enc.Utf8.parse(secretKey);
     const encrypted = CryptoJS.AES.encrypt(plainText, key, {
         mode: CryptoJS.mode.ECB,
-        padding: CryptoJS.pad.Pkcs7
+        padding: CryptoJS.pad.Pkcs5
     });
-    return encrypted.toString();
+    return encrypted.toString(); // Base64 인코딩된 결과 반환
 }
 
 // 사용 예시
-const encryptedAmount = encryptAES("1000", "your-secret-key");
+const encryptedAmount = encryptAES("1000", "pgSettle30y739r82jtd709yOfZ2yK5K");
+// 결과: "AntV/eDpxIaKF0hJiePDKA==" (Base64 인코딩)
 ```
 
 ### 🛡️ 해시 검증 알고리즘
 
-**SHA256 해시 생성:**
+**알고리즘**: SHA-256 + **Hex 인코딩 (소문자)**
 
 ```javascript
 const crypto = require('crypto');
@@ -350,6 +501,7 @@ function generateHash(data) {
 // 해시 생성 예시 (신용카드 결제)
 const hashData = mchtId + method + mchtTrdNo + trdDt + trdTm + trdAmt + hashKey;
 const pktHash = generateHash(hashData);
+// 결과: "f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c" (Hex 소문자)
 ```
 
 ### 🔐 개인정보 암호키
