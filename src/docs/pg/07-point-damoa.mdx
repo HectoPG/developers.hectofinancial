@@ -1,0 +1,877 @@
+# 🎯 포인트 다모아 결제
+
+포인트 다모아는 다양한 포인트를 통합하여 결제할 수 있는 서비스입니다. 고객이 보유한 여러 포인트를 하나로 모아서 편리하게 결제할 수 있습니다.
+
+## 📖 개요
+
+### 🎯 주요 특징
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+  <div className="bg-gradient-to-r from-orange-50 to-orange-100 p-6 rounded-xl border border-orange-200">
+    <div className="flex items-center mb-3">
+      <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center mr-3">
+        <span className="text-white text-lg">🎯</span>
+      </div>
+      <h3 className="text-lg font-semibold text-gray-900">통합 포인트</h3>
+    </div>
+    <p className="text-gray-700">여러 포인트를 하나로 통합하여 사용할 수 있는 편리한 결제 서비스</p>
+  </div>
+
+  <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200">
+    <div className="flex items-center mb-3">
+      <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
+        <span className="text-white text-lg">🔐</span>
+      </div>
+      <h3 className="text-lg font-semibold text-gray-900">본인 인증</h3>
+    </div>
+    <p className="text-gray-700">CI(고객식별정보) 기반의 안전한 본인 인증 시스템</p>
+  </div>
+
+  <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-xl border border-green-200">
+    <div className="flex items-center mb-3">
+      <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center mr-3">
+        <span className="text-white text-lg">⚡</span>
+      </div>
+      <h3 className="text-lg font-semibold text-gray-900">실시간 처리</h3>
+    </div>
+    <p className="text-gray-700">포인트 잔액 확인부터 결제 완료까지 실시간 처리</p>
+  </div>
+
+  <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-6 rounded-xl border border-purple-200">
+    <div className="flex items-center mb-3">
+      <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center mr-3">
+        <span className="text-white text-lg">📊</span>
+      </div>
+      <h3 className="text-lg font-semibold text-gray-900">포인트 관리</h3>
+    </div>
+    <p className="text-gray-700">포인트 적립, 사용, 잔액 조회 등 종합적인 포인트 관리</p>
+  </div>
+</div>
+
+### 🎁 포인트 다모아 특징
+
+| 기능 | 설명 | 장점 |
+|------|------|------|
+| **통합 관리** | 여러 브랜드 포인트를 하나로 통합 | 포인트 관리 편의성 |
+| **실시간 조회** | 보유 포인트 실시간 확인 | 정확한 잔액 파악 |
+| **안전한 인증** | CI 기반 본인 확인 | 보안성 강화 |
+| **약관 동의** | 포인트 사용 약관 동의 처리 | 법적 안전성 |
+
+---
+
+## ⚡ 빠른 시작
+
+### 1️⃣ 기본 포인트 다모아 결제
+
+```html
+<!-- 헥토파이낸셜 SDK 로드 -->
+<script src="https://tbnpg.settlebank.co.kr/resources/js/v1/SettlePG_v1.2.js"></script>
+
+<script>
+// 포인트 다모아 결제 요청
+SETTLE_PG.pay({
+    env: "https://tbnpg.settlebank.co.kr",
+    mchtId: "nxpt_kt_il",              // 포인트 다모아 상점 ID
+    method: "point",                   // 포인트 결제
+    trdDt: "20231215",                 // 거래일자
+    trdTm: "143022",                   // 거래시간
+    mchtTrdNo: "POINT20231215143022",  // 주문번호
+    mchtName: "테스트상점",
+    mchtEName: "Test Shop",
+    pmtPrdtNm: "테스트상품",
+    trdAmt: "3000",                    // 3,000원
+    mchtCustNm: "홍길동",              // 결제자명
+    clipCustNm: "홍길동",              // 포인트 다모아 고객명
+    clipCustCi: "AES암호화된CI값",      // 고객 CI
+    clipCustPhoneNo: "01012345678",    // 휴대폰번호
+    skipCd: "N",                       // 약관동의 스킵 여부
+    notiUrl: "https://yoursite.com/point/notify",
+    nextUrl: "https://yoursite.com/point/success",
+    cancUrl: "https://yoursite.com/point/cancel",
+    certNotiUrl: "https://yoursite.com/point/cert-notify", // 인증 결과 URL
+    pktHash: "생성된해시값",           // SHA256 해시
+    ui: {
+        type: "popup",
+        width: "430",
+        height: "660"
+    }
+}, function(response) {
+    if (response.outStatCd === "0021") {
+        // 결제 성공
+        console.log("포인트 다모아 결제 성공:", response);
+        alert(`결제 완료!\n거래번호: ${response.trdNo}\n사용포인트: ${response.trdAmt}P`);
+    } else {
+        // 결제 실패
+        console.log("포인트 다모아 결제 실패:", response.outRsltMsg);
+        alert("결제가 실패했습니다: " + response.outRsltMsg);
+    }
+});
+</script>
+```
+
+### 2️⃣ 결제 프로세스
+
+<div className="bg-gray-50 p-6 rounded-xl my-8">
+  <div className="flex items-center justify-between">
+    <div className="flex flex-col items-center text-center">
+      <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-lg mb-2">1</div>
+      <span className="text-sm font-medium text-gray-700">결제 요청</span>
+      <span className="text-xs text-gray-500">가맹점→PG</span>
+    </div>
+    <div className="flex-1 h-0.5 bg-orange-200 mx-4"></div>
+    <div className="flex flex-col items-center text-center">
+      <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-lg mb-2">2</div>
+      <span className="text-sm font-medium text-gray-700">본인 인증</span>
+      <span className="text-xs text-gray-500">CI 확인</span>
+    </div>
+    <div className="flex-1 h-0.5 bg-orange-200 mx-4"></div>
+    <div className="flex flex-col items-center text-center">
+      <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-lg mb-2">3</div>
+      <span className="text-sm font-medium text-gray-700">약관 동의</span>
+      <span className="text-xs text-gray-500">포인트 사용</span>
+    </div>
+    <div className="flex-1 h-0.5 bg-orange-200 mx-4"></div>
+    <div className="flex flex-col items-center text-center">
+      <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-lg mb-2">4</div>
+      <span className="text-sm font-medium text-gray-700">포인트 차감</span>
+      <span className="text-xs text-gray-500">결제 완료</span>
+    </div>
+  </div>
+</div>
+
+---
+
+## 🏗️ 구현 가이드
+
+### 1️⃣ UI 포인트 다모아 결제
+
+#### 📡 API 엔드포인트
+
+| 환경 | URL |
+|------|-----|
+| **테스트** | `https://tbnpg.settlebank.co.kr/point/main.do` |
+| **운영** | `https://npg.settlebank.co.kr/point/main.do` |
+
+#### 📋 요청 파라미터
+
+<ParameterCard
+  name="mchtId"
+  type="string(10)"
+  required={true}
+  description="헥토파이낸셜에서 부여하는 고유 상점아이디입니다."
+  example="nxpt_kt_il"
+  note="포인트 다모아 결제 전용 상점ID를 사용해야 합니다."
+/>
+
+<ParameterCard
+  name="method"
+  type="string(20)"
+  required={true}
+  description="PG 서비스에 해당하는 결제 구분 코드입니다."
+  example="point"
+  note="포인트 다모아의 경우 항상 'point' 고정값을 사용합니다."
+/>
+
+<ParameterCard
+  name="trdDt"
+  type="string(8)"
+  required={true}
+  description="거래 요청 일자입니다. yyyyMMdd 형식으로 전달합니다."
+  example="20231215"
+/>
+
+<ParameterCard
+  name="trdTm"
+  type="string(6)"
+  required={true}
+  description="거래 요청 시간입니다. HH24MISS 형식으로 전달합니다."
+  example="143022"
+/>
+
+<ParameterCard
+  name="mchtTrdNo"
+  type="string(100)"
+  required={true}
+  description="상점에서 생성하는 고유 주문번호입니다. 포인트 다모아 결제 추적과 관리에 사용됩니다."
+  example="POINT20231215143022"
+  note="⚠️ 한글은 사용할 수 없으며, 영문, 숫자, 일부 특수문자만 사용 가능합니다."
+/>
+
+<ParameterCard
+  name="mchtName"
+  type="string(100)"
+  required={true}
+  description="상점의 한글명입니다."
+  example="헥토파이낸셜"
+/>
+
+<ParameterCard
+  name="mchtEName"
+  type="string(100)"
+  required={true}
+  description="상점의 영문명입니다."
+  example="Hecto Financial"
+/>
+
+<ParameterCard
+  name="pmtPrdtNm"
+  type="string(128)"
+  required={true}
+  description="결제할 상품의 이름입니다. 결제창과 영수증에 표시됩니다."
+  example="프리미엄 서비스 이용권"
+/>
+
+<ParameterCard
+  name="trdAmt"
+  type="number(12)"
+  required={true}
+  description="포인트로 결제할 금액입니다. 보유 포인트 범위 내에서 결제됩니다."
+  example="3000"
+  note="⚠️ 이 필드는 AES 암호화가 필요합니다."
+/>
+
+<ParameterCard
+  name="mchtCustNm"
+  type="string(30)"
+  required={false}
+  description="결제할 고객의 이름입니다."
+  example="홍길동"
+  note="⚠️ 이 필드는 AES 암호화가 필요합니다."
+/>
+
+<ParameterCard
+  name="clipCustNm"
+  type="string(30)"
+  required={false}
+  description="포인트 다모아에서 사용할 고객명입니다. 본인 인증에 사용됩니다."
+  example="홍길동"
+  note="⚠️ 이 필드는 AES 암호화가 필요합니다. 포인트 다모아 서비스 이용 시 필수입니다."
+/>
+
+<ParameterCard
+  name="clipCustCi"
+  type="string(88)"
+  required={false}
+  description="고객의 CI(Customer Identifier) 정보입니다. 본인 확인을 위해 사용됩니다."
+  example="AES256 암호화된 CI 값"
+  note="⚠️ 이 필드는 AES 암호화가 필요합니다. 포인트 다모아 서비스의 핵심 인증 정보입니다."
+/>
+
+<ParameterCard
+  name="clipCustPhoneNo"
+  type="string(11)"
+  required={false}
+  description="포인트 다모아에서 사용할 고객의 휴대폰 번호입니다."
+  example="01012345678"
+  note="⚠️ 이 필드는 AES 암호화가 필요합니다. 하이픈 없이 숫자만 입력합니다."
+/>
+
+<ParameterCard
+  name="skipCd"
+  type="string(1)"
+  required={false}
+  description="약관동의 화면을 스킵할지 여부를 설정합니다."
+  values={[
+    "N: 약관동의 화면 표시 (기본값)",
+    "Y: 약관동의 화면 스킵"
+  ]}
+  note="💡 고객이 이미 약관에 동의한 경우 Y로 설정하여 결제 과정을 단축할 수 있습니다."
+/>
+
+<ParameterCard
+  name="certNotiUrl"
+  type="string(250)"
+  required={false}
+  description="인증 결과를 전달받을 서버 URL입니다. 특정 상점에서만 사용됩니다."
+  example="https://yoursite.com/payment/point/cert-notification"
+  note="💡 본인 인증 완료 후 별도 처리가 필요한 경우에만 사용합니다."
+/>
+
+<ParameterCard
+  name="notiUrl"
+  type="string(250)"
+  required={true}
+  description="결제 완료 후 결과를 전달받을 서버 URL입니다. Server-to-Server 방식으로 결제 결과를 수신합니다."
+  example="https://yoursite.com/payment/point/notification"
+  note="💡 실제 결제 처리는 반드시 이 URL에서 처리하세요."
+/>
+
+<ParameterCard
+  name="nextUrl"
+  type="string(250)"
+  required={true}
+  description="결제 완료 후 고객에게 보여줄 화면 URL입니다."
+  example="https://yoursite.com/payment/point/success"
+/>
+
+<ParameterCard
+  name="cancUrl"
+  type="string(250)"
+  required={true}
+  description="고객이 포인트 결제를 취소했을 때 이동할 페이지 URL입니다."
+  example="https://yoursite.com/payment/cancel"
+/>
+
+<ParameterCard
+  name="mchtParam"
+  type="string(4000)"
+  required={false}
+  description="상점에서 추가로 전달하고 싶은 정보를 담는 예약 필드입니다. 결제 완료 후 그대로 반환됩니다."
+  example="pointType=integrated&userId=12345&serviceType=premium"
+/>
+
+<ParameterCard
+  name="email"
+  type="string(60)"
+  required={false}
+  description="고객의 이메일 주소입니다. 결제 영수증 발송에 사용됩니다."
+  example="customer@example.com"
+  note="⚠️ 이 필드는 AES 암호화가 필요합니다."
+/>
+
+<ParameterCard
+  name="mchtCustId"
+  type="string(50)"
+  required={false}
+  description="상점에서 관리하는 고유 고객 아이디입니다."
+  example="CUST_20231215_001"
+  note="⚠️ 이 필드는 AES 암호화가 필요합니다."
+/>
+
+<ParameterCard
+  name="prdtTerm"
+  type="string(14)"
+  required={false}
+  description="상품 제공 기간을 설정합니다. 값이 없으면 일반결제로 처리됩니다."
+  example="20231231235959"
+  note="💡 yyyyMMddHHmmss 형식으로 입력합니다."
+/>
+
+<ParameterCard
+  name="custIp"
+  type="string(15)"
+  required={false}
+  description="실제 결제를 요청하는 고객의 IP 주소입니다. 보안 검증에 사용됩니다."
+  example="192.168.1.100"
+  note="⚠️ 서버 IP가 아닌 실제 고객(브라우저)의 IP를 전달해야 합니다."
+/>
+
+<ParameterCard
+  name="pktHash"
+  type="string(200)"
+  required={true}
+  description="위변조 방지를 위한 SHA256 해시값입니다. 지정된 순서로 파라미터를 조합하여 생성합니다."
+  example="f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
+  note="🔒 상점아이디 + 결제수단 + 상점주문번호 + 요청일자 + 요청시간 + 거래금액(평문) + 해시키 순서로 조합"
+/>
+
+#### 🔐 해시 생성 예시
+
+```javascript
+const crypto = require('crypto');
+
+function generatePointDamoaHash(params, hashKey) {
+    // 해시 생성을 위한 데이터 조합
+    const hashData = 
+        params.mchtId +         // 상점아이디
+        params.method +         // 결제수단 (point)
+        params.mchtTrdNo +      // 상점주문번호
+        params.trdDt +          // 요청일자
+        params.trdTm +          // 요청시간
+        params.trdAmt +         // 거래금액 (평문, 암호화 전)
+        hashKey;                // 해시키 (헥토파이낸셜 제공)
+    
+    // SHA256 해시 생성
+    return crypto.createHash('sha256').update(hashData, 'utf8').digest('hex');
+}
+
+// 사용 예시
+const pointParams = {
+    mchtId: "nxpt_kt_il",
+    method: "point",
+    mchtTrdNo: "POINT20231215143022",
+    trdDt: "20231215",
+    trdTm: "143022",
+    trdAmt: "3000"  // 암호화 전 원본 금액
+};
+
+const hashKey = "your-hash-key-from-hecto"; // 헥토파이낸셜에서 제공
+const pktHash = generatePointDamoaHash(pointParams, hashKey);
+```
+
+### 2️⃣ 응답 처리
+
+#### 📨 결제 성공 응답
+
+```javascript
+{
+    "outStatCd": "0021",               // 성공 코드
+    "outRsltCd": "0000",               // 결과 코드
+    "outRsltMsg": "정상처리",           // 결과 메시지
+    "method": "point",                 // 결제수단
+    "mchtTrdNo": "POINT20231215143022", // 상점주문번호
+    "trdNo": "STFP_PGPTnxpt_kt_il0231215143022M1234567", // 헥토 거래번호
+    "trdAmt": "3000",                  // 거래금액
+    "authDt": "20231215143045",        // 승인일시
+    "pointBalance": "7000"             // 결제 후 포인트 잔액
+}
+```
+
+#### ❌ 결제 실패 응답
+
+```javascript
+{
+    "outStatCd": "0031",               // 실패 코드
+    "outRsltCd": "1009",               // 에러 코드
+    "outRsltMsg": "포인트 잔액 부족",   // 에러 메시지
+    "method": "point",
+    "mchtTrdNo": "POINT20231215143022"
+}
+```
+
+### 3️⃣ 결제 완료 노티(NOTI) 처리
+
+포인트 다모아 결제가 완료되면 `notiUrl`로 결과가 전송됩니다.
+
+```javascript
+// Node.js Express 예시
+app.post('/payment/point/notification', (req, res) => {
+    const {
+        outStatCd,
+        trdNo,
+        method,
+        bizType,
+        mchtTrdNo,
+        trdAmt,
+        trdDtm,
+        mchtCustNm,
+        pmtprdNm,
+        pointBalance,
+        pktHash
+    } = req.body;
+    
+    // 1. 해시 검증
+    const expectedHash = generatePointDamoaNotiHash(req.body, hashKey);
+    if (pktHash !== expectedHash) {
+        console.error('해시 검증 실패');
+        return res.status(400).send('FAIL');
+    }
+    
+    // 2. 결제 성공 여부 확인
+    if (outStatCd === '0021' && bizType === 'B0') {
+        // 포인트 다모아 결제 성공
+        await updatePointDamoaPaymentStatus(mchtTrdNo, {
+            status: 'completed',
+            hectoTrdNo: trdNo,
+            completedAt: trdDtm,
+            usedPoints: trdAmt,
+            remainingPoints: pointBalance,
+            customerName: mchtCustNm,
+            productName: pmtprdNm
+        });
+        
+        // 포인트 사용 내역 기록
+        await recordPointUsage(mchtTrdNo, {
+            points: trdAmt,
+            type: 'payment',
+            description: pmtprdNm
+        });
+        
+        // 고객에게 결제 완료 알림 발송
+        await sendPointPaymentNotification(mchtTrdNo);
+        
+        // 성공 응답
+        res.send('OK');
+    } else if (bizType === 'C0') {
+        // 취소 처리 (포인트 복원)
+        await updatePointDamoaPaymentStatus(mchtTrdNo, {
+            status: 'cancelled',
+            cancelledAt: trdDtm
+        });
+        
+        // 포인트 복원 처리
+        await restorePoints(mchtTrdNo, trdAmt);
+        
+        res.send('OK');
+    } else {
+        // 기타 상태 처리
+        console.log('포인트 다모아 결제 상태:', outStatCd, req.body.outRsltMsg);
+        res.send('OK');
+    }
+});
+
+// 포인트 다모아 노티 해시 생성 함수
+function generatePointDamoaNotiHash(notiData, hashKey) {
+    const hashData = 
+        notiData.outStatCd +    // 거래상태코드
+        notiData.trdDtm.substring(0, 8) +  // 거래일자 (YYYYMMDD)
+        notiData.trdDtm.substring(8, 14) + // 거래시간 (HHMMSS)
+        notiData.mchtId +       // 상점아이디
+        notiData.mchtTrdNo +    // 상점주문번호
+        notiData.trdAmt +       // 거래금액
+        hashKey;                // 해시키
+    
+    return crypto.createHash('sha256').update(hashData, 'utf8').digest('hex');
+}
+```
+
+### 4️⃣ 인증 결과 노티 처리
+
+본인 인증 완료 시 `certNotiUrl`로 결과가 전송됩니다.
+
+```javascript
+// 인증 결과 노티 처리
+app.post('/payment/point/cert-notification', (req, res) => {
+    const {
+        certResult,
+        custCi,
+        custName,
+        custPhoneNo,
+        mchtTrdNo
+    } = req.body;
+    
+    if (certResult === 'SUCCESS') {
+        // 인증 성공 - 고객 정보 업데이트
+        await updateCustomerCertInfo(mchtTrdNo, {
+            ci: custCi,
+            name: custName,
+            phoneNo: custPhoneNo,
+            certifiedAt: new Date()
+        });
+        
+        console.log('고객 인증 완료:', mchtTrdNo);
+    } else {
+        // 인증 실패
+        console.log('고객 인증 실패:', mchtTrdNo, req.body.certFailReason);
+    }
+    
+    res.send('OK');
+});
+```
+
+---
+
+## 🔄 고급 기능
+
+### 1️⃣ 포인트 다모아 취소
+
+포인트 다모아 결제 완료 후 취소하는 기능입니다.
+
+#### 📡 취소 API 엔드포인트
+
+| 환경 | URL |
+|------|-----|
+| **테스트** | `https://tbgw.settlebank.co.kr/spay/APICancel.do` |
+| **운영** | `https://gw.settlebank.co.kr/spay/APICancel.do` |
+
+#### 💻 취소 요청 예시
+
+```javascript
+const cancelPointDamoaRequest = {
+    params: {
+        mchtId: "nxpt_kt_il",
+        ver: "0A19",
+        method: "CP",                    // 포인트 다모아 취소 코드
+        bizType: "C0",                   // 취소 구분
+        encCd: "23",                     // 암호화 구분
+        mchtTrdNo: "CANCEL20231215143022",
+        trdDt: "20231215",
+        trdTm: "143022"
+    },
+    data: {
+        pktHash: "생성된해시값",
+        orgTrdNo: "STFP_PGPTnxpt_kt_il0231215143022M1234567", // 원거래번호
+        crcCd: "KRW",                    // 통화구분
+        cnclOrd: "001",                  // 취소회차
+        cnclAmt: "3000",                 // 취소금액 (포인트)
+        cnclRsn: "고객 요청"             // 취소사유
+    }
+};
+
+// 서버로 전송
+fetch('https://tbgw.settlebank.co.kr/spay/APICancel.do', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json; charset=UTF-8'
+    },
+    body: JSON.stringify(cancelPointDamoaRequest)
+})
+.then(response => response.json())
+.then(data => {
+    console.log('취소 결과:', data);
+    if (data.outStatCd === '0021') {
+        alert('포인트 다모아 결제가 취소되었습니다. 포인트가 복원됩니다.');
+    } else {
+        alert('취소 실패: ' + data.outRsltMsg);
+    }
+});
+```
+
+### 2️⃣ 포인트 잔액 조회
+
+결제 전 고객의 포인트 잔액을 확인하는 기능입니다.
+
+```javascript
+// 포인트 잔액 조회 API
+async function checkPointBalance(customerCi) {
+    const balanceRequest = {
+        mchtId: "nxpt_kt_il",
+        custCi: customerCi,              // 고객 CI
+        reqType: "BALANCE_INQUIRY",      // 잔액 조회
+        pktHash: "생성된해시값"
+    };
+
+    try {
+        const response = await fetch('https://tbgw.settlebank.co.kr/point/balance', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify(balanceRequest)
+        });
+        
+        const result = await response.json();
+        
+        if (result.outStatCd === '0021') {
+            return {
+                totalPoints: result.totalPoints,
+                availablePoints: result.availablePoints,
+                lockedPoints: result.lockedPoints
+            };
+        } else {
+            throw new Error(result.outRsltMsg);
+        }
+    } catch (error) {
+        console.error('포인트 잔액 조회 실패:', error);
+        throw error;
+    }
+}
+
+// 사용 예시
+async function beforePayment(customerCi, paymentAmount) {
+    try {
+        const pointBalance = await checkPointBalance(customerCi);
+        
+        if (pointBalance.availablePoints >= paymentAmount) {
+            console.log('결제 가능:', pointBalance.availablePoints, '포인트 보유');
+            return true;
+        } else {
+            console.log('포인트 부족:', pointBalance.availablePoints, '< ', paymentAmount);
+            alert(`포인트가 부족합니다. (보유: ${pointBalance.availablePoints}P, 필요: ${paymentAmount}P)`);
+            return false;
+        }
+    } catch (error) {
+        console.error('포인트 확인 실패:', error);
+        return false;
+    }
+}
+```
+
+### 3️⃣ CI(고객식별정보) 관리
+
+포인트 다모아에서 사용하는 CI 정보 관리 방법입니다.
+
+```javascript
+// CI 암호화 처리
+const crypto = require('crypto');
+
+function encryptCustomerCI(ci, aesKey) {
+    const cipher = crypto.createCipher('aes-256-cbc', aesKey);
+    let encrypted = cipher.update(ci, 'utf8', 'base64');
+    encrypted += cipher.final('base64');
+    return encrypted;
+}
+
+function decryptCustomerCI(encryptedCi, aesKey) {
+    const decipher = crypto.createDecipher('aes-256-cbc', aesKey);
+    let decrypted = decipher.update(encryptedCi, 'base64', 'utf8');
+    decrypted += decipher.final('utf8');
+    return decrypted;
+}
+
+// 고객 정보 검증
+function validateCustomerInfo(customerData) {
+    const required = ['name', 'phoneNo', 'ci'];
+    
+    for (const field of required) {
+        if (!customerData[field]) {
+            throw new Error(`필수 정보가 누락되었습니다: ${field}`);
+        }
+    }
+    
+    // CI 길이 검증 (암호화 전 88바이트)
+    if (customerData.ci.length !== 88) {
+        throw new Error('CI 정보가 올바르지 않습니다.');
+    }
+    
+    // 휴대폰 번호 형식 검증
+    const phoneRegex = /^010\d{8}$/;
+    if (!phoneRegex.test(customerData.phoneNo)) {
+        throw new Error('휴대폰 번호 형식이 올바르지 않습니다.');
+    }
+    
+    return true;
+}
+```
+
+---
+
+## 🧪 테스트 가이드
+
+### 🔧 테스트 환경 설정
+
+**테스트 상점 정보:**
+- **상점ID**: `nxpt_kt_il`
+- **환경**: `https://tbnpg.settlebank.co.kr`
+- **특징**: 실제 포인트 차감 없이 승인 테스트 가능
+
+### 👤 테스트 고객 정보
+
+포인트 다모아 테스트용 고객 정보:
+
+| 항목 | 값 | 설명 |
+|------|-----|------|
+| **고객명** | `홍길동` | 테스트 고객 |
+| **휴대폰** | `01012345678` | 테스트 번호 |
+| **CI** | `TEST_CI_VALUE_88BYTES_LONG...` | 테스트 CI (88바이트) |
+| **포인트 잔액** | `50,000P` | 테스트 계정 보유 포인트 |
+
+### 🎯 테스트 시나리오
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+  <div className="bg-green-50 border border-green-200 p-6 rounded-xl">
+    <h4 className="text-green-900 font-semibold mb-3">✅ 성공 시나리오</h4>
+    <ul className="text-green-800 text-sm space-y-2">
+      <li>• 정상 포인트 결제</li>
+      <li>• 잔액 조회</li>
+      <li>• 본인 인증 완료</li>
+      <li>• 약관 동의 처리</li>
+      <li>• 포인트 취소 및 복원</li>
+    </ul>
+  </div>
+  
+  <div className="bg-red-50 border border-red-200 p-6 rounded-xl">
+    <h4 className="text-red-900 font-semibold mb-3">❌ 실패 시나리오</h4>
+    <ul className="text-red-800 text-sm space-y-2">
+      <li>• 잘못된 CI 정보</li>
+      <li>• 포인트 잔액 부족</li>
+      <li>• 본인 인증 실패</li>
+      <li>• 약관 동의 거부</li>
+      <li>• 해시값 불일치</li>
+    </ul>
+  </div>
+</div>
+
+---
+
+## ❌ 에러 처리
+
+### 🚨 주요 에러 코드
+
+| 코드 | 메시지 | 원인 | 해결방법 |
+|------|--------|------|----------|
+| `1009` | 결제 요청 정보 누락 | 필수 파라미터 누락 | 필수 파라미터 확인 |
+| `1901` | 해쉬값 불일치 오류 | 해시 생성 오류 | 해시 생성 로직 점검 |
+| `1902` | 암호화 항목 미처리 오류 | 암호화 필드 미처리 | AES 암호화 적용 |
+| `PT01` | CI 정보 오류 | 잘못된 CI 값 | 정확한 CI 확인 |
+| `PT02` | 포인트 잔액 부족 | 보유 포인트 부족 | 포인트 충전 또는 금액 조정 |
+| `PT03` | 본인 인증 실패 | 인증 정보 불일치 | 고객 정보 재확인 |
+| `PT04` | 약관 동의 필요 | 약관 동의 안함 | 약관 동의 처리 |
+
+### 🔧 에러 해결 가이드
+
+<div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-6">
+  <div className="flex">
+    <div className="flex-shrink-0">
+      <span className="text-yellow-400 text-lg">💡</span>
+    </div>
+    <div className="ml-3">
+      <h4 className="text-yellow-800 font-medium">일반적인 문제 해결</h4>
+      <ul className="mt-2 text-yellow-700 text-sm space-y-1">
+        <li>• <strong>CI 정보 오류</strong>: CI 값이 정확히 88바이트인지 확인</li>
+        <li>• <strong>인증 실패</strong>: 고객명과 휴대폰번호 일치 여부 확인</li>
+        <li>• <strong>포인트 부족</strong>: 사전 잔액 조회 API 활용</li>
+        <li>• <strong>약관 동의</strong>: skipCd를 'N'으로 설정하여 약관 동의 화면 표시</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+---
+
+## 💡 자주 묻는 질문
+
+### Q. CI(고객식별정보)는 어떻게 획득하나요?
+A. CI는 본인인증 서비스(NICE, KCB 등)를 통해 획득할 수 있습니다. 암호화되지 않은 원본 CI 값이 88바이트여야 합니다.
+
+### Q. 포인트 다모아는 어떤 포인트를 통합하나요?
+A. 다양한 브랜드의 포인트를 하나로 통합하여 관리합니다. 구체적인 포인트 브랜드는 헥토파이낸셜에 문의하세요.
+
+### Q. 포인트 결제 취소 시 포인트는 언제 복원되나요?
+A. 취소 승인 즉시 고객의 포인트 계정으로 복원됩니다. 실시간으로 처리됩니다.
+
+### Q. 약관 동의를 스킵할 수 있나요?
+A. skipCd를 'Y'로 설정하면 약관 동의 화면을 스킵할 수 있습니다. 단, 사전에 고객이 약관에 동의한 경우에만 사용하세요.
+
+### Q. 포인트 유효기간이 있나요?
+A. 포인트 유효기간은 포인트 발급처의 정책에 따라 다릅니다. 잔액 조회 API를 통해 확인할 수 있습니다.
+
+---
+
+## 🚀 다음 단계
+
+포인트 다모아 결제 연동을 완료했다면, 다른 결제 수단도 확인해보세요:
+
+<div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-8">
+  <a href="/docs/pg/credit-card" className="block p-4 bg-white border-2 border-hecto-100 hover:border-hecto-300 rounded-xl transition-colors group">
+    <div className="text-center">
+      <div className="w-12 h-12 bg-hecto-400 rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-hecto-500 transition-colors">
+        <span className="text-white text-lg">💳</span>
+      </div>
+      <span className="text-sm font-medium text-gray-900">신용카드</span>
+    </div>
+  </a>
+  
+  <a href="/docs/pg/mobile-payment" className="block p-4 bg-white border-2 border-purple-100 hover:border-purple-300 rounded-xl transition-colors group">
+    <div className="text-center">
+      <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-purple-600 transition-colors">
+        <span className="text-white text-lg">📱</span>
+      </div>
+      <span className="text-sm font-medium text-gray-900">휴대폰</span>
+    </div>
+  </a>
+  
+  <a href="/docs/pg/gift-card" className="block p-4 bg-white border-2 border-pink-100 hover:border-pink-300 rounded-xl transition-colors group">
+    <div className="text-center">
+      <div className="w-12 h-12 bg-pink-500 rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-pink-600 transition-colors">
+        <span className="text-white text-lg">🎁</span>
+      </div>
+      <span className="text-sm font-medium text-gray-900">상품권</span>
+    </div>
+  </a>
+  
+  <a href="/docs/pg/simple-payment" className="block p-4 bg-white border-2 border-orange-100 hover:border-orange-300 rounded-xl transition-colors group">
+    <div className="text-center">
+      <div className="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-orange-600 transition-colors">
+        <span className="text-white text-lg">⚡</span>
+      </div>
+      <span className="text-sm font-medium text-gray-900">간편결제</span>
+    </div>
+  </a>
+</div>
+
+---
+
+<div className="bg-gray-50 p-6 rounded-xl text-center my-8">
+  <p className="text-gray-600 mb-4">
+    포인트 다모아 결제 연동에 대한 추가 문의사항이 있으시나요?
+  </p>
+  <div className="flex justify-center space-x-4">
+    <a href="mailto:support@hectofinancial.com" className="inline-flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors">
+      📧 기술지원 문의
+    </a>
+    <a href="/docs/pg/api-reference" className="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+      📚 API 레퍼런스
+    </a>
+  </div>
+</div>

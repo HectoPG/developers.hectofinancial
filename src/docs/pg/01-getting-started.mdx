@@ -1,0 +1,430 @@
+# 🚀 시작하기
+
+헥토파이낸셜 전자결제(PG) 서비스에 오신 것을 환영합니다! 이 가이드를 통해 빠르고 안전하게 결제 서비스를 연동할 수 있습니다.
+
+## 📖 개요
+
+### 헥토파이낸셜 PG 서비스란?
+
+헥토파이낸셜 전자결제(PG) 서비스는 **신용카드, 실시간 계좌이체, 가상계좌, 휴대폰 결제, 상품권 결제** 등 다양한 온라인 결제수단을 지원하는 통합 결제 서비스입니다.
+
+### 🎯 주요 특징
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+  <div className="bg-gradient-to-r from-hecto-50 to-hecto-100 p-6 rounded-xl border border-hecto-200">
+    <div className="flex items-center mb-3">
+      <div className="w-10 h-10 bg-hecto-400 rounded-lg flex items-center justify-center mr-3">
+        <span className="text-white text-lg">💳</span>
+      </div>
+      <h3 className="text-lg font-semibold text-gray-900">다양한 결제수단</h3>
+    </div>
+    <p className="text-gray-700">신용카드부터 간편결제까지 모든 주요 결제수단을 하나의 API로 지원</p>
+  </div>
+
+  <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200">
+    <div className="flex items-center mb-3">
+      <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
+        <span className="text-white text-lg">🔒</span>
+      </div>
+      <h3 className="text-lg font-semibold text-gray-900">강력한 보안</h3>
+    </div>
+    <p className="text-gray-700">PCI DSS 준수, AES-256 암호화, 해시 검증으로 안전한 결제 환경 제공</p>
+  </div>
+
+  <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-xl border border-green-200">
+    <div className="flex items-center mb-3">
+      <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center mr-3">
+        <span className="text-white text-lg">⚡</span>
+      </div>
+      <h3 className="text-lg font-semibold text-gray-900">빠른 연동</h3>
+    </div>
+    <p className="text-gray-700">표준 API와 SDK를 통한 쉽고 빠른 연동, 샘플 코드 제공</p>
+  </div>
+
+  <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-6 rounded-xl border border-purple-200">
+    <div className="flex items-center mb-3">
+      <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center mr-3">
+        <span className="text-white text-lg">📊</span>
+      </div>
+      <h3 className="text-lg font-semibold text-gray-900">실시간 관리</h3>
+    </div>
+    <p className="text-gray-700">실시간 거래 조회, 정산 관리, 상세한 통계 데이터 제공</p>
+  </div>
+</div>
+
+### 🎯 이 문서의 대상
+
+이 문서는 **헥토파이낸셜 전자결제(PG) 시스템을 통해 결제를 연동하려는 개발자**를 대상으로 합니다.
+
+### 📚 문서 사용법
+
+> 💡 **팁**: 본 문서를 완독할 필요는 없습니다! 결제 수단별로 나누어져 있으니 필요한 부분만 참고하세요.
+
+**문서 표기법:**
+- 🟢 **필수** 파라미터: 반드시 포함해야 하는 필드
+- 🟡 **선택** 파라미터: 필요에 따라 포함하는 필드
+- **데이터 타입**: `N`(숫자), `A`(영문), `H`(한글), `AN`(영문+숫자)
+- **길이**: UTF-8 인코딩 기준 바이트 수
+
+---
+
+## 🏗️ 표준 결제창(UI) 연동
+
+가장 일반적인 연동 방식으로, 헥토파이낸셜에서 제공하는 결제창을 사용하는 방법입니다.
+
+### ⚡ 빠른 시작 (5분 연동)
+
+```html
+<!-- 1. 헥토파이낸셜 JavaScript SDK 로드 -->
+<script src="https://tbnpg.settlebank.co.kr/resources/js/v1/SettlePG_v1.2.js"></script>
+
+<script>
+// 2. 결제 요청
+SETTLE_PG.pay({
+    env: "https://tbnpg.settlebank.co.kr", // 테스트 환경
+    mchtId: "nxca_jt_il",                   // 상점 ID
+    method: "card",                         // 결제수단
+    trdDt: "20231215",                      // 거래일자
+    trdTm: "143022",                        // 거래시간
+    mchtTrdNo: "ORDER20231215143022",       // 주문번호
+    mchtName: "테스트상점",
+    pmtPrdtNm: "테스트상품",
+    trdAmt: "1000",                         // 결제금액
+    notiUrl: "https://yoursite.com/notify", // 결과통보 URL
+    nextUrl: "https://yoursite.com/success",// 성공페이지 URL
+    cancUrl: "https://yoursite.com/cancel", // 취소페이지 URL
+    pktHash: "생성된해시값",                 // 보안 해시
+    ui: {
+        type: "popup",
+        width: "430",
+        height: "660"
+    }
+}, function(response) {
+    // 3. 결제 결과 처리
+    console.log(response);
+});
+</script>
+```
+
+### 🔄 연동 프로세스
+
+<div className="bg-gray-50 p-6 rounded-xl my-8">
+  <div className="flex items-center justify-between">
+    <div className="flex flex-col items-center text-center">
+      <div className="w-12 h-12 bg-hecto-400 rounded-full flex items-center justify-center text-white font-bold text-lg mb-2">1</div>
+      <span className="text-sm font-medium text-gray-700">결제 요청</span>
+      <span className="text-xs text-gray-500">가맹점→PG</span>
+    </div>
+    <div className="flex-1 h-0.5 bg-hecto-200 mx-4"></div>
+    <div className="flex flex-col items-center text-center">
+      <div className="w-12 h-12 bg-hecto-400 rounded-full flex items-center justify-center text-white font-bold text-lg mb-2">2</div>
+      <span className="text-sm font-medium text-gray-700">결제창 표시</span>
+      <span className="text-xs text-gray-500">PG→고객</span>
+    </div>
+    <div className="flex-1 h-0.5 bg-hecto-200 mx-4"></div>
+    <div className="flex flex-col items-center text-center">
+      <div className="w-12 h-12 bg-hecto-400 rounded-full flex items-center justify-center text-white font-bold text-lg mb-2">3</div>
+      <span className="text-sm font-medium text-gray-700">정보 입력</span>
+      <span className="text-xs text-gray-500">고객 결제</span>
+    </div>
+    <div className="flex-1 h-0.5 bg-hecto-200 mx-4"></div>
+    <div className="flex flex-col items-center text-center">
+      <div className="w-12 h-12 bg-hecto-400 rounded-full flex items-center justify-center text-white font-bold text-lg mb-2">4</div>
+      <span className="text-sm font-medium text-gray-700">승인 처리</span>
+      <span className="text-xs text-gray-500">카드사 승인</span>
+    </div>
+    <div className="flex-1 h-0.5 bg-hecto-200 mx-4"></div>
+    <div className="flex flex-col items-center text-center">
+      <div className="w-12 h-12 bg-hecto-400 rounded-full flex items-center justify-center text-white font-bold text-lg mb-2">5</div>
+      <span className="text-sm font-medium text-gray-700">결과 통보</span>
+      <span className="text-xs text-gray-500">PG→가맹점</span>
+    </div>
+  </div>
+</div>
+
+### 🌐 환경별 도메인
+
+| 환경 | 도메인 | 용도 |
+|------|--------|------|
+| **테스트베드** | `tbnpg.settlebank.co.kr` | 개발 및 테스트용 |
+| **상용환경** | `npg.settlebank.co.kr` | 실제 서비스용 |
+
+### ⚠️ 중요 주의사항
+
+<div className="bg-red-50 border-l-4 border-red-400 p-4 my-6">
+  <div className="flex">
+    <div className="flex-shrink-0">
+      <span className="text-red-400 text-lg">⚠️</span>
+    </div>
+    <div className="ml-3">
+      <h4 className="text-red-800 font-medium">필수 확인 사항</h4>
+      <ul className="mt-2 text-red-700 text-sm space-y-1">
+        <li>• <strong>운영환경 테스트 시 비용 발생</strong> - 테스트는 반드시 테스트베드에서 진행</li>
+        <li>• <strong>HTTPS 필수</strong> - HTTP 사용시 브라우저 정책으로 인해 오작동 가능</li>
+        <li>• <strong>iframe 사용 금지</strong> - 일부 브라우저에서 정상 작동하지 않음</li>
+        <li>• <strong>IE 브라우저 지원 종료</strong> (2022.06.15부터) - Edge 브라우저 사용 권장</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+### 📝 URL 파라미터 이해하기
+
+**핵심 URL 3종세트:**
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+  <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+    <h4 className="font-semibold text-blue-900 mb-2">🔔 notiUrl</h4>
+    <p className="text-sm text-blue-800">Server-to-Server 결과 통보</p>
+    <p className="text-xs text-blue-600 mt-2">💡 실제 DB 처리는 여기서!</p>
+  </div>
+  
+  <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
+    <h4 className="font-semibold text-green-900 mb-2">✅ nextUrl</h4>
+    <p className="text-sm text-green-800">결제 완료 후 고객 화면</p>
+    <p className="text-xs text-green-600 mt-2">💡 화면 표시용으로만 사용</p>
+  </div>
+  
+  <div className="bg-orange-50 border border-orange-200 p-4 rounded-lg">
+    <h4 className="font-semibold text-orange-900 mb-2">❌ cancUrl</h4>
+    <p className="text-sm text-orange-800">결제 취소 시 이동 화면</p>
+    <p className="text-xs text-orange-600 mt-2">💡 고객이 강제 종료시</p>
+  </div>
+</div>
+
+---
+
+## 🔧 API 서버 연동 (Non-UI)
+
+결제창 없이 서버에서 직접 결제를 처리하는 방식입니다.
+
+### 📡 API 특징
+
+- **Server-to-Server** 통신
+- **JSON** 기반 데이터 교환
+- **실시간** 결제 처리
+- **높은 보안성**
+
+### 🌐 API 엔드포인트
+
+| 환경 | URL |
+|------|-----|
+| **테스트베드** | `https://tbgw.settlebank.co.kr/spay/APICard.do` |
+| **상용환경** | `https://gw.settlebank.co.kr/spay/APICard.do` |
+
+### 📋 요청/응답 헤더
+
+```
+Content-type: application/json; charset=UTF-8
+```
+
+### 💡 API 연동 예시
+
+```javascript
+// API 요청 예시
+const paymentRequest = {
+    params: {
+        mchtId: "nx_mid_il",
+        ver: "0A19",
+        mchtTrdNo: "ORDER20231215143022",
+        trdDt: "20231215",
+        trdTm: "143022"
+    },
+    data: {
+        pktHash: "생성된해시값",
+        method: "CA",
+        trdAmt: "1000",
+        pmtPrdtNm: "테스트상품",
+        mchtCustNm: "홍길동",
+        notiUrl: "https://yoursite.com/notify"
+    }
+};
+
+// 서버로 전송
+fetch('https://tbgw.settlebank.co.kr/spay/APICard.do', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json; charset=UTF-8'
+    },
+    body: JSON.stringify(paymentRequest)
+})
+.then(response => response.json())
+.then(data => {
+    console.log('결제 결과:', data);
+});
+```
+
+---
+
+## 🌐 연동 서버 정보
+
+### 🖥️ 서버 IP 주소
+
+**테스트베드 환경:**
+```
+203.238.37.3    tbnpg.settlebank.co.kr
+203.238.37.3    tbgw.settlebank.co.kr
+```
+
+**상용 환경:**
+```
+203.238.37.4    npg.settlebank.co.kr
+203.238.37.4    gw.settlebank.co.kr
+```
+
+### 🔧 hosts 파일 설정 (필요시)
+
+**Windows:** `C:\Windows\System32\drivers\etc\hosts`
+**Linux/Mac:** `/etc/hosts`
+
+```
+203.238.37.3    tbnpg.settlebank.co.kr
+203.238.37.3    tbgw.settlebank.co.kr
+```
+
+### 📡 노티(Notification) 서버
+
+결제 결과를 실시간으로 통보받기 위한 서버 설정이 필요합니다.
+
+<div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-6">
+  <div className="flex">
+    <div className="flex-shrink-0">
+      <span className="text-yellow-400 text-lg">💡</span>
+    </div>
+    <div className="ml-3">
+      <h4 className="text-yellow-800 font-medium">노티 서버 주의사항</h4>
+      <p className="mt-2 text-yellow-700 text-sm">
+        notiUrl로 전송되는 결과 데이터는 <strong>반드시 해시 검증</strong>을 거쳐야 합니다. 
+        검증이 완료된 후에만 실제 서비스를 제공하세요.
+      </p>
+    </div>
+  </div>
+</div>
+
+---
+
+## 🔒 중요 정보 보안
+
+### 🔐 개인정보 암복호화
+
+**암호화 대상 필드:**
+- 거래금액 (`trdAmt`)
+- 고객명 (`mchtCustNm`)
+- 이메일 (`email`)
+- 상점고객아이디 (`mchtCustId`)
+- 과세금액 (`taxAmt`)
+- 부가세금액 (`vatAmt`)
+- 비과세금액 (`taxFreeAmt`)
+- 봉사료 (`svcAmt`)
+
+### 🔑 AES 암호화 방식
+
+```javascript
+// AES-128-ECB 암호화 예시
+const CryptoJS = require('crypto-js');
+
+function encryptAES(plainText, secretKey) {
+    const key = CryptoJS.enc.Utf8.parse(secretKey);
+    const encrypted = CryptoJS.AES.encrypt(plainText, key, {
+        mode: CryptoJS.mode.ECB,
+        padding: CryptoJS.pad.Pkcs7
+    });
+    return encrypted.toString();
+}
+
+// 사용 예시
+const encryptedAmount = encryptAES("1000", "your-secret-key");
+```
+
+### 🛡️ 해시 검증 알고리즘
+
+**SHA256 해시 생성:**
+
+```javascript
+const crypto = require('crypto');
+
+function generateHash(data) {
+    return crypto.createHash('sha256').update(data, 'utf8').digest('hex');
+}
+
+// 해시 생성 예시 (신용카드 결제)
+const hashData = mchtId + method + mchtTrdNo + trdDt + trdTm + trdAmt + hashKey;
+const pktHash = generateHash(hashData);
+```
+
+### 🔐 개인정보 암호키
+
+암호화에 사용되는 키는 **헥토파이낸셜에서 별도 제공**합니다.
+- 키 관리는 **보안이 중요**합니다
+- 소스코드에 하드코딩하지 마세요
+- 환경변수나 보안 저장소를 이용하세요
+
+### 🔒 해시 인증키
+
+위변조 방지를 위한 해시 인증키도 **헥토파이낸셜에서 별도 제공**합니다.
+
+---
+
+## 🎯 다음 단계
+
+축하합니다! 기본 연동 방법을 익혔습니다. 이제 구체적인 결제 수단별 연동을 시작해보세요:
+
+<div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-8">
+  <a href="/docs/pg/credit-card" className="block p-4 bg-white border-2 border-hecto-100 hover:border-hecto-300 rounded-xl transition-colors group">
+    <div className="text-center">
+      <div className="w-12 h-12 bg-hecto-400 rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-hecto-500 transition-colors">
+        <span className="text-white text-lg">💳</span>
+      </div>
+      <span className="text-sm font-medium text-gray-900">신용카드</span>
+    </div>
+  </a>
+  
+  <a href="/docs/pg/virtual-account" className="block p-4 bg-white border-2 border-green-100 hover:border-green-300 rounded-xl transition-colors group">
+    <div className="text-center">
+      <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-green-600 transition-colors">
+        <span className="text-white text-lg">💰</span>
+      </div>
+      <span className="text-sm font-medium text-gray-900">가상계좌</span>
+    </div>
+  </a>
+  
+  <a href="/docs/pg/bank-transfer" className="block p-4 bg-white border-2 border-blue-100 hover:border-blue-300 rounded-xl transition-colors group">
+    <div className="text-center">
+      <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-blue-600 transition-colors">
+        <span className="text-white text-lg">🏦</span>
+      </div>
+      <span className="text-sm font-medium text-gray-900">계좌이체</span>
+    </div>
+  </a>
+  
+  <a href="/docs/pg/mobile-payment" className="block p-4 bg-white border-2 border-purple-100 hover:border-purple-300 rounded-xl transition-colors group">
+    <div className="text-center">
+      <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-purple-600 transition-colors">
+        <span className="text-white text-lg">📱</span>
+      </div>
+      <span className="text-sm font-medium text-gray-900">휴대폰</span>
+    </div>
+  </a>
+</div>
+
+### 📚 추가 리소스
+
+- [샘플 코드 다운로드](https://develop.sbsvc.online/21/bbsList.do?tx=R&articleSeq=149)
+- [자주 묻는 질문](https://develop.sbsvc.online/3/bbsList.do)
+- [고객센터 문의](mailto:support@hectofinancial.com)
+
+---
+
+<div className="bg-gray-50 p-6 rounded-xl text-center my-8">
+  <p className="text-gray-600 mb-4">
+    더 자세한 내용이나 기술 지원이 필요하시나요?
+  </p>
+  <div className="flex justify-center space-x-4">
+    <a href="mailto:support@hectofinancial.com" className="inline-flex items-center px-4 py-2 bg-hecto-400 text-white rounded-lg hover:bg-hecto-500 transition-colors">
+      📧 이메일 문의
+    </a>
+    <a href="tel:1588-0000" className="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+      📞 전화 문의
+    </a>
+  </div>
+</div>

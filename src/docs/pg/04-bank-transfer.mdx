@@ -1,0 +1,715 @@
+# 🏦 계좌이체
+
+고객의 은행 계좌에서 직접 결제 금액을 이체하는 실시간 결제 서비스입니다. 현금영수증 발행이 자동으로 처리되며, 빠르고 안전한 결제가 가능합니다.
+
+## 📖 개요
+
+### 🎯 주요 특징
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+  <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200">
+    <div className="flex items-center mb-3">
+      <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
+        <span className="text-white text-lg">⚡</span>
+      </div>
+      <h3 className="text-lg font-semibold text-gray-900">실시간 결제</h3>
+    </div>
+    <p className="text-gray-700">뱅크페이 시스템을 통한 즉시 계좌이체, 실시간 승인 처리</p>
+  </div>
+
+  <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-xl border border-green-200">
+    <div className="flex items-center mb-3">
+      <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center mr-3">
+        <span className="text-white text-lg">🏦</span>
+      </div>
+      <h3 className="text-lg font-semibold text-gray-900">다양한 은행 지원</h3>
+    </div>
+    <p className="text-gray-700">국내 주요 은행 모두 지원, 인터넷뱅킹 및 모바일뱅킹 연동</p>
+  </div>
+
+  <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-6 rounded-xl border border-purple-200">
+    <div className="flex items-center mb-3">
+      <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center mr-3">
+        <span className="text-white text-lg">🧾</span>
+      </div>
+      <h3 className="text-lg font-semibold text-gray-900">현금영수증 자동발행</h3>
+    </div>
+    <p className="text-gray-700">결제 완료 시 현금영수증이 자동으로 발행되어 세무 처리 편리</p>
+  </div>
+
+  <div className="bg-gradient-to-r from-orange-50 to-orange-100 p-6 rounded-xl border border-orange-200">
+    <div className="flex items-center mb-3">
+      <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center mr-3">
+        <span className="text-white text-lg">🔒</span>
+      </div>
+      <h3 className="text-lg font-semibold text-gray-900">안전한 인증</h3>
+    </div>
+    <p className="text-gray-700">은행 공동 인증서, 간편인증 등 다양한 보안 인증 방식 지원</p>
+  </div>
+</div>
+
+### 🏦 지원 금융기관
+
+| 금융기관 | 코드 | 특징 |
+|----------|------|------|
+| **국민은행** | `004` | 광범위한 사용자 기반 |
+| **우리은행** | `020` | 빠른 이체 처리 |
+| **신한은행** | `088` | 모바일 서비스 우수 |
+| **하나은행** | `081` | 외환은행 통합 서비스 |
+| **농협은행** | `011` | 지역 접근성 좋음 |
+| **기업은행** | `003` | 기업 고객 특화 |
+| **SC제일은행** | `023` | 외국계 은행 서비스 |
+| **씨티은행** | `027` | 글로벌 금융 서비스 |
+
+---
+
+## ⚡ 빠른 시작
+
+### 1️⃣ 기본 계좌이체 결제
+
+```html
+<!-- 헥토파이낸셜 SDK 로드 -->
+<script src="https://tbnpg.settlebank.co.kr/resources/js/v1/SettlePG_v1.2.js"></script>
+
+<script>
+// 계좌이체 결제 요청
+SETTLE_PG.pay({
+    env: "https://tbnpg.settlebank.co.kr",
+    mchtId: "nx_mid_il",               // 상점 ID
+    method: "bank",                    // 계좌이체
+    trdDt: "20231215",                 // 거래일자
+    trdTm: "143022",                   // 거래시간
+    mchtTrdNo: "BANK20231215143022",   // 주문번호
+    mchtName: "테스트상점",
+    mchtEName: "Test Shop",
+    pmtPrdtNm: "테스트상품",
+    trdAmt: "30000",                   // 30,000원
+    mchtCustNm: "홍길동",              // 결제자명
+    notiUrl: "https://yoursite.com/bank/notify",
+    nextUrl: "https://yoursite.com/bank/success",
+    cancUrl: "https://yoursite.com/bank/cancel",
+    pktHash: "생성된해시값",           // SHA256 해시
+    ui: {
+        type: "popup",
+        width: "430",
+        height: "660"
+    }
+}, function(response) {
+    if (response.outStatCd === "0021") {
+        // 결제 성공
+        console.log("계좌이체 결제 성공:", response);
+        alert(`결제 완료!\n은행: ${response.fnNm}\n승인번호: ${response.authDt}`);
+    } else {
+        // 결제 실패
+        console.log("계좌이체 결제 실패:", response.outRsltMsg);
+        alert("결제가 실패했습니다: " + response.outRsltMsg);
+    }
+});
+</script>
+```
+
+### 2️⃣ 결제 프로세스
+
+<div className="bg-gray-50 p-6 rounded-xl my-8">
+  <div className="flex items-center justify-between">
+    <div className="flex flex-col items-center text-center">
+      <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg mb-2">1</div>
+      <span className="text-sm font-medium text-gray-700">결제 요청</span>
+      <span className="text-xs text-gray-500">가맹점→PG</span>
+    </div>
+    <div className="flex-1 h-0.5 bg-blue-200 mx-4"></div>
+    <div className="flex flex-col items-center text-center">
+      <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg mb-2">2</div>
+      <span className="text-sm font-medium text-gray-700">은행 선택</span>
+      <span className="text-xs text-gray-500">고객 선택</span>
+    </div>
+    <div className="flex-1 h-0.5 bg-blue-200 mx-4"></div>
+    <div className="flex flex-col items-center text-center">
+      <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg mb-2">3</div>
+      <span className="text-sm font-medium text-gray-700">인증 및 이체</span>
+      <span className="text-xs text-gray-500">뱅크페이</span>
+    </div>
+    <div className="flex-1 h-0.5 bg-blue-200 mx-4"></div>
+    <div className="flex flex-col items-center text-center">
+      <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg mb-2">4</div>
+      <span className="text-sm font-medium text-gray-700">결제 완료</span>
+      <span className="text-xs text-gray-500">즉시 승인</span>
+    </div>
+  </div>
+</div>
+
+---
+
+## 🏗️ 구현 가이드
+
+### 1️⃣ UI 계좌이체 결제
+
+#### 📡 API 엔드포인트
+
+| 환경 | URL |
+|------|-----|
+| **테스트** | `https://tbnpg.settlebank.co.kr/bank/main.do` |
+| **운영** | `https://npg.settlebank.co.kr/bank/main.do` |
+
+#### 📋 요청 파라미터
+
+<ParameterCard
+  name="mchtId"
+  type="string(10)"
+  required={true}
+  description="헥토파이낸셜에서 부여하는 고유 상점아이디입니다."
+  example="nx_mid_il"
+  note="계좌이체 전용 상점ID를 사용해야 합니다."
+/>
+
+<ParameterCard
+  name="method"
+  type="string(20)"
+  required={true}
+  description="PG 서비스에 해당하는 결제 구분 코드입니다."
+  example="bank"
+  note="계좌이체의 경우 항상 'bank' 고정값을 사용합니다."
+/>
+
+<ParameterCard
+  name="trdDt"
+  type="string(8)"
+  required={true}
+  description="거래 요청 일자입니다. yyyyMMdd 형식으로 전달합니다."
+  example="20231215"
+/>
+
+<ParameterCard
+  name="trdTm"
+  type="string(6)"
+  required={true}
+  description="거래 요청 시간입니다. HH24MISS 형식으로 전달합니다."
+  example="143022"
+/>
+
+<ParameterCard
+  name="mchtTrdNo"
+  type="string(100)"
+  required={true}
+  description="상점에서 생성하는 고유 주문번호입니다. 계좌이체 추적과 관리에 사용됩니다."
+  example="BANK20231215143022"
+  note="⚠️ 한글은 사용할 수 없으며, 영문, 숫자, 일부 특수문자만 사용 가능합니다."
+/>
+
+<ParameterCard
+  name="mchtName"
+  type="string(100)"
+  required={true}
+  description="상점의 한글명입니다. 고객의 통장에 표시되는 이체 내역에 사용됩니다."
+  example="헥토파이낸셜"
+  note="💡 고객이 통장에서 확인할 수 있는 이름이므로 명확하게 작성하세요."
+/>
+
+<ParameterCard
+  name="mchtEName"
+  type="string(100)"
+  required={true}
+  description="상점의 영문명입니다."
+  example="Hecto Financial"
+/>
+
+<ParameterCard
+  name="pmtPrdtNm"
+  type="string(128)"
+  required={true}
+  description="결제할 상품의 이름입니다. 결제창과 영수증에 표시됩니다."
+  example="프리미엄 멤버십 1개월"
+/>
+
+<ParameterCard
+  name="trdAmt"
+  type="number(12)"
+  required={true}
+  description="이체할 금액입니다. 고객 계좌에서 차감되는 정확한 금액입니다."
+  example="30000"
+  note="⚠️ 이 필드는 AES 암호화가 필요합니다."
+/>
+
+<ParameterCard
+  name="mchtCustNm"
+  type="string(30)"
+  required={false}
+  description="이체를 진행할 고객의 이름입니다. 계좌 명의자와 일치하는 것이 좋습니다."
+  example="홍길동"
+  note="⚠️ 이 필드는 AES 암호화가 필요합니다."
+/>
+
+<ParameterCard
+  name="notiUrl"
+  type="string(250)"
+  required={true}
+  description="이체 완료 후 결과를 전달받을 서버 URL입니다. Server-to-Server 방식으로 결제 결과를 수신합니다."
+  example="https://yoursite.com/payment/bank/notification"
+  note="💡 실제 결제 처리는 반드시 이 URL에서 처리하세요. 고객이 브라우저를 닫아도 호출됩니다."
+/>
+
+<ParameterCard
+  name="nextUrl"
+  type="string(250)"
+  required={true}
+  description="이체 완료 후 고객에게 보여줄 화면 URL입니다."
+  example="https://yoursite.com/payment/bank/success"
+  note="💡 결제 완료 안내 화면으로 이동시킵니다."
+/>
+
+<ParameterCard
+  name="cancUrl"
+  type="string(250)"
+  required={true}
+  description="고객이 계좌이체를 취소했을 때 이동할 페이지 URL입니다."
+  example="https://yoursite.com/payment/cancel"
+/>
+
+<ParameterCard
+  name="mchtParam"
+  type="string(4000)"
+  required={false}
+  description="상점에서 추가로 전달하고 싶은 정보를 담는 예약 필드입니다. 결제 완료 후 그대로 반환됩니다."
+  example="userId=12345&productId=PROD001&eventCode=WINTER2023"
+  note="💡 URL 인코딩된 쿼리스트링 형태로 전달하면 편리합니다."
+/>
+
+<ParameterCard
+  name="email"
+  type="string(60)"
+  required={false}
+  description="고객의 이메일 주소입니다. 결제 영수증 발송에 사용됩니다."
+  example="customer@example.com"
+  note="⚠️ 이 필드는 AES 암호화가 필요합니다."
+/>
+
+<ParameterCard
+  name="mchtCustId"
+  type="string(50)"
+  required={false}
+  description="상점에서 관리하는 고유 고객 아이디입니다."
+  example="CUST_20231215_001"
+  note="⚠️ 이 필드는 AES 암호화가 필요합니다."
+/>
+
+<ParameterCard
+  name="appScheme"
+  type="string(100)"
+  required={false}
+  description="모바일 앱에서 결제 후 원래 앱으로 돌아가기 위한 스키마입니다."
+  example="myapp://payment"
+  note="💡 모바일 앱 개발 시에만 필요합니다. 웹에서는 사용하지 않습니다."
+/>
+
+<ParameterCard
+  name="custIp"
+  type="string(15)"
+  required={false}
+  description="실제 결제를 요청하는 고객의 IP 주소입니다. 보안 검증에 사용됩니다."
+  example="192.168.1.100"
+  note="⚠️ 서버 IP가 아닌 실제 고객(브라우저)의 IP를 전달해야 합니다."
+/>
+
+<ParameterCard
+  name="pktHash"
+  type="string(200)"
+  required={true}
+  description="위변조 방지를 위한 SHA256 해시값입니다. 지정된 순서로 파라미터를 조합하여 생성합니다."
+  example="f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
+  note="🔒 상점아이디 + 결제수단 + 상점주문번호 + 요청일자 + 요청시간 + 거래금액(평문) + 해시키 순서로 조합"
+/>
+
+#### 🔐 해시 생성 예시
+
+```javascript
+const crypto = require('crypto');
+
+function generateBankTransferHash(params, hashKey) {
+    // 해시 생성을 위한 데이터 조합
+    const hashData = 
+        params.mchtId +         // 상점아이디
+        params.method +         // 결제수단 (bank)
+        params.mchtTrdNo +      // 상점주문번호
+        params.trdDt +          // 요청일자
+        params.trdTm +          // 요청시간
+        params.trdAmt +         // 거래금액 (평문, 암호화 전)
+        hashKey;                // 해시키 (헥토파이낸셜 제공)
+    
+    // SHA256 해시 생성
+    return crypto.createHash('sha256').update(hashData, 'utf8').digest('hex');
+}
+
+// 사용 예시
+const bankParams = {
+    mchtId: "nx_mid_il",
+    method: "bank",
+    mchtTrdNo: "BANK20231215143022",
+    trdDt: "20231215",
+    trdTm: "143022",
+    trdAmt: "30000"  // 암호화 전 원본 금액
+};
+
+const hashKey = "your-hash-key-from-hecto"; // 헥토파이낸셜에서 제공
+const pktHash = generateBankTransferHash(bankParams, hashKey);
+```
+
+### 2️⃣ 응답 처리
+
+#### 📨 결제 성공 응답
+
+```javascript
+{
+    "outStatCd": "0021",               // 성공 코드
+    "outRsltCd": "0000",               // 결과 코드
+    "outRsltMsg": "정상처리",           // 결과 메시지
+    "method": "bank",                  // 결제수단
+    "mchtTrdNo": "BANK20231215143022", // 상점주문번호
+    "trdNo": "STFP_PGRAnx_mid_il0231215143022M1234567", // 헥토 거래번호
+    "trdAmt": "30000",                 // 거래금액
+    "authDt": "20231215143045",        // 승인일시
+    "fnNm": "국민은행",                 // 은행명
+    "fnCd": "004"                      // 은행코드
+}
+```
+
+#### ❌ 결제 실패 응답
+
+```javascript
+{
+    "outStatCd": "0031",               // 실패 코드
+    "outRsltCd": "1009",               // 에러 코드
+    "outRsltMsg": "결제 요청 정보 누락 (거래금액)", // 에러 메시지
+    "method": "bank",
+    "mchtTrdNo": "BANK20231215143022"
+}
+```
+
+### 3️⃣ 결제 완료 노티(NOTI) 처리
+
+계좌이체가 완료되면 `notiUrl`로 결과가 전송됩니다.
+
+```javascript
+// Node.js Express 예시
+app.post('/payment/bank/notification', (req, res) => {
+    const {
+        outStatCd,
+        trdNo,
+        method,
+        bizType,
+        mchtTrdNo,
+        trdAmt,
+        trdDtm,
+        bankCd,
+        bankNm,
+        csrcIssNo,
+        pktHash
+    } = req.body;
+    
+    // 1. 해시 검증
+    const expectedHash = generateBankNotiHash(req.body, hashKey);
+    if (pktHash !== expectedHash) {
+        console.error('해시 검증 실패');
+        return res.status(400).send('FAIL');
+    }
+    
+    // 2. 결제 성공 여부 확인
+    if (outStatCd === '0021' && bizType === 'B0') {
+        // 결제 성공 - DB 업데이트
+        await updateBankTransferStatus(mchtTrdNo, {
+            status: 'completed',
+            hectoTrdNo: trdNo,
+            completedAt: trdDtm,
+            bankCode: bankCd,
+            bankName: bankNm,
+            cashReceiptNo: csrcIssNo,
+            amount: trdAmt
+        });
+        
+        // 고객에게 결제 완료 알림 발송
+        await sendPaymentNotification(mchtTrdNo);
+        
+        // 성공 응답
+        res.send('OK');
+    } else if (bizType === 'C0') {
+        // 취소 처리
+        await updateBankTransferStatus(mchtTrdNo, {
+            status: 'cancelled',
+            cancelledAt: trdDtm
+        });
+        
+        res.send('OK');
+    } else {
+        // 기타 상태 처리
+        console.log('계좌이체 상태:', outStatCd, req.body.outRsltMsg);
+        res.send('OK');
+    }
+});
+
+// 노티 해시 생성 함수
+function generateBankNotiHash(notiData, hashKey) {
+    const hashData = 
+        notiData.outStatCd +    // 거래상태코드
+        notiData.trdDtm.substring(0, 8) +  // 거래일자 (YYYYMMDD)
+        notiData.trdDtm.substring(8, 14) + // 거래시간 (HHMMSS)
+        notiData.mchtId +       // 상점아이디
+        notiData.mchtTrdNo +    // 상점주문번호
+        notiData.trdAmt +       // 거래금액
+        hashKey;                // 해시키
+    
+    return crypto.createHash('sha256').update(hashData, 'utf8').digest('hex');
+}
+```
+
+---
+
+## 🔄 고급 기능
+
+### 1️⃣ 계좌이체 취소
+
+결제 완료된 계좌이체를 취소하는 기능입니다.
+
+#### 📡 취소 API 엔드포인트
+
+| 환경 | URL |
+|------|-----|
+| **테스트** | `https://tbgw.settlebank.co.kr/spay/APICancel.do` |
+| **운영** | `https://gw.settlebank.co.kr/spay/APICancel.do` |
+
+#### 💻 취소 요청 예시
+
+```javascript
+const cancelRequest = {
+    params: {
+        mchtId: "nx_mid_il",
+        ver: "0A19",
+        mchtTrdNo: "CANCEL20231215143022",
+        trdDt: "20231215",
+        trdTm: "143022"
+    },
+    data: {
+        pktHash: "생성된해시값",
+        method: "RA",                    // 계좌이체 취소 코드
+        orgTrdNo: "STFP_PGRAnx_mid_il0231215143022M1234567", // 원거래번호
+        orgTrdDt: "20231215",            // 원거래일자
+        cnclAmt: "30000",                // 취소금액 (전체취소)
+        cnclRsn: "고객 요청"             // 취소사유
+    }
+};
+
+// 서버로 전송
+fetch('https://tbgw.settlebank.co.kr/spay/APICancel.do', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json; charset=UTF-8'
+    },
+    body: JSON.stringify(cancelRequest)
+})
+.then(response => response.json())
+.then(data => {
+    console.log('취소 결과:', data);
+    if (data.outStatCd === '0021') {
+        alert('취소가 완료되었습니다.');
+    } else {
+        alert('취소 실패: ' + data.outRsltMsg);
+    }
+});
+```
+
+### 2️⃣ 부분 취소
+
+결제 금액의 일부만 취소하는 기능입니다.
+
+```javascript
+const partialCancelRequest = {
+    params: {
+        mchtId: "nx_mid_il",
+        ver: "0A19",
+        mchtTrdNo: "PARTIAL_CANCEL20231215143022",
+        trdDt: "20231215",
+        trdTm: "143022"
+    },
+    data: {
+        pktHash: "생성된해시값",
+        method: "RA",
+        orgTrdNo: "STFP_PGRAnx_mid_il0231215143022M1234567",
+        orgTrdDt: "20231215",
+        cnclAmt: "10000",                // 부분취소 금액 (30,000원 중 10,000원)
+        cnclRsn: "부분 환불 요청"
+    }
+};
+```
+
+### 3️⃣ 통장 표시명 관리
+
+<div className="bg-blue-50 border-l-4 border-blue-400 p-4 my-6">
+  <div className="flex">
+    <div className="flex-shrink-0">
+      <span className="text-blue-400 text-lg">💡</span>
+    </div>
+    <div className="ml-3">
+      <h4 className="text-blue-800 font-medium">통장 표시명 정책</h4>
+      <ul className="mt-2 text-blue-700 text-sm space-y-1">
+        <li>• <strong>결제 및 익일환불</strong>: 뱅크페이에 등록된 가맹점명 사용</li>
+        <li>• <strong>당일취소</strong>: 각 은행 정책에 따라 다름</li>
+        <li>• <strong>표시명 변경</strong>: 헥토파이낸셜에 별도 문의 필요</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+---
+
+## 🧪 테스트 가이드
+
+### 🔧 테스트 환경 설정
+
+**테스트 상점 정보:**
+- **상점ID**: `nx_mid_il`
+- **환경**: `https://tbnpg.settlebank.co.kr`
+- **특징**: 실제 이체 없이 승인 테스트 가능
+
+### 🎯 테스트 시나리오
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+  <div className="bg-green-50 border border-green-200 p-6 rounded-xl">
+    <h4 className="text-green-900 font-semibold mb-3">✅ 성공 시나리오</h4>
+    <ul className="text-green-800 text-sm space-y-2">
+      <li>• 정상 계좌이체 결제</li>
+      <li>• 다양한 은행 선택</li>
+      <li>• 전체 취소</li>
+      <li>• 부분 취소</li>
+      <li>• 현금영수증 발행</li>
+    </ul>
+  </div>
+  
+  <div className="bg-red-50 border border-red-200 p-6 rounded-xl">
+    <h4 className="text-red-900 font-semibold mb-3">❌ 실패 시나리오</h4>
+    <ul className="text-red-800 text-sm space-y-2">
+      <li>• 잘못된 계좌 정보</li>
+      <li>• 잔액 부족</li>
+      <li>• 인증 실패</li>
+      <li>• 해시값 불일치</li>
+      <li>• 취소 기한 초과</li>
+    </ul>
+  </div>
+</div>
+
+### 💡 테스트 팁
+
+- **은행별 테스트**: 주요 은행별로 결제 테스트 진행
+- **모바일 테스트**: 모바일 환경에서 뱅크페이 앱 연동 확인
+- **취소 테스트**: 당일취소와 익일환불 시나리오 모두 테스트
+- **현금영수증**: 자동 발행되는 현금영수증 번호 확인
+
+---
+
+## ❌ 에러 처리
+
+### 🚨 주요 에러 코드
+
+| 코드 | 메시지 | 원인 | 해결방법 |
+|------|--------|------|----------|
+| `1009` | 결제 요청 정보 누락 (거래금액) | 필수 파라미터 누락 | 필수 파라미터 확인 |
+| `1901` | 해쉬값 불일치 오류 | 해시 생성 오류 | 해시 생성 로직 점검 |
+| `1902` | 암호화 항목 미처리 오류 | 암호화 필드 미처리 | AES 암호화 적용 |
+| `ST24` | 예금주 불일치 | 계좌 명의자 불일치 | 정확한 예금주명 확인 |
+| `ST30` | 인증 시간 만료 | 뱅크페이 인증 시간 초과 | 인증 시간 내 완료 안내 |
+| `ST46` | 취소기간 경과 | 취소 가능 기간 초과 | 취소 가능 기간 확인 |
+
+### 🔧 에러 해결 가이드
+
+<div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-6">
+  <div className="flex">
+    <div className="flex-shrink-0">
+      <span className="text-yellow-400 text-lg">💡</span>
+    </div>
+    <div className="ml-3">
+      <h4 className="text-yellow-800 font-medium">일반적인 문제 해결</h4>
+      <ul className="mt-2 text-yellow-700 text-sm space-y-1">
+        <li>• <strong>뱅크페이 오류</strong>: 은행 시스템 점검 시간 확인</li>
+        <li>• <strong>인증 실패</strong>: 공동인증서 또는 간편인증 상태 확인</li>
+        <li>• <strong>취소 불가</strong>: 취소 가능 기간과 조건 확인</li>
+        <li>• <strong>NOTI 미수신</strong>: 방화벽 및 URL 접근성 확인</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+---
+
+## 💡 자주 묻는 질문
+
+### Q. 계좌이체 취소는 언제까지 가능한가요?
+A. 당일 23시까지는 당일취소, 그 이후는 익일환불로 처리됩니다. 취소 방식에 따라 처리 시간이 다릅니다.
+
+### Q. 현금영수증은 자동으로 발행되나요?
+A. 네, 계좌이체 결제 완료 시 현금영수증이 자동으로 발행됩니다. 별도 신청이 필요하지 않습니다.
+
+### Q. 부분취소도 가능한가요?
+A. 네, 원거래 금액 범위 내에서 여러 번 부분취소가 가능합니다.
+
+### Q. 모든 은행이 지원되나요?
+A. 뱅크페이에 참여하는 모든 국내 은행이 지원됩니다. 인터넷뱅킹 및 모바일뱅킹 모두 이용 가능합니다.
+
+### Q. 통장에 표시되는 이름을 변경할 수 있나요?
+A. 뱅크페이에 등록된 가맹점명이 표시됩니다. 변경이 필요한 경우 헥토파이낸셜에 문의하세요.
+
+---
+
+## 🚀 다음 단계
+
+계좌이체 연동을 완료했다면, 다른 결제 수단도 확인해보세요:
+
+<div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-8">
+  <a href="/docs/pg/credit-card" className="block p-4 bg-white border-2 border-hecto-100 hover:border-hecto-300 rounded-xl transition-colors group">
+    <div className="text-center">
+      <div className="w-12 h-12 bg-hecto-400 rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-hecto-500 transition-colors">
+        <span className="text-white text-lg">💳</span>
+      </div>
+      <span className="text-sm font-medium text-gray-900">신용카드</span>
+    </div>
+  </a>
+  
+  <a href="/docs/pg/virtual-account" className="block p-4 bg-white border-2 border-green-100 hover:border-green-300 rounded-xl transition-colors group">
+    <div className="text-center">
+      <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-green-600 transition-colors">
+        <span className="text-white text-lg">💰</span>
+      </div>
+      <span className="text-sm font-medium text-gray-900">가상계좌</span>
+    </div>
+  </a>
+  
+  <a href="/docs/pg/mobile-payment" className="block p-4 bg-white border-2 border-purple-100 hover:border-purple-300 rounded-xl transition-colors group">
+    <div className="text-center">
+      <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-purple-600 transition-colors">
+        <span className="text-white text-lg">📱</span>
+      </div>
+      <span className="text-sm font-medium text-gray-900">휴대폰</span>
+    </div>
+  </a>
+  
+  <a href="/docs/pg/simple-payment" className="block p-4 bg-white border-2 border-orange-100 hover:border-orange-300 rounded-xl transition-colors group">
+    <div className="text-center">
+      <div className="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-orange-600 transition-colors">
+        <span className="text-white text-lg">⚡</span>
+      </div>
+      <span className="text-sm font-medium text-gray-900">간편결제</span>
+    </div>
+  </a>
+</div>
+
+---
+
+<div className="bg-gray-50 p-6 rounded-xl text-center my-8">
+  <p className="text-gray-600 mb-4">
+    계좌이체 연동에 대한 추가 문의사항이 있으시나요?
+  </p>
+  <div className="flex justify-center space-x-4">
+    <a href="mailto:support@hectofinancial.com" className="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+      📧 기술지원 문의
+    </a>
+    <a href="/docs/pg/api-reference" className="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+      📚 API 레퍼런스
+    </a>
+  </div>
+</div>
