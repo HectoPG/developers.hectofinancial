@@ -1,69 +1,84 @@
-# React + TypeScript + Vite
+# 헥토파이낸셜 개발자 문서 사이트
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite + MDX 기반의 헥토파이낸셜 개발자 문서 사이트입니다.
 
-Currently, two official plugins are available:
+## 🚀 실행 방법
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 개발 서버 실행
+```bash
+npm install
+npm run dev
+```
+브라우저에서 `http://localhost:5173` 접속
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 빌드
+```bash
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 빌드 결과 미리보기
+```bash
+npm run preview
 ```
+
+## 📁 프로젝트 구조
+
+```
+src/
+├── components/        # React 컴포넌트
+├── docs/             # MDX 문서 파일
+│   ├── pg/           # PG 결제 문서 (10개 챕터)
+│   ├── ezauth/       # 내통장결제 문서
+│   ├── ezcp/         # 간편현금결제 문서
+│   └── whitelabel/   # 화이트라벨 문서
+├── pages/            # 페이지 컴포넌트
+└── types/            # TypeScript 타입 정의
+```
+
+## 🎨 기술 스택
+
+- **React 18** + **TypeScript**
+- **Vite** (빌드 도구)
+- **MDX** (마크다운 + JSX)
+- **Tailwind CSS** (스타일링)
+- **React Router** (라우팅)
+- **Lucide React** (아이콘)
+
+## 📖 문서 카테고리
+
+- **PG 결제**: 신용카드, 가상계좌, 계좌이체, 간편결제 등
+- **내통장결제**: 간편 계좌 결제 서비스
+- **간편현금결제**: 현금 결제 서비스
+- **화이트라벨**: 통합 결제 서비스
+
+## 🛠️ 개발 명령어
+
+```bash
+# 의존성 설치
+npm install
+
+# 개발 서버 실행
+npm run dev
+
+# 타입 체크
+npm run type-check
+
+# 린트 검사
+npm run lint
+
+# 빌드
+npm run build
+
+# 빌드 결과 미리보기
+npm run preview
+```
+
+## 📝 문서 추가/수정
+
+1. `src/docs/` 폴더에 MDX 파일 추가
+2. `src/pages/DocsPage.tsx`에서 라우팅 설정
+3. `src/components/Layout.tsx`에서 네비게이션 메뉴 추가
+
+---
+
+**헥토파이낸셜 개발팀** | [GitHub](https://github.com/HectoPG/developers.hectofinancial)
