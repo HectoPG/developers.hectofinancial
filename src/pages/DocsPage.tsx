@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 import { ArrowLeft, FileText, ExternalLink } from 'lucide-react'
 
+// 
 // 미리 정의된 lazy 컴포넌트들
 const PgGettingStarted = lazy(() => import('../docs/pg/01-getting-started.mdx'))
 const PgCreditCard = lazy(() => import('../docs/pg/02-credit-card.mdx'))
