@@ -29,6 +29,14 @@ export default function TableOfContents({ className }: TableOfContentsProps) {
         // 네비게이션이나 헤더의 헤딩은 제외
         if (heading.closest('header') || heading.closest('nav')) return
 
+        // MDX 컴포넌트 내부의 헤딩은 제외 (순수 마크다운 헤딩만 포함)
+        if (heading.closest('[data-exclude-from-toc]') ||
+            heading.closest('[data-mdx-component]') || 
+            heading.closest('.mdx-component') ||
+            heading.closest('div[class*="component"]') ||
+            heading.closest('div[class*="grid"]') ||
+            heading.closest('div[class*="FeatureGrid"]')) return
+
         const id = heading.id || `heading-${index}`
         if (!heading.id) {
           heading.id = id
@@ -37,14 +45,8 @@ export default function TableOfContents({ className }: TableOfContentsProps) {
         const level = parseInt(heading.tagName.substring(1))
         const text = heading.textContent?.trim() || ''
 
-        // 파라미터 관련 헤딩 제외 (ParameterCard 컴포넌트 내부나 파라미터 관련 텍스트)
-        const isParameterHeading = heading.closest('[data-parameter]') || 
-                                  text.includes('파라미터') || 
-                                  text.includes('Parameters') ||
-                                  text.includes('parameter')
-
-        // 빈 텍스트나 파라미터 관련 헤딩은 제외
-        if (text && !isParameterHeading) {
+        // 빈 텍스트는 제외, h1-h3까지만 포함
+        if (text && level <= 3) {
           tocItems.push({ id, text, level })
         }
       })
@@ -102,6 +104,15 @@ export default function TableOfContents({ className }: TableOfContentsProps) {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setActiveId(entry.target.id)
+            
+            // 목차에서 해당 항목으로 자동 스크롤
+            const tocElement = document.querySelector(`[data-toc-id="${entry.target.id}"]`)
+            if (tocElement) {
+              tocElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+              })
+            }
           }
         })
       },
@@ -143,31 +154,41 @@ export default function TableOfContents({ className }: TableOfContentsProps) {
     <div className={clsx('sticky top-24', className)}>
       <div className="p-4 max-h-[calc(100vh-120px)] overflow-hidden hover:overflow-y-auto">
         <h4 className="text-sm font-semibold text-gray-900 mb-4 flex items-center whitespace-nowrap">
-          <svg className="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-          </svg>
           목차
         </h4>
         <nav className="space-y-1">
           {toc.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => scrollToHeading(item.id)}
-              className={clsx(
-                'block w-full text-left py-2 px-3 text-sm rounded transition-colors whitespace-nowrap overflow-hidden text-ellipsis',
-                item.level === 1 && 'font-semibold',
-                item.level === 2 && 'pl-4',
-                item.level === 3 && 'pl-6',
-                item.level === 4 && 'pl-8',
-                item.level >= 5 && 'pl-10',
-                activeId === item.id
-                  ? 'bg-hecto-50 text-hecto-700 border-l-2 border-hecto-400'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+            <div key={item.id} className="relative">
+              {/* 수직 선 */}
+              {item.level > 1 && (
+                <div 
+                  className="absolute left-0 top-0 bottom-0 w-px bg-gray-200"
+                  style={{
+                    left: `${(item.level - 1) * 16}px`,
+                    height: '100%'
+                  }}
+                />
               )}
-              title={item.text} // 전체 텍스트를 툴팁으로 표시
-            >
-              {item.text}
-            </button>
+              
+              <button
+                onClick={() => scrollToHeading(item.id)}
+                data-toc-id={item.id}
+                className={clsx(
+                  'block w-full text-left py-2 px-3 text-sm rounded transition-colors whitespace-nowrap overflow-hidden text-ellipsis relative z-10',
+                  item.level === 1 && 'font-semibold pl-3',
+                  item.level === 2 && 'pl-7',
+                  item.level === 3 && 'pl-11',
+                  item.level === 4 && 'pl-15',
+                  item.level >= 5 && 'pl-19',
+                  activeId === item.id
+                    ? 'bg-hecto-50 text-hecto-700 border-l-2 border-hecto-400'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                )}
+                title={item.text} // 전체 텍스트를 툴팁으로 표시
+              >
+                {item.text}
+              </button>
+            </div>
           ))}
         </nav>
       </div>

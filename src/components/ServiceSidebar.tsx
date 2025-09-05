@@ -54,7 +54,6 @@ export default function ServiceSidebar({ className }: ServiceSidebarProps) {
   return (
     <div className={clsx('w-64 bg-white border-r border-gray-200', className)}>
       <div className="p-4">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">서비스 목록</h2>
         <nav className="space-y-2">
           {serviceNavigation.map((service) => {
             const Icon = service.icon
