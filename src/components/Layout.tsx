@@ -58,10 +58,10 @@ export default function Layout({ children }: LayoutProps) {
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-100">
-        <div className="max-w-7xl mx-auto pl-0 pr-4">
-          <div className="flex justify-between items-center h-16">
+        <div className="w-full pl-6 pr-4">
+          <div className="flex justify-start items-center h-16 space-x-8">
             {/* Logo */}
-            <Link to="/" className="flex items-center hover:opacity-80 transition-opacity -ml-4">
+            <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
               <img src="/site-mark.svg" alt="헥토파이낸셜" className="h-8" /> 
             </Link>
 
