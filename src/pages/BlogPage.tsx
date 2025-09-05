@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom'
 import { Calendar, Clock, ArrowRight, BookOpen, Code, Shield, Zap } from 'lucide-react'
 
 const BlogPage: React.FC = () => {
-  console.log('BlogPage component rendered')
-  
   // 추천 글 데이터 (샘플)
   const featuredPosts = [
     {
