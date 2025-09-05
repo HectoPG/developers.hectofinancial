@@ -8,22 +8,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>헥토파이낸셜 개발자 가이드</title>
     <meta name="description" content="헥토파이낸셜 결제 서비스 API 문서 및 연동 가이드" />
-  </head>
-  <body>
-    <div id="root"></div>
     <script>
       // GitHub Pages SPA fallback
-      (function(l) {
-        if (l.search[1] === '/' ) {
-          var decoded = l.search.slice(1).split('&').map(function(s) { 
-            return s.replace(/~and~/g, '&')
-          }).join('?');
-          window.history.replaceState(null, null,
-              l.pathname.slice(0, -1) + decoded + l.hash
-          );
-        }
-      }(window.location))
+      sessionStorage.redirect = location.href;
     </script>
-    <script type="module" src="/src/main.tsx"></script>
+    <meta http-equiv="refresh" content="0;URL='/'">
+  </head>
+  <body>
+    <div id="root">
+      <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: system-ui, sans-serif;">
+        <div style="text-align: center;">
+          <h1>페이지를 찾는 중...</h1>
+          <p>잠시 후 메인 페이지로 이동합니다.</p>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
