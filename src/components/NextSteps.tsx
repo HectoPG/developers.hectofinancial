@@ -108,10 +108,22 @@ export default function NextSteps({ title, steps, excludeTitle }: NextStepsProps
           <a 
             key={index}
             href={step.href} 
-            className="block p-6 bg-white border border-gray-200 hover:border-gray-300 rounded-2xl transition-all duration-200 group shadow-sm hover:shadow-md"
+            className="block p-6 border rounded-2xl transition-all duration-200 group shadow-sm hover:shadow-md"
+            style={{ 
+              backgroundColor: '#fff7f0',
+              borderColor: '#ffd9c1'
+            }}
           >
             <div className="text-center">
-              <div className={`w-14 h-14 ${step.iconBgColor} rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:${step.hoverIconBgColor} transition-all duration-200 shadow-sm`}>
+              <div 
+                className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3 transition-all duration-200 shadow-sm group-hover:shadow-md"
+                style={{ 
+                  backgroundColor: '#ffb089',
+                  ':hover': { backgroundColor: '#ff9566' }
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#ff9566' }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#ffb089' }}
+              >
                 <span className="text-white text-xl">{step.icon}</span>
               </div>
               <span className="text-sm font-semibold text-gray-900 group-hover:text-gray-700 transition-colors">{step.title}</span>
