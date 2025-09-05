@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
-import { ArrowLeft, FileText, ExternalLink } from 'lucide-react'
+import { ArrowLeft, FileText } from 'lucide-react'
 
 // 미리 정의된 lazy 컴포넌트들
 const PgGettingStarted = lazy(() => import('../docs/pg/01-getting-started.mdx'))
@@ -154,25 +154,6 @@ export default function DocsPage() {
         </Suspense>
       </div>
 
-      {/* Footer */}
-      <div className="mt-8 bg-gray-50 rounded-xl p-6 text-center">
-        <p className="text-gray-600 mb-4">더 자세한 정보가 필요하신가요?</p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a
-            href="#"
-            className="inline-flex items-center px-4 py-2 bg-hecto-400 text-white rounded-lg hover:bg-hecto-500 transition-colors"
-          >
-            <ExternalLink className="h-4 w-4 mr-2" />
-            API 레퍼런스
-          </a>
-          <a
-            href="#"
-            className="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 bg-white rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            고객센터 문의
-          </a>
-        </div>
-      </div>
     </div>
   )
 }

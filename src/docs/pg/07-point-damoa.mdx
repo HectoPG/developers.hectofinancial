@@ -855,18 +855,14 @@ A. 포인트 유효기간은 포인트 발급처의 정책에 따라 다릅니�
   </a>
 </div>
 
----
-
-<div className="bg-gray-50 p-6 rounded-xl text-center my-8">
-  <p className="text-gray-600 mb-4">
-    포인트 다모아 결제 연동에 대한 추가 문의사항이 있으시나요?
-  </p>
-  <div className="flex justify-center space-x-4">
-    <a href="mailto:support@hectofinancial.com" className="inline-flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors">
-      📧 기술지원 문의
-    </a>
-    <a href="/docs/pg/api-reference" className="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
-      📚 API 레퍼런스
-    </a>
-  </div>
-</div>
+<DocumentFooter 
+  title="포인트 다모아 결제 연동에 대한 추가 문의사항이 있으시나요?"
+  primaryButton={{
+    text: "📧 기술지원 문의",
+    href: "mailto:support@hectofinancial.com"
+  }}
+  secondaryButton={{
+    text: "📚 API 레퍼런스",
+    href: "/docs/pg/api-reference"
+  }}
+/>
