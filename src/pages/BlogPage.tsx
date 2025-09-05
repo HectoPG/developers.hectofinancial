@@ -14,8 +14,8 @@ const BlogPage: React.FC = () => {
       category: "가이드",
       icon: BookOpen,
       bgColor: "bg-hecto-50",
-      borderColor: "border-hecto-200",
-      iconColor: "text-hecto-600"
+      borderColor: "border-hecto-100",
+      iconColor: "text-hecto-500"
     },
     {
       id: "02-sample-article-2",
@@ -25,9 +25,9 @@ const BlogPage: React.FC = () => {
       readTime: "8분",
       category: "보안",
       icon: Shield,
-      bgColor: "bg-emerald-50",
-      borderColor: "border-emerald-200",
-      iconColor: "text-emerald-600"
+      bgColor: "bg-hecto-50",
+      borderColor: "border-hecto-100",
+      iconColor: "text-hecto-500"
     },
     {
       id: "03-sample-article-3",
@@ -37,9 +37,9 @@ const BlogPage: React.FC = () => {
       readTime: "6분",
       category: "기술",
       icon: Zap,
-      bgColor: "bg-violet-50",
-      borderColor: "border-violet-200",
-      iconColor: "text-violet-600"
+      bgColor: "bg-hecto-50",
+      borderColor: "border-hecto-100",
+      iconColor: "text-hecto-500"
     }
   ]
 
@@ -77,7 +77,7 @@ const BlogPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-hecto-50 to-white border-b border-gray-200">
+      <div className="bg-hecto-50 border-b border-hecto-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
@@ -102,10 +102,10 @@ const BlogPage: React.FC = () => {
                 <Link
                   key={post.id}
                   to={`/blog/${post.id}`}
-                  className={`${post.bgColor} ${post.borderColor} border rounded-xl p-6 hover:shadow-lg transition-all duration-200 group`}
+                  className={`${post.bgColor} ${post.borderColor} border rounded-2xl p-6 hover:shadow-md transition-all duration-200 group shadow-sm`}
                 >
                   <div className="flex items-center mb-4">
-                    <div className={`p-2 rounded-lg ${post.bgColor} ${post.iconColor}`}>
+                    <div className={`p-2 rounded-xl bg-hecto-100 ${post.iconColor}`}>
                       <IconComponent className="w-5 h-5" />
                     </div>
                     <span className="ml-3 text-sm font-medium text-gray-600">
@@ -145,11 +145,11 @@ const BlogPage: React.FC = () => {
               <Link
                 key={post.id}
                 to={`/blog/${post.id}`}
-                className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-all duration-200 group flex flex-col sm:flex-row"
+                className="bg-hecto-50 rounded-2xl border border-hecto-100 p-6 hover:shadow-md transition-all duration-200 group flex flex-col sm:flex-row shadow-sm"
               >
                 <div className="flex-shrink-0 mb-4 sm:mb-0 sm:mr-6">
-                  <div className="w-full sm:w-48 h-32 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center border border-gray-200">
-                    <Code className="w-8 h-8 text-gray-500" />
+                  <div className="w-full sm:w-48 h-32 bg-gradient-to-br from-hecto-100 to-hecto-200 rounded-xl flex items-center justify-center border border-hecto-200">
+                    <Code className="w-8 h-8 text-hecto-600" />
                   </div>
                 </div>
                 <div className="flex-1">
