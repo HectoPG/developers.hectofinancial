@@ -62,12 +62,6 @@ const getMdxComponent = (category: string, page?: string) => {
   }
 }
 
-const categoryNames: Record<string, string> = {
-  pg: 'PG 결제',
-  ezauth: '내통장결제',
-  ezcp: '간편현금결제',
-  whitelabel: '화이트라벨',
-}
 
 const categoryDescriptions: Record<string, string> = {
   pg: '결제 서비스 연동 가이드',
@@ -76,12 +70,6 @@ const categoryDescriptions: Record<string, string> = {
   whitelabel: '통합 결제 서비스 연동 가이드',
 }
 
-const categoryColors: Record<string, string> = {
-  pg: 'bg-hecto-400',
-  ezauth: 'bg-green-500',
-  ezcp: 'bg-purple-500',
-  whitelabel: 'bg-hecto-600',
-}
 
 export default function DocsPage() {
   const { category, page } = useParams<{ category: string; page?: string }>()

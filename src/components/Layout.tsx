@@ -22,28 +22,6 @@ const navigation = [
   { name: '블로그', href: '/blog', icon: FileText, description: '기술 블로그 및 소식' },
 ]
 
-const serviceNavigation = [
-  { 
-    name: 'PG 결제', 
-    href: '/docs/pg', 
-    icon: CreditCard,
-    children: [
-      { name: '시작하기', href: '/docs/pg', description: '개요 및 기본 설정' },
-      { name: '신용카드', href: '/docs/pg/credit-card', description: '신용카드 결제' },
-      { name: '가상계좌', href: '/docs/pg/virtual-account', description: '가상계좌 발급 및 입금' },
-      { name: '계좌이체', href: '/docs/pg/bank-transfer', description: '실시간 계좌이체' },
-      { name: '휴대폰 결제', href: '/docs/pg/mobile-payment', description: '휴대폰 소액결제' },
-      { name: '상품권 결제', href: '/docs/pg/gift-card', description: '각종 상품권 결제' },
-      { name: '포인트 다모아', href: '/docs/pg/point-damoa', description: '포인트 결제 서비스' },
-      { name: '간편결제', href: '/docs/pg/simple-payment', description: '페이코, 카카오페이 등' },
-      { name: '거래 조회 및 관리', href: '/docs/pg/transaction-management', description: '거래대사, 정산대사' },
-      { name: '개발자 참조', href: '/docs/pg/developer-reference', description: '에러코드, 카드사 코드' },
-    ]
-  },
-  { name: '내통장결제', href: '/docs/ezauth', icon: Banknote, description: '간편 계좌 결제 서비스' },
-  { name: '간편현금결제', href: '/docs/ezcp', icon: FileText, description: '현금 결제 서비스' },
-  { name: '화이트라벨', href: '/docs/whitelabel', icon: Layers, description: '통합 결제 서비스' },
-]
 
 interface LayoutProps {
   children: React.ReactNode
@@ -55,8 +33,6 @@ export default function Layout({ children }: LayoutProps) {
   const location = useLocation()
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  // 문서 페이지인지 확인
-  const isDocsPage = location.pathname.startsWith('/docs')
   // 서비스 페이지인지 확인
   const isServicePage = location.pathname.startsWith('/docs/')
 
