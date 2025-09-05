@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { CreditCard, Banknote, FileText, Layers, ArrowRight, Code, Zap, Shield, Globe, BookOpen, Users, CheckCircle, ExternalLink, Calendar, TrendingUp } from 'lucide-react'
+import { CreditCard, Banknote, FileText, Layers, ArrowRight, Zap, Shield, BookOpen, Users, CheckCircle, ExternalLink, Calendar } from 'lucide-react'
 
 const services = [
   {
@@ -138,7 +138,7 @@ export default function HomePage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-            {services.map((service, index) => {
+            {services.map((service) => {
               const Icon = service.icon
               return (
                 <div
