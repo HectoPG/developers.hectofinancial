@@ -3,6 +3,8 @@ import { MDXProvider } from '@mdx-js/react'
 import Layout from './components/Layout'
 import HomePage from './pages/HomePage'
 import DocsPage from './pages/DocsPage'
+import BlogPage from './pages/BlogPage'
+import BlogDetailPage from './pages/BlogDetailPage'
 import ParameterCard from './components/ParameterCard'
 
 // 헤딩에서 ID 생성하는 함수
@@ -67,6 +69,8 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:id" element={<BlogDetailPage />} />
             <Route path="/docs/:category" element={<DocsPage />} />
             <Route path="/docs/:category/:page" element={<DocsPage />} />
           </Routes>
