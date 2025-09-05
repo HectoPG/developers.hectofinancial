@@ -82,11 +82,11 @@ export default function Layout({ children }: LayoutProps) {
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto pl-0 pr-4">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
-            <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
-              <img src="/site-mark.svg" alt="헥토파이낸셜 로고" className="h-8" />
+            <Link to="/" className="flex items-center hover:opacity-80 transition-opacity -ml-4">
+              <img src="/site-mark.svg" alt="헥토파이낸셜" className="h-8" />
             </Link>
 
             {/* Desktop Navigation */}
@@ -262,20 +262,18 @@ export default function Layout({ children }: LayoutProps) {
             </div>
             
             {/* Content Area */}
-            <div className="flex-1 min-w-0 max-w-4xl">
+            <div className="flex-1 min-w-0 max-w-4xl lg:mr-64">
               <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
-                <div className="flex gap-6">
-                  {/* Documentation Content */}
-                  <div className="w-full max-w-2xl overflow-x-hidden">
-                    {children}
-                  </div>
-                  
-                  {/* Table of Contents - Desktop only */}
-                  <div className="hidden lg:block w-44 flex-shrink-0">
-                    <TableOfContents />
-                  </div>
+                {/* Documentation Content */}
+                <div className="w-full max-w-2xl overflow-x-hidden">
+                  {children}
                 </div>
               </div>
+            </div>
+            
+            {/* Table of Contents - Fixed to right edge */}
+            <div className="hidden lg:block fixed right-0 top-20 w-64 h-[calc(100vh-5rem)] overflow-y-auto bg-white border-l border-gray-200 p-4">
+              <TableOfContents />
             </div>
           </div>
         ) : (
