@@ -22,7 +22,7 @@ const ParameterCard: React.FC<ParameterCardProps> = ({
   className = ""
 }) => {
   return (
-    <div className={`mb-8 pb-6 border-b border-gray-100 last:border-b-0 ${className}`}>
+    <div className={`mb-6 p-6 bg-gray-50 border border-gray-200 rounded-lg hover:shadow-sm transition-shadow ${className}`}>
       {/* 파라미터 헤더 - 이미지와 동일한 레이아웃 */}
       <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2 mb-3">
         <h3 className="text-lg font-semibold text-gray-900 m-0">
@@ -73,7 +73,7 @@ const ParameterCard: React.FC<ParameterCardProps> = ({
           <span className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2 block">
             예시
           </span>
-          <pre className="bg-gray-100 px-3 py-2 rounded-md text-sm font-mono text-gray-800 overflow-x-auto">
+          <pre className="bg-white border border-gray-200 px-4 py-3 rounded-md text-sm font-mono text-gray-800 overflow-x-auto shadow-sm">
             <code>"{example}"</code>
           </pre>
         </div>
@@ -81,16 +81,16 @@ const ParameterCard: React.FC<ParameterCardProps> = ({
       
       {/* 추가 정보 노트 */}
       {note && (
-        <div className="mt-4 p-3 bg-blue-50 border-l-4 border-blue-400 rounded-r-md">
+        <div className="mt-4 p-4 bg-hecto-50 border-l-4 border-hecto-400 rounded-r-md">
           <div className="flex">
             <div className="flex-shrink-0">
-              <span className="text-blue-400 text-sm">💡</span>
+              <span className="text-hecto-500 text-sm">💡</span>
             </div>
             <div className="ml-2">
-              <p className="text-sm text-blue-800 font-medium">
+              <p className="text-sm text-hecto-800 font-medium">
                 참고사항
               </p>
-              <p className="text-sm text-blue-700 mt-1">
+              <p className="text-sm text-hecto-700 mt-1">
                 {note}
               </p>
             </div>
