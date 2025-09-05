@@ -6,6 +6,11 @@ import DocsPage from './pages/DocsPage'
 import BlogPage from './pages/BlogPage'
 import BlogDetailPage from './pages/BlogDetailPage'
 import ParameterCard from './components/ParameterCard'
+import FeatureGrid from './components/FeatureGrid'
+import NextSteps from './components/NextSteps'
+import TestScenario from './components/TestScenario'
+import ErrorGuide from './components/ErrorGuide'
+import DocumentFooter from './components/DocumentFooter'
 
 // 헤딩에서 ID 생성하는 함수
 const generateId = (text: string) => {
@@ -60,6 +65,11 @@ const mdxComponents = {
   blockquote: (props: any) => <blockquote className="border-l-4 border-hecto-400 pl-3 py-2 italic text-gray-600 mb-3 bg-hecto-50 rounded-r-lg text-xs" {...props} />,
   a: (props: any) => <a className="text-hecto-600 hover:text-hecto-800 underline decoration-2 underline-offset-2 transition-colors" {...props} />,
   ParameterCard,
+  FeatureGrid,
+  NextSteps,
+  TestScenario,
+  ErrorGuide,
+  DocumentFooter,
 }
 
 function App() {

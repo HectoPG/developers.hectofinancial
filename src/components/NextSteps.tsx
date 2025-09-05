@@ -117,10 +117,7 @@ export default function NextSteps({ title, steps, excludeTitle }: NextStepsProps
             <div className="text-center">
               <div 
                 className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3 transition-all duration-200 shadow-sm group-hover:shadow-md"
-                style={{ 
-                  backgroundColor: '#ffb089',
-                  ':hover': { backgroundColor: '#ff9566' }
-                }}
+                style={{ backgroundColor: '#ffb089' }}
                 onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#ff9566' }}
                 onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#ffb089' }}
               >
