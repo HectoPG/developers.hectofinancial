@@ -37,8 +37,14 @@ export default function TableOfContents({ className }: TableOfContentsProps) {
         const level = parseInt(heading.tagName.substring(1))
         const text = heading.textContent?.trim() || ''
 
-        // 빈 텍스트는 제외
-        if (text) {
+        // 파라미터 관련 헤딩 제외 (ParameterCard 컴포넌트 내부나 파라미터 관련 텍스트)
+        const isParameterHeading = heading.closest('[data-parameter]') || 
+                                  text.includes('파라미터') || 
+                                  text.includes('Parameters') ||
+                                  text.includes('parameter')
+
+        // 빈 텍스트나 파라미터 관련 헤딩은 제외
+        if (text && !isParameterHeading) {
           tocItems.push({ id, text, level })
         }
       })

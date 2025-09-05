@@ -3,14 +3,30 @@ import { Link, useLocation } from 'react-router-dom'
 import { Menu, X, FileText, CreditCard, Banknote, Layers, Home, ChevronDown } from 'lucide-react'
 import clsx from 'clsx'
 import TableOfContents from './TableOfContents'
+import ServiceSidebar from './ServiceSidebar'
 
 const navigation = [
   { name: '홈', href: '/', icon: Home },
   { 
+    name: '서비스', 
+    href: '/services', 
+    icon: Layers, 
+    description: '결제 서비스',
+    children: [
+      { name: 'PG 결제', href: '/docs/pg', description: '신용카드, 간편결제, 가상계좌 등', icon: CreditCard },
+      { name: '내통장결제', href: '/docs/ezauth', description: '실시간 계좌이체 서비스', icon: Banknote },
+      { name: '간편현금결제', href: '/docs/ezcp', description: '현금 결제 서비스', icon: FileText },
+      { name: '화이트라벨', href: '/docs/whitelabel', description: '통합 결제 서비스', icon: Layers },
+    ]
+  },
+  { name: '블로그', href: '/blog', icon: FileText, description: '기술 블로그 및 소식' },
+]
+
+const serviceNavigation = [
+  { 
     name: 'PG 결제', 
     href: '/docs/pg', 
-    icon: CreditCard, 
-    description: '신용카드 결제 서비스',
+    icon: CreditCard,
     children: [
       { name: '시작하기', href: '/docs/pg', description: '개요 및 기본 설정' },
       { name: '신용카드', href: '/docs/pg/credit-card', description: '신용카드 결제' },
@@ -41,6 +57,8 @@ export default function Layout({ children }: LayoutProps) {
 
   // 문서 페이지인지 확인
   const isDocsPage = location.pathname.startsWith('/docs')
+  // 서비스 페이지인지 확인
+  const isServicePage = location.pathname.startsWith('/docs/')
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -74,7 +92,6 @@ export default function Layout({ children }: LayoutProps) {
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-1" ref={dropdownRef}>
               {navigation.map((item) => {
-                const Icon = item.icon
                 const isActive = location.pathname === item.href || location.pathname.startsWith(item.href + '/')
                 
                 return (
@@ -91,7 +108,6 @@ export default function Layout({ children }: LayoutProps) {
                             'flex items-center px-4 py-2 text-base font-medium rounded-md transition-all duration-200'
                           )}
                         >
-                          <Icon className="mr-2 h-5 w-5" />
                           {item.name}
                           <ChevronDown className={clsx(
                             'ml-2 h-4 w-4 transition-transform duration-200',
@@ -101,25 +117,27 @@ export default function Layout({ children }: LayoutProps) {
                         
                         {/* Dropdown menu */}
                         {activeDropdown === item.name && (
-                          <div className="absolute top-full left-0 mt-1 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                          <div className="absolute top-full left-0 mt-1 w-96 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
                             <div className="py-2">
-                              {item.children.map((child) => (
-                                <Link
-                                  key={child.name}
-                                  to={child.href}
-                                  className={clsx(
-                                    location.pathname === child.href
-                                      ? 'bg-hecto-50 text-hecto-700 border-l-4 border-hecto-400' 
-                                      : 'text-gray-700 hover:bg-gray-50 hover:text-hecto-600',
-                                    'block px-4 py-3 transition-all duration-200'
-                                  )}
-                                >
-                                  <div className="font-medium">{child.name}</div>
-                                  {child.description && (
-                                    <div className="text-sm text-gray-500 mt-1">{child.description}</div>
-                                  )}
-                                </Link>
-                              ))}
+                              {item.children.map((child) => {
+                                return (
+                                  <Link
+                                    key={child.name}
+                                    to={child.href}
+                                    className={clsx(
+                                      location.pathname === child.href || location.pathname.startsWith(child.href + '/')
+                                        ? 'bg-hecto-50 text-hecto-700 border-l-4 border-hecto-400' 
+                                        : 'text-gray-700 hover:bg-gray-50 hover:text-hecto-600',
+                                      'block px-4 py-3 transition-all duration-200'
+                                    )}
+                                  >
+                                    <div className="font-medium">{child.name}</div>
+                                    {child.description && (
+                                      <div className="text-sm text-gray-500 mt-1">{child.description}</div>
+                                    )}
+                                  </Link>
+                                )
+                              })}
                             </div>
                           </div>
                         )}
@@ -135,7 +153,6 @@ export default function Layout({ children }: LayoutProps) {
                           'flex items-center px-4 py-2 text-base font-medium rounded-md transition-all duration-200'
                         )}
                       >
-                        <Icon className="mr-2 h-5 w-5" />
                         {item.name}
                       </Link>
                     )}
@@ -164,52 +181,68 @@ export default function Layout({ children }: LayoutProps) {
           <div className="md:hidden border-t border-gray-200">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white shadow-lg">
               {navigation.map((item) => {
-                const Icon = item.icon
                 const isActive = location.pathname === item.href || location.pathname.startsWith(item.href + '/')
                 
                 return (
                   <div key={item.name}>
-                    <Link
-                      to={item.href}
-                      className={clsx(
-                        isActive
-                          ? 'bg-hecto-100 text-hecto-900 border-l-4 border-hecto-400' 
-                          : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900',
-                        'flex items-center px-3 py-3 text-base font-medium transition-all duration-200'
-                      )}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      <Icon className="mr-3 h-6 w-6" />
+                    {item.children ? (
+                      // Mobile dropdown menu
                       <div>
+                        <div
+                          className={clsx(
+                            isActive
+                              ? 'bg-hecto-100 text-hecto-900' 
+                              : 'text-gray-700',
+                            'px-3 py-3 text-base font-medium'
+                          )}
+                        >
+                          <div>{item.name}</div>
+                          {item.description && (
+                            <div className="text-sm text-gray-500 mt-1">{item.description}</div>
+                          )}
+                        </div>
+                        
+                        {/* Mobile submenu */}
+                        <div className="ml-6 mt-1 space-y-1">
+                          {item.children.map((child) => {
+                            return (
+                              <Link
+                                key={child.name}
+                                to={child.href}
+                                className={clsx(
+                                  location.pathname === child.href || location.pathname.startsWith(child.href + '/')
+                                    ? 'bg-hecto-50 text-hecto-700 border-l-2 border-hecto-400' 
+                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-700',
+                                  'block px-3 py-2 text-sm font-medium transition-all duration-200'
+                                )}
+                                onClick={() => setMobileMenuOpen(false)}
+                              >
+                                <div>{child.name}</div>
+                                {child.description && (
+                                  <div className="text-xs text-gray-500 mt-1">{child.description}</div>
+                                )}
+                              </Link>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    ) : (
+                      // Regular mobile menu item
+                      <Link
+                        to={item.href}
+                        className={clsx(
+                          isActive
+                            ? 'bg-hecto-100 text-hecto-900 border-l-4 border-hecto-400' 
+                            : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900',
+                          'block px-3 py-3 text-base font-medium transition-all duration-200'
+                        )}
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
                         <div>{item.name}</div>
                         {item.description && (
                           <div className="text-sm text-gray-500 mt-1">{item.description}</div>
                         )}
-                      </div>
-                    </Link>
-                    
-                    {/* Mobile submenu */}
-                    {item.children && isActive && (
-                      <div className="ml-6 mt-1 space-y-1">
-                        {item.children.map((child) => (
-                          <Link
-                            key={child.name}
-                            to={child.href}
-                            className={clsx(
-                              location.pathname === child.href
-                                ? 'bg-hecto-50 text-hecto-700 border-l-2 border-hecto-400' 
-                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-700',
-                              'block px-3 py-2 text-sm font-medium transition-all duration-200'
-                            )}
-                            onClick={() => setMobileMenuOpen(false)}
-                          >
-                            <div>{child.name}</div>
-                            {child.description && (
-                              <div className="text-xs text-gray-500 mt-1">{child.description}</div>
-                            )}
-                          </Link>
-                        ))}
-                      </div>
+                      </Link>
                     )}
                   </div>
                 )
@@ -221,17 +254,27 @@ export default function Layout({ children }: LayoutProps) {
 
       {/* Main content */}
       <main>
-        {isDocsPage ? (
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-8">
-            <div className="flex gap-8">
-              {/* Documentation Content */}
-              <div className="flex-1">
-                {children}
-              </div>
-              
-              {/* Table of Contents - Desktop only */}
-              <div className="hidden xl:block w-64">
-                <TableOfContents />
+        {isServicePage ? (
+          <div className="flex">
+            {/* Service Sidebar - Desktop only */}
+            <div className="hidden lg:block">
+              <ServiceSidebar />
+            </div>
+            
+            {/* Content Area */}
+            <div className="flex-1 min-w-0 max-w-4xl">
+              <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
+                <div className="flex gap-6">
+                  {/* Documentation Content */}
+                  <div className="w-full max-w-2xl overflow-x-hidden">
+                    {children}
+                  </div>
+                  
+                  {/* Table of Contents - Desktop only */}
+                  <div className="hidden lg:block w-44 flex-shrink-0">
+                    <TableOfContents />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

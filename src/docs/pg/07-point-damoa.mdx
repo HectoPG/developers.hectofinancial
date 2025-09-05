@@ -1,3 +1,5 @@
+import { FeatureGrid, TestScenario, ErrorGuide, NextSteps, DocumentFooter } from '../../components'
+
 # 🎯 포인트 다모아 결제
 
 포인트 다모아는 다양한 포인트를 통합하여 결제할 수 있는 서비스입니다. 고객이 보유한 여러 포인트를 하나로 모아서 편리하게 결제할 수 있습니다.
@@ -6,47 +8,40 @@
 
 ### 🎯 주요 특징
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
-  <div className="bg-gradient-to-r from-orange-50 to-orange-100 p-6 rounded-xl border border-orange-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">🎯</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">통합 포인트</h3>
-    </div>
-    <p className="text-gray-700">여러 포인트를 하나로 통합하여 사용할 수 있는 편리한 결제 서비스</p>
-  </div>
-
-  <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">🔐</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">본인 인증</h3>
-    </div>
-    <p className="text-gray-700">CI(고객식별정보) 기반의 안전한 본인 인증 시스템</p>
-  </div>
-
-  <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-xl border border-green-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">⚡</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">실시간 처리</h3>
-    </div>
-    <p className="text-gray-700">포인트 잔액 확인부터 결제 완료까지 실시간 처리</p>
-  </div>
-
-  <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-6 rounded-xl border border-purple-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">📊</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">포인트 관리</h3>
-    </div>
-    <p className="text-gray-700">포인트 적립, 사용, 잔액 조회 등 종합적인 포인트 관리</p>
-  </div>
-</div>
+<FeatureGrid features={[
+  {
+    icon: "🎯",
+    title: "통합 포인트",
+    description: "여러 포인트를 하나로 통합하여 사용할 수 있는 편리한 결제 서비스",
+    bgColor: "from-orange-50 to-orange-100",
+    borderColor: "border-orange-200",
+    iconBgColor: "bg-orange-500"
+  },
+  {
+    icon: "🔐",
+    title: "본인 인증",
+    description: "CI(고객식별정보) 기반의 안전한 본인 인증 시스템",
+    bgColor: "from-blue-50 to-blue-100",
+    borderColor: "border-blue-200",
+    iconBgColor: "bg-blue-500"
+  },
+  {
+    icon: "⚡",
+    title: "실시간 처리",
+    description: "포인트 잔액 확인부터 결제 완료까지 실시간 처리",
+    bgColor: "from-green-50 to-green-100",
+    borderColor: "border-green-200",
+    iconBgColor: "bg-green-500"
+  },
+  {
+    icon: "📊",
+    title: "포인트 관리",
+    description: "포인트 적립, 사용, 잔액 조회 등 종합적인 포인트 관리",
+    bgColor: "from-purple-50 to-purple-100",
+    borderColor: "border-purple-200",
+    iconBgColor: "bg-purple-500"
+  }
+]} />
 
 ### 🎁 포인트 다모아 특징
 

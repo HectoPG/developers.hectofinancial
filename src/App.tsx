@@ -17,45 +17,45 @@ const generateId = (text: string) => {
 const mdxComponents = {
   h1: (props: any) => {
     const id = props.id || generateId(props.children?.toString() || '')
-    return <h1 id={id} className="text-4xl font-bold mb-8 text-gray-900 border-b border-gray-200 pb-4" {...props} />
+    return <h1 id={id} className="text-xl font-bold mb-3 text-gray-900" {...props} />
   },
   h2: (props: any) => {
     const id = props.id || generateId(props.children?.toString() || '')
-    return <h2 id={id} className="text-3xl font-semibold mb-6 mt-12 text-gray-900" {...props} />
+    return <h2 id={id} className="text-lg font-semibold mb-2 mt-5 text-gray-900" {...props} />
   },
   h3: (props: any) => {
     const id = props.id || generateId(props.children?.toString() || '')
-    return <h3 id={id} className="text-2xl font-semibold mb-4 mt-8 text-gray-800" {...props} />
+    return <h3 id={id} className="text-base font-semibold mb-2 mt-3 text-gray-800" {...props} />
   },
   h4: (props: any) => {
     const id = props.id || generateId(props.children?.toString() || '')
-    return <h4 id={id} className="text-xl font-semibold mb-3 mt-6 text-gray-800" {...props} />
+    return <h4 id={id} className="text-base font-semibold mb-2 mt-3 text-gray-800" {...props} />
   },
   h5: (props: any) => {
     const id = props.id || generateId(props.children?.toString() || '')
-    return <h5 id={id} className="text-lg font-semibold mb-3 mt-5 text-gray-800" {...props} />
+    return <h5 id={id} className="text-sm font-semibold mb-2 mt-3 text-gray-800" {...props} />
   },
   h6: (props: any) => {
     const id = props.id || generateId(props.children?.toString() || '')
-    return <h6 id={id} className="text-base font-semibold mb-2 mt-4 text-gray-800" {...props} />
+    return <h6 id={id} className="text-xs font-semibold mb-1 mt-2 text-gray-800" {...props} />
   },
-  p: (props: any) => <p className="mb-6 text-gray-700 leading-relaxed text-base" {...props} />,
+  p: (props: any) => <p className="mb-2 text-gray-700 leading-relaxed text-xs" {...props} />,
   code: (props: any) => <code className="bg-gray-100 px-2 py-1 rounded-md text-sm font-mono text-hecto-700" {...props} />,
-  pre: (props: any) => <pre className="bg-gray-900 text-gray-100 p-6 rounded-lg overflow-x-auto mb-6 border border-gray-200 shadow-sm" {...props} />,
+  pre: (props: any) => <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4 border border-gray-200 shadow-sm text-xs" {...props} />,
   table: (props: any) => (
-    <div className="overflow-x-auto mb-8 shadow-sm">
-      <table className="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg bg-white" {...props} />
+    <div className="overflow-x-auto mb-4 shadow-sm">
+      <table className="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg bg-white text-xs" {...props} />
     </div>
   ),
   thead: (props: any) => <thead className="bg-gray-50" {...props} />,
   tbody: (props: any) => <tbody className="bg-white divide-y divide-gray-100" {...props} />,
   tr: (props: any) => <tr className="hover:bg-gray-50 transition-colors" {...props} />,
-  th: (props: any) => <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider" {...props} />,
-  td: (props: any) => <td className="px-6 py-4 text-sm text-gray-900" {...props} />,
-  ul: (props: any) => <ul className="list-disc list-inside mb-6 text-gray-700 space-y-2" {...props} />,
-  ol: (props: any) => <ol className="list-decimal list-inside mb-6 text-gray-700 space-y-2" {...props} />,
-  li: (props: any) => <li className="leading-relaxed" {...props} />,
-  blockquote: (props: any) => <blockquote className="border-l-4 border-hecto-400 pl-6 py-4 italic text-gray-600 mb-6 bg-hecto-50 rounded-r-lg" {...props} />,
+  th: (props: any) => <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider" {...props} />,
+  td: (props: any) => <td className="px-3 py-2 text-xs text-gray-900" {...props} />,
+  ul: (props: any) => <ul className="list-disc list-inside mb-3 text-gray-700 space-y-0.5 text-xs" {...props} />,
+  ol: (props: any) => <ol className="list-decimal list-inside mb-3 text-gray-700 space-y-0.5 text-xs" {...props} />,
+  li: (props: any) => <li className="leading-relaxed text-xs" {...props} />,
+  blockquote: (props: any) => <blockquote className="border-l-4 border-hecto-400 pl-3 py-2 italic text-gray-600 mb-3 bg-hecto-50 rounded-r-lg text-xs" {...props} />,
   a: (props: any) => <a className="text-hecto-600 hover:text-hecto-800 underline decoration-2 underline-offset-2 transition-colors" {...props} />,
   ParameterCard,
 }

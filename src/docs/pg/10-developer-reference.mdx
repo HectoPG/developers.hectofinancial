@@ -1,3 +1,5 @@
+import { FeatureGrid, TestScenario, ErrorGuide, NextSteps, DocumentFooter } from '../../components'
+
 # 📚 개발자 참조
 
 PG 결제 서비스 개발에 필요한 에러 코드, 카드사 식별자, 금융기관 코드 등 모든 참조 정보를 제공합니다.
@@ -6,37 +8,32 @@ PG 결제 서비스 개발에 필요한 에러 코드, 카드사 식별자, 금�
 
 ### 🎯 참조 정보 종류
 
-<div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
-  <div className="bg-gradient-to-r from-red-50 to-red-100 p-6 rounded-xl border border-red-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">⚠️</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">에러 코드</h3>
-    </div>
-    <p className="text-gray-700">PG 공통, 결제수단별 상세 에러 코드와 해결 방법</p>
-  </div>
-
-  <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">💳</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">카드사 식별자</h3>
-    </div>
-    <p className="text-gray-700">모든 신용카드사의 고유 식별 코드와 명칭</p>
-  </div>
-
-  <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-xl border border-green-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">🏦</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">금융기관 코드</h3>
-    </div>
-    <p className="text-gray-700">은행, 증권사, 저축은행 등 모든 금융기관 코드</p>
-  </div>
-</div>
+<FeatureGrid features={[
+  {
+    icon: "⚠️",
+    title: "에러 코드",
+    description: "PG 공통, 결제수단별 상세 에러 코드와 해결 방법",
+    bgColor: "from-red-50 to-red-100",
+    borderColor: "border-red-200",
+    iconBgColor: "bg-red-500"
+  },
+  {
+    icon: "💳",
+    title: "카드사 식별자",
+    description: "모든 신용카드사의 고유 식별 코드와 명칭",
+    bgColor: "from-blue-50 to-blue-100",
+    borderColor: "border-blue-200",
+    iconBgColor: "bg-blue-500"
+  },
+  {
+    icon: "🏦",
+    title: "금융기관 코드",
+    description: "은행, 증권사, 저축은행 등 모든 금융기관 코드",
+    bgColor: "from-green-50 to-green-100",
+    borderColor: "border-green-200",
+    iconBgColor: "bg-green-500"
+  }
+]} />
 
 ---
 

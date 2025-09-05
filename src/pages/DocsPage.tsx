@@ -70,7 +70,7 @@ const categoryNames: Record<string, string> = {
 }
 
 const categoryDescriptions: Record<string, string> = {
-  pg: '신용카드 결제 서비스 연동 가이드',
+  pg: '결제 서비스 연동 가이드',
   ezauth: '간편 계좌 결제 서비스 연동 가이드',
   ezcp: '현금 결제 서비스 연동 가이드',
   whitelabel: '통합 결제 서비스 연동 가이드',
@@ -129,7 +129,7 @@ export default function DocsPage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="w-full">
       {/* Breadcrumb */}
       <div className="mb-6">
         <Link 
@@ -142,41 +142,28 @@ export default function DocsPage() {
       </div>
 
       {/* Header */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
-        <div className="flex items-start">
-          <div className={`${categoryColors[category]} p-4 rounded-xl mr-6`}>
-            <FileText className="h-8 w-8 text-white" />
-          </div>
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {categoryNames[category] || category}
-            </h1>
-            <p className="text-lg text-gray-600 mb-4">
-              {categoryDescriptions[category]}
-            </p>
-            <div className="flex items-center gap-4">
-              <div className={`h-1 w-20 ${categoryColors[category]} rounded`}></div>
-              <span className="text-sm text-gray-500">개발자 문서</span>
-            </div>
-          </div>
-        </div>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          PG 결제 연동 가이드
+        </h1>
+        <p className="text-base text-gray-600 mb-4">
+          {categoryDescriptions[category]}
+        </p>
       </div>
       
       {/* Content */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div className="prose prose-lg max-w-none p-8">
-          <Suspense 
-            key={`${category}-${page || 'default'}`}
-            fallback={
-              <div className="flex flex-col items-center justify-center py-16">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-hecto-400 mb-4"></div>
-                <p className="text-gray-600">문서를 불러오는 중...</p>
-              </div>
-            }
-          >
-            <MdxComponent key={`mdx-${category}-${page || 'default'}`} />
-          </Suspense>
-        </div>
+      <div>
+        <Suspense 
+          key={`${category}-${page || 'default'}`}
+          fallback={
+            <div className="flex flex-col items-center justify-center py-16">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-hecto-400 mb-4"></div>
+              <p className="text-gray-600">문서를 불러오는 중...</p>
+            </div>
+          }
+        >
+          <MdxComponent key={`mdx-${category}-${page || 'default'}`} />
+        </Suspense>
       </div>
 
       {/* Footer */}

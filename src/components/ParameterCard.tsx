@@ -22,81 +22,71 @@ const ParameterCard: React.FC<ParameterCardProps> = ({
   className = ""
 }) => {
   return (
-    <div className={`mb-6 p-6 bg-gray-50 border border-gray-200 rounded-lg hover:shadow-sm transition-shadow ${className}`}>
-      {/* 파라미터 헤더 - 이미지와 동일한 레이아웃 */}
-      <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2 mb-3">
-        <h3 className="text-lg font-semibold text-gray-900 m-0">
-          {name}
-        </h3>
-        <div className="flex items-center gap-2">
-          <span className={`text-sm px-2 py-0.5 rounded-sm font-medium ${
-            required 
-              ? 'text-red-600 bg-red-50 border border-red-200' 
-              : 'text-gray-500 bg-gray-100'
-          }`}>
-            {required ? '필수' : '선택'}
-          </span>
-          <span className="text-gray-400 font-light">·</span>
-          <span className="text-gray-600 text-sm font-mono">
-            {type}
-          </span>
+    <div className={`border-b border-gray-100 py-2 ${className}`}>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
+        {/* 파라미터 이름과 타입 */}
+        <div className="lg:col-span-1">
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-1">
+              <code className="text-xs font-mono font-semibold text-gray-900 bg-gray-100 px-1.5 py-0.5 rounded">
+                {name}
+              </code>
+              {required && (
+                <span className="text-xs text-red-600 font-medium">required</span>
+              )}
+            </div>
+            <div className="flex items-center gap-1 text-xs">
+              <span className="text-gray-500">Type:</span>
+              <code className="font-mono text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded text-xs">
+                {type}
+              </code>
+            </div>
+          </div>
         </div>
-      </div>
-      
-      {/* 설명 텍스트 - 이미지와 같은 색상과 줄간격 */}
-      <div className="text-gray-700 leading-relaxed text-sm mb-4">
-        {description}
-      </div>
-      
-      {/* 사용 가능한 값들 */}
-      {values && values.length > 0 && (
-        <div className="mb-4">
-          <span className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2 block">
-            사용 가능한 값
-          </span>
-          <div className="space-y-1">
-            {values.map((value, index) => (
-              <div key={index} className="flex items-start gap-2">
-                <span className="inline-block w-1.5 h-1.5 bg-hecto-400 rounded-full mt-2 flex-shrink-0"></span>
-                <code className="text-sm bg-gray-100 px-2 py-1 rounded font-mono text-gray-800">
-                  {value}
-                </code>
+        
+        {/* 설명과 추가 정보 */}
+        <div className="lg:col-span-2">
+          <div className="text-xs text-gray-700 leading-relaxed mb-2">
+            {description}
+          </div>
+          
+          {/* 사용 가능한 값들 */}
+          {values && values.length > 0 && (
+            <div className="mb-2">
+              <div className="text-xs text-gray-500 font-medium mb-1">허용값:</div>
+              <div className="flex flex-wrap gap-0.5">
+                {values.map((value, index) => (
+                  <code key={index} className="text-xs bg-gray-100 text-gray-800 px-1.5 py-0.5 rounded font-mono">
+                    {value}
+                  </code>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      )}
-      
-      {/* 예시 코드 */}
-      {example && (
-        <div className="mb-3">
-          <span className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2 block">
-            예시
-          </span>
-          <pre className="bg-white border border-gray-200 px-4 py-3 rounded-md text-sm font-mono text-gray-800 overflow-x-auto shadow-sm">
-            <code>"{example}"</code>
-          </pre>
-        </div>
-      )}
-      
-      {/* 추가 정보 노트 */}
-      {note && (
-        <div className="mt-4 p-4 bg-hecto-50 border-l-4 border-hecto-400 rounded-r-md">
-          <div className="flex">
-            <div className="flex-shrink-0">
-              <span className="text-hecto-500 text-sm">💡</span>
             </div>
-            <div className="ml-2">
-              <p className="text-sm text-hecto-800 font-medium">
-                참고사항
-              </p>
-              <p className="text-sm text-hecto-700 mt-1">
-                {note}
-              </p>
+          )}
+          
+          {/* 예시 */}
+          {example && (
+            <div className="mb-2">
+              <div className="text-xs text-gray-500 font-medium mb-1">예시:</div>
+              <code className="text-xs bg-gray-800 text-gray-200 px-1.5 py-0.5 rounded font-mono">
+                "{example}"
+              </code>
             </div>
-          </div>
+          )}
+          
+          {/* 참고사항 */}
+          {note && (
+            <div className="mt-2 p-2 bg-amber-50 border-l-2 border-amber-300 rounded-r text-xs">
+              <div className="flex items-start gap-1">
+                <span className="text-amber-600 text-xs mt-0.5">ℹ️</span>
+                <div className="text-amber-800">
+                  {note}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };
