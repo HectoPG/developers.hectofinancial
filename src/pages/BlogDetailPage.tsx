@@ -58,7 +58,7 @@ const BlogDetailPage: React.FC = () => {
 
   // MDX 컴포넌트 동적 로드
   const MDXComponent = lazy(() => 
-    import(`../docs/blog/${blogPost.file}.mdx`).catch(() => ({
+    import(`../docs/blog/${blogPost.file}`).catch(() => ({
       default: () => (
         <div className="text-center py-12">
           <h2 className="text-xl font-semibold text-gray-900 mb-2">콘텐츠를 불러올 수 없습니다</h2>

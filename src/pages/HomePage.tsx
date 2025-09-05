@@ -38,25 +38,25 @@ const services = [
 
 const news = [
   {
-    title: 'PG 결제 API v2.0 정식 출시',
-    description: '새로운 기능과 향상된 성능으로 업데이트된 PG 결제 API를 만나보세요.',
-    date: '2024.12.15',
-    category: '업데이트',
+    title: '헥토파이낸셜 개발자 문서 사이트 오픈',
+    description: 'PG, 내통장결제, 간편현금결제, 화이트라벨 서비스의 통합 개발자 가이드를 제공합니다.',
+    date: '2025.09.05',
+    category: '오픈',
+    href: '/blog'
+  },
+  {
+    title: 'PG 결제 서비스 연동 가이드 업데이트',
+    description: '신용카드, 가상계좌, 계좌이체 등 모든 결제 수단의 상세한 연동 방법을 확인하세요.',
+    date: '2025.09.05',
+    category: '가이드',
     href: '/docs/pg'
   },
   {
-    title: '내통장결제 서비스 확대',
-    description: '더 많은 은행과의 연동으로 고객 편의성이 크게 향상되었습니다.',
-    date: '2024.12.10',
-    category: '서비스',
+    title: '내통장결제(ezauth) API 문서 공개',
+    description: '실시간 계좌이체와 계좌 인증을 위한 ezauth 서비스 연동 방법을 알아보세요.',
+    date: '2025.09.05',
+    category: 'API',
     href: '/docs/ezauth'
-  },
-  {
-    title: '개발자 문서 개편 완료',
-    description: '더욱 직관적이고 이해하기 쉬운 개발자 가이드로 새롭게 단장했습니다.',
-    date: '2024.12.05',
-    category: '개선',
-    href: '/docs/pg'
   }
 ]
 
@@ -64,7 +64,7 @@ const stats = [
   { label: '누적 거래액', value: '1조+', unit: '원' },
   { label: '연동 기업', value: '10,000+', unit: '개' },
   { label: '일 거래량', value: '100만+', unit: '건' },
-  { label: '서비스 가동률', value: '99.9', unit: '%' }
+  { label: '서비스 가동률', value: '100', unit: '%' }
 ]
 
 export default function HomePage() {
