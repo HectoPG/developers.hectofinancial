@@ -19,9 +19,14 @@ const WhiteLabel = lazy(() => import('../docs/whitelabel/hecto_financial_whitela
 
 // 동적으로 MDX 컴포넌트를 선택하는 함수
 const getMdxComponent = (category: string, page?: string) => {
+  console.log('getMdxComponent called with:', { category, page })
+  
   // 페이지가 지정된 경우 해당 페이지를 로드
   if (page) {
-    switch (`${category}/${page}`) {
+    const routeKey = `${category}/${page}`
+    console.log('Route key:', routeKey)
+    
+    switch (routeKey) {
       case 'pg/getting-started':
         return PgGettingStarted
       case 'pg/credit-card':
