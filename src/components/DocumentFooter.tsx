@@ -20,7 +20,8 @@ export default function DocumentFooter({ title, description, primaryButton, seco
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <a 
           href={primaryButton.href} 
-          className="inline-flex items-center px-4 py-2 bg-hecto-400 text-white rounded-lg hover:bg-hecto-500 transition-colors"
+          className="inline-flex items-center px-4 py-2 text-white rounded-lg hover:opacity-90 transition-colors font-medium"
+          style={{ backgroundColor: '#ffb089' }}
         >
           {primaryButton.text}
         </a>
