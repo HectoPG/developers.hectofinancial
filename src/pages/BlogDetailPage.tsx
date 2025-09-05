@@ -8,7 +8,7 @@ const blogPosts = [
     id: '01-sample-article-1',
     title: '헥토파이낸셜 PG 서비스 시작하기',
     description: '헥토파이낸셜 전자결제(PG) 서비스 연동을 위한 첫 번째 단계를 알아보세요.',
-    date: '2024-12-05',
+    date: '2025-09-05',
     readTime: '5분',
     category: '가이드',
     file: '01-sample-article-1.mdx'
@@ -17,7 +17,7 @@ const blogPosts = [
     id: '02-sample-article-2',
     title: '헥토파이낸셜 결제 보안 가이드',
     description: '안전한 결제 시스템 구축을 위한 보안 베스트 프랙티스를 알아보세요.',
-    date: '2024-11-28',
+    date: '2025-09-05',
     readTime: '8분',
     category: '보안',
     file: '02-sample-article-2.mdx'
@@ -26,7 +26,7 @@ const blogPosts = [
     id: '03-sample-article-3',
     title: '헥토파이낸셜 결과통보 URL 설정 가이드',
     description: 'Server-to-Server 결과 통보를 위한 notiUrl 설정 방법을 알아보세요.',
-    date: '2024-11-20',
+    date: '2025-09-05',
     readTime: '6분',
     category: '기술',
     file: '03-sample-article-3.mdx'
@@ -57,16 +57,17 @@ const BlogDetailPage: React.FC = () => {
   }
 
   // MDX 컴포넌트 동적 로드
-  const MDXComponent = lazy(() => 
-    import(`../docs/blog/${blogPost.file}`).catch(() => ({
+  const MDXComponent = lazy(() => {
+    const fileName = blogPost.file.replace('.mdx', '')
+    return import(`../docs/blog/${fileName}.mdx`).catch(() => ({
       default: () => (
         <div className="text-center py-12">
           <h2 className="text-xl font-semibold text-gray-900 mb-2">콘텐츠를 불러올 수 없습니다</h2>
-          <p className="text-gray-600">MDX 파일을 찾을 수 없습니다.</p>
+          <p className="text-gray-600">MDX 파일을 찾을 수 없습니다: {blogPost.file}</p>
         </div>
       )
     }))
-  )
+  })
 
   return (
     <div className="min-h-screen bg-gray-50">

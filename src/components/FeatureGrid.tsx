@@ -18,10 +18,17 @@ export default function FeatureGrid({ features }: FeatureGridProps) {
       {features.map((feature, index) => (
         <div 
           key={index}
-          className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200 hover:border-gray-200"
+          className="p-6 rounded-2xl border shadow-sm hover:shadow-md transition-all duration-200"
+          style={{ 
+            backgroundColor: '#fff7f0',
+            borderColor: '#ffd9c1'
+          }}
         >
           <div className="flex items-center mb-4">
-            <div className={`w-12 h-12 ${feature.iconBgColor} rounded-xl flex items-center justify-center mr-4 shadow-sm`}>
+            <div 
+              className="w-12 h-12 rounded-xl flex items-center justify-center mr-4 shadow-sm"
+              style={{ backgroundColor: '#ffb089' }}
+            >
               <span className="text-white text-xl">{feature.icon}</span>
             </div>
             <h3 className="text-lg font-semibold text-gray-900">{feature.title}</h3>
