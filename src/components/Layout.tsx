@@ -74,12 +74,9 @@ export default function Layout({ children }: LayoutProps) {
             </button>
           </div>
           <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
-            <div className="flex-shrink-0 flex items-center px-4 mb-6">
-              <div className="w-8 h-8 bg-hecto-400 rounded-lg flex items-center justify-center mr-3">
-                <span className="text-white font-bold text-lg">H</span>
-              </div>
-              <h1 className="text-xl font-bold text-gray-900">헥토파이낸셜</h1>
-            </div>
+            <Link to="/" className="flex-shrink-0 flex items-center px-4 mb-6 hover:opacity-80 transition-opacity">
+              <img src="/site-mark.svg" alt="헥토파이낸셜 로고" className="h-8" />
+            </Link>
             <nav className="mt-5 px-2 space-y-1">
               {navigation.map((item) => {
                 const Icon = item.icon
@@ -188,12 +185,9 @@ export default function Layout({ children }: LayoutProps) {
       <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
         <div className="flex-1 flex flex-col min-h-0 border-r border-gray-200 bg-white shadow-lg">
           <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-            <div className="flex items-center flex-shrink-0 px-4 mb-6">
-              <div className="w-8 h-8 bg-hecto-400 rounded-lg flex items-center justify-center mr-3">
-                <span className="text-white font-bold text-lg">H</span>
-              </div>
-              <h1 className="text-xl font-bold text-gray-900">헥토파이낸셜</h1>
-            </div>
+            <Link to="/" className="flex items-center flex-shrink-0 px-4 mb-6 hover:opacity-80 transition-opacity">
+              <img src="/site-mark.svg" alt="헥토파이낸셜 로고" className="h-8" />
+            </Link>
             <nav className="mt-5 flex-1 px-2 space-y-1">
               {navigation.map((item) => {
                 const Icon = item.icon
@@ -306,12 +300,9 @@ export default function Layout({ children }: LayoutProps) {
             >
               <Menu className="h-6 w-6" />
             </button>
-            <div className="flex items-center">
-              <div className="w-6 h-6 bg-hecto-400 rounded flex items-center justify-center mr-2">
-                <span className="text-white font-bold text-sm">H</span>
-              </div>
-              <h1 className="text-lg font-bold text-gray-900">헥토파이낸셜</h1>
-            </div>
+            <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
+              <img src="/site-mark.svg" alt="헥토파이낸셜 로고" className="h-6" />
+            </Link>
             <div className="w-10"></div> {/* Spacer for balance */}
           </div>
         </div>
