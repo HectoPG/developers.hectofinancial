@@ -1,3 +1,5 @@
+import { FeatureGrid, TestScenario, ErrorGuide, NextSteps, DocumentFooter } from '../../components'
+
 # ⚡ 간편 결제
 
 페이코, 카카오페이, 네이버페이, 삼성페이 등 다양한 간편결제 서비스를 통한 결제 솔루션입니다. 고객이 선호하는 간편결제 방식으로 빠르고 편리한 결제가 가능합니다.
@@ -6,47 +8,40 @@
 
 ### 🎯 주요 특징
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
-  <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">⚡</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">빠른 결제</h3>
-    </div>
-    <p className="text-gray-700">간편한 인증으로 빠른 결제 완료, 복잡한 카드 정보 입력 불필요</p>
-  </div>
-
-  <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-xl border border-green-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">🏢</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">다양한 브랜드</h3>
-    </div>
-    <p className="text-gray-700">페이코, 카카오페이, 네이버페이, 삼성페이 등 주요 간편결제 지원</p>
-  </div>
-
-  <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-6 rounded-xl border border-purple-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">💳</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">복합 결제</h3>
-    </div>
-    <p className="text-gray-700">포인트, 쿠폰, 카드 등 다양한 결제 수단을 조합하여 사용</p>
-  </div>
-
-  <div className="bg-gradient-to-r from-orange-50 to-orange-100 p-6 rounded-xl border border-orange-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">🔄</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">인증/승인 분리</h3>
-    </div>
-    <p className="text-gray-700">하이브리드 방식으로 인증과 승인을 분리한 유연한 결제 프로세스</p>
-  </div>
-</div>
+<FeatureGrid features={[
+  {
+    icon: "⚡",
+    title: "빠른 결제",
+    description: "간편한 인증으로 빠른 결제 완료, 복잡한 카드 정보 입력 불필요",
+    bgColor: "from-blue-50 to-blue-100",
+    borderColor: "border-blue-200",
+    iconBgColor: "bg-blue-500"
+  },
+  {
+    icon: "🏢",
+    title: "다양한 브랜드",
+    description: "페이코, 카카오페이, 네이버페이, 삼성페이 등 주요 간편결제 지원",
+    bgColor: "from-green-50 to-green-100",
+    borderColor: "border-green-200",
+    iconBgColor: "bg-green-500"
+  },
+  {
+    icon: "💳",
+    title: "복합 결제",
+    description: "포인트, 쿠폰, 카드 등 다양한 결제 수단을 조합하여 사용",
+    bgColor: "from-purple-50 to-purple-100",
+    borderColor: "border-purple-200",
+    iconBgColor: "bg-purple-500"
+  },
+  {
+    icon: "🔄",
+    title: "인증/승인 분리",
+    description: "하이브리드 방식으로 인증과 승인을 분리한 유연한 결제 프로세스",
+    bgColor: "from-orange-50 to-orange-100",
+    borderColor: "border-orange-200",
+    iconBgColor: "bg-orange-500"
+  }
+]} />
 
 ### 🏢 지원 간편결제 서비스
 
@@ -777,29 +772,22 @@ function handleComplexPayment(notiData) {
 
 ### 🎯 테스트 시나리오
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
-  <div className="bg-green-50 border border-green-200 p-6 rounded-xl">
-    <h4 className="text-green-900 font-semibold mb-3">✅ 성공 시나리오</h4>
-    <ul className="text-green-800 text-sm space-y-2">
-      <li>• 각 브랜드별 정상 결제</li>
-      <li>• 하이브리드 인증 → 승인</li>
-      <li>• 복합결제 (포인트+카드)</li>
-      <li>• 전체 취소</li>
-      <li>• 부분 취소</li>
-    </ul>
-  </div>
-  
-  <div className="bg-red-50 border border-red-200 p-6 rounded-xl">
-    <h4 className="text-red-900 font-semibold mb-3">❌ 실패 시나리오</h4>
-    <ul className="text-red-800 text-sm space-y-2">
-      <li>• 잘못된 간편결제 코드</li>
-      <li>• 간편결제 앱 미설치</li>
-      <li>• 결제 한도 초과</li>
-      <li>• 인증 실패</li>
-      <li>• 해시값 불일치</li>
-    </ul>
-  </div>
-</div>
+<TestScenario 
+  successItems={[
+    "각 브랜드별 정상 결제",
+    "하이브리드 인증 → 승인",
+    "복합결제 (포인트+카드)",
+    "전체 취소",
+    "부분 취소"
+  ]}
+  failureItems={[
+    "잘못된 간편결제 코드",
+    "간편결제 앱 미설치",
+    "결제 한도 초과",
+    "인증 실패",
+    "해시값 불일치"
+  ]}
+/>
 
 ---
 

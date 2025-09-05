@@ -1,3 +1,5 @@
+import { FeatureGrid, TestScenario, ErrorGuide, NextSteps, DocumentFooter } from '../../components'
+
 # 🏦 계좌이체
 
 고객의 은행 계좌에서 직접 결제 금액을 이체하는 실시간 결제 서비스입니다. 현금영수증 발행이 자동으로 처리되며, 빠르고 안전한 결제가 가능합니다.
@@ -6,47 +8,40 @@
 
 ### 🎯 주요 특징
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
-  <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">⚡</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">실시간 결제</h3>
-    </div>
-    <p className="text-gray-700">뱅크페이 시스템을 통한 즉시 계좌이체, 실시간 승인 처리</p>
-  </div>
-
-  <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-xl border border-green-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">🏦</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">다양한 은행 지원</h3>
-    </div>
-    <p className="text-gray-700">국내 주요 은행 모두 지원, 인터넷뱅킹 및 모바일뱅킹 연동</p>
-  </div>
-
-  <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-6 rounded-xl border border-purple-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">🧾</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">현금영수증 자동발행</h3>
-    </div>
-    <p className="text-gray-700">결제 완료 시 현금영수증이 자동으로 발행되어 세무 처리 편리</p>
-  </div>
-
-  <div className="bg-gradient-to-r from-orange-50 to-orange-100 p-6 rounded-xl border border-orange-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">🔒</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">안전한 인증</h3>
-    </div>
-    <p className="text-gray-700">은행 공동 인증서, 간편인증 등 다양한 보안 인증 방식 지원</p>
-  </div>
-</div>
+<FeatureGrid features={[
+  {
+    icon: "⚡",
+    title: "실시간 결제",
+    description: "뱅크페이 시스템을 통한 즉시 계좌이체, 실시간 승인 처리",
+    bgColor: "from-blue-50 to-blue-100",
+    borderColor: "border-blue-200",
+    iconBgColor: "bg-blue-500"
+  },
+  {
+    icon: "🏦",
+    title: "다양한 은행 지원",
+    description: "국내 주요 은행 모두 지원, 인터넷뱅킹 및 모바일뱅킹 연동",
+    bgColor: "from-green-50 to-green-100",
+    borderColor: "border-green-200",
+    iconBgColor: "bg-green-500"
+  },
+  {
+    icon: "🧾",
+    title: "현금영수증 자동발행",
+    description: "결제 완료 시 현금영수증이 자동으로 발행되어 세무 처리 편리",
+    bgColor: "from-purple-50 to-purple-100",
+    borderColor: "border-purple-200",
+    iconBgColor: "bg-purple-500"
+  },
+  {
+    icon: "🔒",
+    title: "안전한 인증",
+    description: "은행 공동 인증서, 간편인증 등 다양한 보안 인증 방식 지원",
+    bgColor: "from-orange-50 to-orange-100",
+    borderColor: "border-orange-200",
+    iconBgColor: "bg-orange-500"
+  }
+]} />
 
 ### 🏦 지원 금융기관
 
@@ -570,29 +565,22 @@ const partialCancelRequest = {
 
 ### 🎯 테스트 시나리오
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
-  <div className="bg-green-50 border border-green-200 p-6 rounded-xl">
-    <h4 className="text-green-900 font-semibold mb-3">✅ 성공 시나리오</h4>
-    <ul className="text-green-800 text-sm space-y-2">
-      <li>• 정상 계좌이체 결제</li>
-      <li>• 다양한 은행 선택</li>
-      <li>• 전체 취소</li>
-      <li>• 부분 취소</li>
-      <li>• 현금영수증 발행</li>
-    </ul>
-  </div>
-  
-  <div className="bg-red-50 border border-red-200 p-6 rounded-xl">
-    <h4 className="text-red-900 font-semibold mb-3">❌ 실패 시나리오</h4>
-    <ul className="text-red-800 text-sm space-y-2">
-      <li>• 잘못된 계좌 정보</li>
-      <li>• 잔액 부족</li>
-      <li>• 인증 실패</li>
-      <li>• 해시값 불일치</li>
-      <li>• 취소 기한 초과</li>
-    </ul>
-  </div>
-</div>
+<TestScenario 
+  successItems={[
+    "정상 계좌이체 결제",
+    "다양한 은행 선택",
+    "전체 취소",
+    "부분 취소",
+    "현금영수증 발행"
+  ]}
+  failureItems={[
+    "잘못된 계좌 정보",
+    "잔액 부족",
+    "인증 실패",
+    "해시값 불일치",
+    "취소 기한 초과"
+  ]}
+/>
 
 ### 💡 테스트 팁
 
@@ -618,22 +606,17 @@ const partialCancelRequest = {
 
 ### 🔧 에러 해결 가이드
 
-<div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-6">
-  <div className="flex">
-    <div className="flex-shrink-0">
-      <span className="text-yellow-400 text-lg">💡</span>
-    </div>
-    <div className="ml-3">
-      <h4 className="text-yellow-800 font-medium">일반적인 문제 해결</h4>
-      <ul className="mt-2 text-yellow-700 text-sm space-y-1">
-        <li>• <strong>뱅크페이 오류</strong>: 은행 시스템 점검 시간 확인</li>
-        <li>• <strong>인증 실패</strong>: 공동인증서 또는 간편인증 상태 확인</li>
-        <li>• <strong>취소 불가</strong>: 취소 가능 기간과 조건 확인</li>
-        <li>• <strong>NOTI 미수신</strong>: 방화벽 및 URL 접근성 확인</li>
-      </ul>
-    </div>
-  </div>
-</div>
+<ErrorGuide 
+  title="일반적인 문제 해결"
+  content={
+    <ul className="mt-2 text-yellow-700 text-sm space-y-1">
+      <li>• <strong>뱅크페이 오류</strong>: 은행 시스템 점검 시간 확인</li>
+      <li>• <strong>인증 실패</strong>: 공동인증서 또는 간편인증 상태 확인</li>
+      <li>• <strong>취소 불가</strong>: 취소 가능 기간과 조건 확인</li>
+      <li>• <strong>NOTI 미수신</strong>: 방화벽 및 URL 접근성 확인</li>
+    </ul>
+  }
+/>
 
 ---
 
@@ -658,58 +641,64 @@ A. 뱅크페이에 등록된 가맹점명이 표시됩니다. 변경이 필요�
 
 ## 🚀 다음 단계
 
-계좌이체 연동을 완료했다면, 다른 결제 수단도 확인해보세요:
-
-<div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-8">
-  <a href="/docs/pg/credit-card" className="block p-4 bg-white border-2 border-hecto-100 hover:border-hecto-300 rounded-xl transition-colors group">
-    <div className="text-center">
-      <div className="w-12 h-12 bg-hecto-400 rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-hecto-500 transition-colors">
-        <span className="text-white text-lg">💳</span>
-      </div>
-      <span className="text-sm font-medium text-gray-900">신용카드</span>
-    </div>
-  </a>
-  
-  <a href="/docs/pg/virtual-account" className="block p-4 bg-white border-2 border-green-100 hover:border-green-300 rounded-xl transition-colors group">
-    <div className="text-center">
-      <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-green-600 transition-colors">
-        <span className="text-white text-lg">💰</span>
-      </div>
-      <span className="text-sm font-medium text-gray-900">가상계좌</span>
-    </div>
-  </a>
-  
-  <a href="/docs/pg/mobile-payment" className="block p-4 bg-white border-2 border-purple-100 hover:border-purple-300 rounded-xl transition-colors group">
-    <div className="text-center">
-      <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-purple-600 transition-colors">
-        <span className="text-white text-lg">📱</span>
-      </div>
-      <span className="text-sm font-medium text-gray-900">휴대폰</span>
-    </div>
-  </a>
-  
-  <a href="/docs/pg/simple-payment" className="block p-4 bg-white border-2 border-orange-100 hover:border-orange-300 rounded-xl transition-colors group">
-    <div className="text-center">
-      <div className="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-orange-600 transition-colors">
-        <span className="text-white text-lg">⚡</span>
-      </div>
-      <span className="text-sm font-medium text-gray-900">간편결제</span>
-    </div>
-  </a>
-</div>
+<NextSteps 
+  title="계좌이체 연동을 완료했다면, 다른 결제 수단도 확인해보세요:"
+  steps={[
+    {
+      href: "/docs/pg/credit-card",
+      icon: "💳",
+      title: "신용카드",
+      bgColor: "bg-white",
+      borderColor: "border-hecto-100",
+      hoverBorderColor: "border-hecto-300",
+      iconBgColor: "bg-hecto-400",
+      hoverIconBgColor: "bg-hecto-500"
+    },
+    {
+      href: "/docs/pg/virtual-account",
+      icon: "💰",
+      title: "가상계좌",
+      bgColor: "bg-white",
+      borderColor: "border-green-100",
+      hoverBorderColor: "border-green-300",
+      iconBgColor: "bg-green-500",
+      hoverIconBgColor: "bg-green-600"
+    },
+    {
+      href: "/docs/pg/mobile-payment",
+      icon: "📱",
+      title: "휴대폰",
+      bgColor: "bg-white",
+      borderColor: "border-purple-100",
+      hoverBorderColor: "border-purple-300",
+      iconBgColor: "bg-purple-500",
+      hoverIconBgColor: "bg-purple-600"
+    },
+    {
+      href: "/docs/pg/simple-payment",
+      icon: "⚡",
+      title: "간편결제",
+      bgColor: "bg-white",
+      borderColor: "border-orange-100",
+      hoverBorderColor: "border-orange-300",
+      iconBgColor: "bg-orange-500",
+      hoverIconBgColor: "bg-orange-600"
+    }
+  ]}
+/>
 
 ---
 
-<div className="bg-gray-50 p-6 rounded-xl text-center my-8">
-  <p className="text-gray-600 mb-4">
-    계좌이체 연동에 대한 추가 문의사항이 있으시나요?
-  </p>
-  <div className="flex justify-center space-x-4">
-    <a href="mailto:support@hectofinancial.com" className="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-      📧 기술지원 문의
-    </a>
-    <a href="/docs/pg/api-reference" className="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
-      📚 API 레퍼런스
-    </a>
-  </div>
-</div>
+<DocumentFooter 
+  title="계좌이체 연동에 대한 추가 문의사항이 있으시나요?"
+  primaryButton={{
+    text: "📧 기술지원 문의",
+    href: "mailto:support@hectofinancial.com",
+    bgColor: "bg-blue-500",
+    hoverBgColor: "hover:bg-blue-600"
+  }}
+  secondaryButton={{
+    text: "📚 API 레퍼런스",
+    href: "/docs/pg/api-reference"
+  }}
+/>

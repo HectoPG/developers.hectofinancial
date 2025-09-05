@@ -1,157 +1,329 @@
 import { Link } from 'react-router-dom'
-import { CreditCard, Banknote, FileText, Layers, ArrowRight } from 'lucide-react'
+import { CreditCard, Banknote, FileText, Layers, ArrowRight, Code, Zap, Shield, Globe, BookOpen, Users, CheckCircle, ExternalLink, Calendar, TrendingUp } from 'lucide-react'
 
 const services = [
   {
     name: 'PG 결제',
-    description: '신용카드 결제 서비스 연동 가이드',
+    description: '신용카드, 간편결제, 가상계좌까지 모든 결제 수단 지원',
     href: '/docs/pg',
     icon: CreditCard,
-    color: 'bg-hecto-400',
+    color: 'bg-blue-500',
+    features: ['신용카드 결제', '간편결제', '가상계좌', '해외카드']
   },
   {
     name: '내통장결제',
-    description: '간편 계좌 결제 서비스 연동 가이드',
+    description: '실시간 계좌이체로 빠르고 안전한 결제 서비스',
     href: '/docs/ezauth',
     icon: Banknote,
     color: 'bg-green-500',
+    features: ['실시간 이체', '계좌 인증', '잔액 조회', 'API 연동']
   },
   {
     name: '간편현금결제',
-    description: '현금 결제 서비스 연동 가이드',
+    description: '현금 결제를 더욱 간편하게 처리하는 솔루션',
     href: '/docs/ezcp',
     icon: FileText,
     color: 'bg-purple-500',
+    features: ['현금영수증', '세금계산서', '간편 정산', '리포트']
   },
   {
     name: '화이트라벨',
-    description: '통합 결제 서비스 연동 가이드',
+    description: '통합 결제 서비스로 모든 결제를 한 번에 관리',
     href: '/docs/whitelabel',
     icon: Layers,
-    color: 'bg-hecto-600',
+    color: 'bg-hecto-500',
+    features: ['통합 대시보드', '멀티 결제', '브랜딩', '커스텀 UI']
   },
+]
+
+const news = [
+  {
+    title: 'PG 결제 API v2.0 정식 출시',
+    description: '새로운 기능과 향상된 성능으로 업데이트된 PG 결제 API를 만나보세요.',
+    date: '2024.12.15',
+    category: '업데이트',
+    href: '/docs/pg'
+  },
+  {
+    title: '내통장결제 서비스 확대',
+    description: '더 많은 은행과의 연동으로 고객 편의성이 크게 향상되었습니다.',
+    date: '2024.12.10',
+    category: '서비스',
+    href: '/docs/ezauth'
+  },
+  {
+    title: '개발자 문서 개편 완료',
+    description: '더욱 직관적이고 이해하기 쉬운 개발자 가이드로 새롭게 단장했습니다.',
+    date: '2024.12.05',
+    category: '개선',
+    href: '/docs/pg'
+  }
+]
+
+const stats = [
+  { label: '누적 거래액', value: '1조+', unit: '원' },
+  { label: '연동 기업', value: '10,000+', unit: '개' },
+  { label: '일 거래량', value: '100만+', unit: '건' },
+  { label: '서비스 가동률', value: '99.9', unit: '%' }
 ]
 
 export default function HomePage() {
   return (
-    <div className="py-8 md:py-12">
-      {/* Hero Section */}
-      <div className="text-center mb-16">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-hecto-400 rounded-2xl mb-6">
-          <span className="text-white font-bold text-2xl">H</span>
+    <div className="space-y-0">
+      {/* Hero Section - Corporate Style */}
+      <section className="relative bg-white py-12 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-hecto-50 opacity-60"></div>
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center max-w-4xl mx-auto">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              <span className="block">안전하고 간편한</span>
+              <span className="text-hecto-500 block">결제 서비스</span>
+            </h1>
+            <p className="text-lg text-gray-600 mb-6 max-w-3xl mx-auto leading-relaxed">
+              헥토파이낸셜의 결제 API로 고객에게 최상의 결제 경험을 제공하세요.<br />
+              빠른 연동부터 안정적인 운영까지 모든 것을 지원합니다.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link
+                to="/docs/pg"
+                className="inline-flex items-center px-8 py-3 text-base font-semibold text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1"
+                style={{ backgroundColor: '#ff9566' }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f07a42' }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#ff9566' }}
+              >
+                개발 시작하기
+                <ArrowRight className="ml-3 h-5 w-5" />
+              </Link>
+              <a
+                href="#services"
+                className="inline-flex items-center px-8 py-3 text-base font-semibold bg-white hover:bg-gray-50 border-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+                style={{ color: '#e6652a', borderColor: '#ffc199' }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#ffb089' }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#ffc199' }}
+              >
+                서비스 둘러보기
+              </a>
+            </div>
+          </div>
         </div>
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-          헥토파이낸셜 개발자 가이드
-        </h1>
-        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-          안전하고 간편한 결제 서비스 연동을 위한<br />
-          완전한 API 문서와 개발 가이드를 제공합니다
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
-            to="/docs/pg"
-            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-hecto-400 hover:bg-hecto-500 transition-colors duration-200"
-          >
-            빠른 시작하기
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Link>
-          <a
-            href="#services"
-            className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-200"
-          >
-            서비스 둘러보기
-          </a>
+      </section>
+
+      {/* Statistics Section */}
+      <section className="py-8" style={{ backgroundColor: '#ff9566' }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {stats.map((stat, index) => (
+              <div key={index} className="text-center">
+                <div className="text-2xl md:text-3xl font-bold text-white mb-1">
+                  {stat.value}
+                  <span className="text-white opacity-80 text-lg ml-1">{stat.unit}</span>
+                </div>
+                <div className="text-white opacity-90 font-medium text-sm">{stat.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
 
       {/* Services Section */}
-      <div id="services" className="mb-20">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">결제 서비스</h2>
-          <p className="text-lg text-gray-600">다양한 결제 서비스 중에서 필요한 서비스를 선택하세요</p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-          {services.map((service) => {
-            const Icon = service.icon
-            return (
-              <Link
-                key={service.name}
-                to={service.href}
-                className="group relative bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 hover:border-blue-200 hover:-translate-y-1"
-              >
-                <div className="flex items-start mb-6">
-                  <div className={`${service.color} p-4 rounded-xl mr-4 group-hover:scale-110 transition-transform duration-200`}>
-                    <Icon className="h-8 w-8 text-white" />
+      <section id="services" className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+              서비스 안내
+            </h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              다양한 결제 방식을 하나의 플랫폼에서 통합 관리할 수 있습니다
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+            {services.map((service, index) => {
+              const Icon = service.icon
+              return (
+                <div
+                  key={service.name}
+                  className="bg-white rounded-2xl border border-gray-200 shadow-lg hover:shadow-2xl p-6 transition-all duration-300 transform hover:-translate-y-1"
+                >
+                  <div className="flex items-center mb-4">
+                    <div className={`${service.color} p-3 rounded-xl mr-3`}>
+                      <Icon className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-1">
+                        {service.name}
+                      </h3>
+                      <p className="text-sm text-gray-600">{service.description}</p>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-gray-900 group-hover:text-hecto-600 mb-2 transition-colors">
-                      {service.name}
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed">{service.description}</p>
+                  
+                  <div className="mb-4">
+                    <div className="grid grid-cols-2 gap-2">
+                      {service.features.map((feature, idx) => (
+                        <div key={idx} className="flex items-center">
+                          <CheckCircle className="h-4 w-4 text-hecto-500 mr-2" />
+                          <span className="text-sm text-gray-700">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
+                  
+                  <Link
+                    to={service.href}
+                    className="inline-flex items-center text-hecto-600 hover:text-hecto-700 font-semibold transition-colors"
+                  >
+                    자세히 보기
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
                 </div>
-                <div className="flex items-center text-hecto-600 group-hover:text-hecto-700 font-medium">
-                  <span className="text-sm">문서 보기</span>
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-r from-hecto-50 to-hecto-100 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300 -z-10"></div>
-              </Link>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Getting Started Section */}
-      <div className="bg-gradient-to-r from-hecto-50 to-hecto-100 rounded-2xl p-8 md:p-12 max-w-5xl mx-auto">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">시작하기</h2>
-          <p className="text-lg text-gray-600">3단계로 간단하게 결제 서비스를 연동하세요</p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="text-center">
-            <div className="relative">
-              <div className="bg-hecto-400 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6 shadow-lg">
-                <span className="text-white font-bold text-xl">1</span>
-              </div>
-              {/* Connection line */}
-              <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-hecto-200 -translate-x-1/2"></div>
-            </div>
-            <h3 className="font-semibold text-gray-900 mb-3 text-lg">서비스 선택</h3>
-            <p className="text-gray-600">PG, 내통장결제, 간편현금결제, 화이트라벨 중 필요한 서비스를 선택하세요</p>
+      {/* Why Choose Us Section */}
+      <section className="py-10 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+              왜 헥토파이낸셜인가요?
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              안정성과 편의성을 모두 갖춘 결제 서비스로 고객의 성공을 지원합니다
+            </p>
           </div>
           
-          <div className="text-center">
-            <div className="relative">
-              <div className="bg-hecto-400 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6 shadow-lg">
-                <span className="text-white font-bold text-xl">2</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="text-center p-4">
+              <div className="mx-auto w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-4">
+                <Shield className="h-8 w-8 text-blue-600" />
               </div>
-              <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-hecto-200 -translate-x-1/2"></div>
+              <h3 className="text-lg font-bold text-gray-900 mb-3">금융권 보안</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                금융위원회 인증과 PCI DSS 준수로 최고 수준의 보안을 보장합니다.
+              </p>
             </div>
-            <h3 className="font-semibold text-gray-900 mb-3 text-lg">API 문서 확인</h3>
-            <p className="text-gray-600">상세한 연동 가이드와 API 명세서를 통해 개발 방법을 확인하세요</p>
+            
+            <div className="text-center p-4">
+              <div className="mx-auto w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-4">
+                <Zap className="h-8 w-8 text-green-600" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-3">빠른 정산</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                실시간 정산 시스템으로 매출을 즉시 확인하고 관리할 수 있습니다.
+              </p>
+            </div>
+            
+            <div className="text-center p-4">
+              <div className="mx-auto w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-4">
+                <Users className="h-8 w-8 text-purple-600" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-3">전문 지원</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                24시간 전담 지원팀이 연동부터 운영까지 모든 과정을 도와드립니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Latest News Section */}
+      <section className="py-10 bg-white">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="flex justify-between items-center mb-8">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+                최신 소식
+              </h2>
+              <p className="text-lg text-gray-600">
+                헥토파이낸셜의 새로운 소식을 확인하세요
+              </p>
+            </div>
+            <Link
+              to="/news"
+              className="hidden md:inline-flex items-center text-hecto-600 hover:text-hecto-700 font-semibold transition-colors"
+            >
+              전체 보기
+              <ExternalLink className="ml-2 h-4 w-4" />
+            </Link>
           </div>
           
-          <div className="text-center">
-            <div className="bg-hecto-400 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6 shadow-lg">
-              <span className="text-white font-bold text-xl">3</span>
-            </div>
-            <h3 className="font-semibold text-gray-900 mb-3 text-lg">연동 개발</h3>
-            <p className="text-gray-600">제공된 예시 코드와 샘플을 활용하여 빠르게 연동을 완료하세요</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {news.map((item, index) => (
+              <article key={index} className="group cursor-pointer">
+                <Link to={item.href} className="block">
+                  <div className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg transition-all duration-300 h-full">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-hecto-100 text-hecto-800">
+                        {item.category}
+                      </span>
+                      <div className="flex items-center text-gray-500 text-sm">
+                        <Calendar className="h-4 w-4 mr-1" />
+                        {item.date}
+                      </div>
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-hecto-600 transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 leading-relaxed mb-3">
+                      {item.description}
+                    </p>
+                    <div className="flex items-center text-hecto-600 group-hover:text-hecto-700 font-medium">
+                      <span className="text-sm">더 읽기</span>
+                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </div>
+                </Link>
+              </article>
+            ))}
+          </div>
+          
+          <div className="text-center mt-8 md:hidden">
+            <Link
+              to="/news"
+              className="inline-flex items-center text-hecto-600 hover:text-hecto-700 font-semibold transition-colors"
+            >
+              전체 소식 보기
+              <ExternalLink className="ml-2 h-4 w-4" />
+            </Link>
           </div>
         </div>
-        
-        <div className="text-center mt-10">
-          <Link
-            to="/docs/pg"
-            className="inline-flex items-center px-8 py-4 bg-white text-hecto-600 font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 border border-hecto-200 hover:border-hecto-300"
-          >
-            지금 시작하기
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Link>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-10 bg-gradient-to-r from-hecto-500 to-hecto-600">
+        <div className="max-w-4xl mx-auto text-center px-6 lg:px-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+            지금 바로 시작하세요
+          </h2>
+          <p className="text-lg text-hecto-100 mb-6 max-w-2xl mx-auto">
+            헥토파이낸셜과 함께 성장하는 비즈니스를 경험해보세요.<br />
+            전문 상담을 통해 최적의 결제 솔루션을 제안해드립니다.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              to="/docs/pg"
+              className="inline-flex items-center px-6 py-3 text-base font-semibold bg-white hover:bg-gray-50 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+              style={{ color: '#e6652a' }}
+            >
+              <BookOpen className="mr-3 h-5 w-5" />
+              개발 문서 보기
+            </Link>
+            <a
+              href="mailto:business@hectofinancial.com"
+              className="inline-flex items-center px-6 py-3 text-base font-semibold text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 border-2"
+              style={{ backgroundColor: '#e6652a', borderColor: '#ffb089' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#cc5722' }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#e6652a' }}
+            >
+              상담 문의하기
+              <ArrowRight className="ml-3 h-5 w-5" />
+            </a>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   )
 }

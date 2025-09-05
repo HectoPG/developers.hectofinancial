@@ -1,3 +1,5 @@
+import { FeatureGrid, TestScenario, ErrorGuide, NextSteps, DocumentFooter } from '../../components'
+
 # 🚀 시작하기
 
 헥토파이낸셜 전자결제(PG) 서비스에 오신 것을 환영합니다! 이 가이드를 통해 빠르고 안전하게 결제 서비스를 연동할 수 있습니다.
@@ -10,47 +12,40 @@
 
 ### 🎯 주요 특징
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
-  <div className="bg-gradient-to-r from-hecto-50 to-hecto-100 p-6 rounded-xl border border-hecto-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-hecto-400 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">💳</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">다양한 결제수단</h3>
-    </div>
-    <p className="text-gray-700">신용카드부터 간편결제까지 모든 주요 결제수단을 하나의 API로 지원</p>
-  </div>
-
-  <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">🔒</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">강력한 보안</h3>
-    </div>
-    <p className="text-gray-700">PCI DSS 준수, AES-256 암호화, 해시 검증으로 안전한 결제 환경 제공</p>
-  </div>
-
-  <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-xl border border-green-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">⚡</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">빠른 연동</h3>
-    </div>
-    <p className="text-gray-700">표준 API와 SDK를 통한 쉽고 빠른 연동, 샘플 코드 제공</p>
-  </div>
-
-  <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-6 rounded-xl border border-purple-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">📊</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">실시간 관리</h3>
-    </div>
-    <p className="text-gray-700">실시간 거래 조회, 정산 관리, 상세한 통계 데이터 제공</p>
-  </div>
-</div>
+<FeatureGrid features={[
+  {
+    icon: "💳",
+    title: "다양한 결제수단",
+    description: "신용카드부터 간편결제까지 모든 주요 결제수단을 하나의 API로 지원",
+    bgColor: "from-hecto-50 to-hecto-100",
+    borderColor: "border-hecto-200",
+    iconBgColor: "bg-hecto-400"
+  },
+  {
+    icon: "🔒",
+    title: "강력한 보안",
+    description: "PCI DSS 준수, AES-256 암호화, 해시 검증으로 안전한 결제 환경 제공",
+    bgColor: "from-blue-50 to-blue-100",
+    borderColor: "border-blue-200",
+    iconBgColor: "bg-blue-500"
+  },
+  {
+    icon: "⚡",
+    title: "빠른 연동",
+    description: "표준 API와 SDK를 통한 쉽고 빠른 연동, 샘플 코드 제공",
+    bgColor: "from-green-50 to-green-100",
+    borderColor: "border-green-200",
+    iconBgColor: "bg-green-500"
+  },
+  {
+    icon: "📊",
+    title: "실시간 관리",
+    description: "실시간 거래 조회, 정산 관리, 상세한 통계 데이터 제공",
+    bgColor: "from-purple-50 to-purple-100",
+    borderColor: "border-purple-200",
+    iconBgColor: "bg-purple-500"
+  }
+]} />
 
 ### 🎯 이 문서의 대상
 

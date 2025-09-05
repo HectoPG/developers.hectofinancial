@@ -1,3 +1,5 @@
+import { FeatureGrid, TestScenario, ErrorGuide, NextSteps, DocumentFooter } from '../../components'
+
 # 📱 휴대폰 결제
 
 휴대폰 번호 인증을 통해 통신요금과 함께 결제하는 서비스입니다. 간편하고 빠른 결제가 가능하며, 정기결제 서비스도 지원합니다.
@@ -6,47 +8,40 @@
 
 ### 🎯 주요 특징
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
-  <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-6 rounded-xl border border-purple-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">📞</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">간편 인증</h3>
-    </div>
-    <p className="text-gray-700">휴대폰 번호와 생년월일만으로 간단한 본인 인증 및 결제</p>
-  </div>
-
-  <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">📡</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">모든 통신사 지원</h3>
-    </div>
-    <p className="text-gray-700">SKT, KT, LG U+, 알뜰폰 등 모든 국내 통신사 지원</p>
-  </div>
-
-  <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-xl border border-green-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">🔄</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">정기결제</h3>
-    </div>
-    <p className="text-gray-700">월자동 결제 서비스로 구독 서비스에 최적화</p>
-  </div>
-
-  <div className="bg-gradient-to-r from-orange-50 to-orange-100 p-6 rounded-xl border border-orange-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">⚡</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">하이브리드 API</h3>
-    </div>
-    <p className="text-gray-700">인증과 승인을 분리한 고급 연동 방식 지원</p>
-  </div>
-</div>
+<FeatureGrid features={[
+  {
+    icon: "📞",
+    title: "간편 인증",
+    description: "휴대폰 번호와 생년월일만으로 간단한 본인 인증 및 결제",
+    bgColor: "from-purple-50 to-purple-100",
+    borderColor: "border-purple-200",
+    iconBgColor: "bg-purple-500"
+  },
+  {
+    icon: "📡",
+    title: "모든 통신사 지원",
+    description: "SKT, KT, LG U+, 알뜰폰 등 모든 국내 통신사 지원",
+    bgColor: "from-blue-50 to-blue-100",
+    borderColor: "border-blue-200",
+    iconBgColor: "bg-blue-500"
+  },
+  {
+    icon: "🔄",
+    title: "정기결제",
+    description: "월자동 결제 서비스로 구독 서비스에 최적화",
+    bgColor: "from-green-50 to-green-100",
+    borderColor: "border-green-200",
+    iconBgColor: "bg-green-500"
+  },
+  {
+    icon: "⚡",
+    title: "하이브리드 API",
+    description: "인증과 승인을 분리한 고급 연동 방식 지원",
+    bgColor: "from-orange-50 to-orange-100",
+    borderColor: "border-orange-200",
+    iconBgColor: "bg-orange-500"
+  }
+]} />
 
 ### 📡 지원 통신사
 

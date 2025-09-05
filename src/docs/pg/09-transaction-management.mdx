@@ -1,3 +1,5 @@
+import { FeatureGrid, TestScenario, ErrorGuide, NextSteps, DocumentFooter } from '../../components'
+
 # 📊 거래 조회 및 관리
 
 결제 거래의 실시간 조회, 거래대사, 정산대사 등 거래 관리를 위한 API 가이드입니다. 안정적인 결제 서비스 운영을 위한 필수 기능들을 제공합니다.
@@ -6,37 +8,32 @@
 
 ### 🎯 주요 기능
 
-<div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
-  <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">🔍</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">실시간 거래 조회</h3>
-    </div>
-    <p className="text-gray-700">개별 거래의 상세 정보와 현재 상태를 실시간으로 확인</p>
-  </div>
-
-  <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-xl border border-green-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">📋</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">거래대사</h3>
-    </div>
-    <p className="text-gray-700">일자별 전체 거래 내역을 조회하여 거래 데이터 검증</p>
-  </div>
-
-  <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-6 rounded-xl border border-purple-200">
-    <div className="flex items-center mb-3">
-      <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white text-lg">💰</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900">정산대사</h3>
-    </div>
-    <p className="text-gray-700">정산 예정 거래와 수수료 정보를 확인하여 정산 관리</p>
-  </div>
-</div>
+<FeatureGrid features={[
+  {
+    icon: "🔍",
+    title: "실시간 거래 조회",
+    description: "개별 거래의 상세 정보와 현재 상태를 실시간으로 확인",
+    bgColor: "from-blue-50 to-blue-100",
+    borderColor: "border-blue-200",
+    iconBgColor: "bg-blue-500"
+  },
+  {
+    icon: "📋",
+    title: "거래대사",
+    description: "일자별 전체 거래 내역을 조회하여 거래 데이터 검증",
+    bgColor: "from-green-50 to-green-100",
+    borderColor: "border-green-200",
+    iconBgColor: "bg-green-500"
+  },
+  {
+    icon: "💰",
+    title: "정산대사",
+    description: "정산 예정 거래와 수수료 정보를 확인하여 정산 관리",
+    bgColor: "from-purple-50 to-purple-100",
+    borderColor: "border-purple-200",
+    iconBgColor: "bg-purple-500"
+  }
+]} />
 
 ### 🔧 API 종류
 
