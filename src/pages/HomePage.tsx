@@ -75,12 +75,15 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-hecto-50 opacity-60"></div>
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              <span className="block">안전하고 간편한</span>
-              <span className="text-hecto-500 block">결제 서비스</span>
-            </h1>
+            <div className="mb-8">
+              <img 
+                src="/logo.svg" 
+                alt="헥토파이낸셜 로고" 
+                className="mx-auto h-12 md:h-16 w-auto"
+              />
+            </div>
             <p className="text-lg text-gray-600 mb-6 max-w-3xl mx-auto leading-relaxed">
-              헥토파이낸셜의 결제 API로 고객에게 최상의 결제 경험을 제공하세요.<br />
+              헥토파이낸셜의 결제 서비스로 고객에게 최상의 결제 경험을 제공하세요.<br />
               빠른 연동부터 안정적인 운영까지 모든 것을 지원합니다.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -190,7 +193,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-10">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-              왜 헥토파이낸셜인가요?
+              Why Hecto Financial
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               안정성과 편의성을 모두 갖춘 결제 서비스로 고객의 성공을 지원합니다
@@ -198,34 +201,40 @@ export default function HomePage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="text-center p-4">
-              <div className="mx-auto w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-4">
-                <Shield className="h-8 w-8 text-blue-600" />
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-lg hover:shadow-xl p-6 transition-all duration-300 transform hover:-translate-y-1">
+              <div className="text-center">
+                <div className="mx-auto w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-4">
+                  <Shield className="h-8 w-8 text-blue-600" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-3">금융권 보안</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  금융위원회 인증과 PCI DSS 준수로 최고 수준의 보안을 보장합니다.
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-3">금융권 보안</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                금융위원회 인증과 PCI DSS 준수로 최고 수준의 보안을 보장합니다.
-              </p>
             </div>
             
-            <div className="text-center p-4">
-              <div className="mx-auto w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-4">
-                <Zap className="h-8 w-8 text-green-600" />
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-lg hover:shadow-xl p-6 transition-all duration-300 transform hover:-translate-y-1">
+              <div className="text-center">
+                <div className="mx-auto w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-4">
+                  <Zap className="h-8 w-8 text-green-600" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-3">빠른 정산</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  실시간 정산 시스템으로 매출을 즉시 확인하고 관리할 수 있습니다.
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-3">빠른 정산</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                실시간 정산 시스템으로 매출을 즉시 확인하고 관리할 수 있습니다.
-              </p>
             </div>
             
-            <div className="text-center p-4">
-              <div className="mx-auto w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-4">
-                <Users className="h-8 w-8 text-purple-600" />
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-lg hover:shadow-xl p-6 transition-all duration-300 transform hover:-translate-y-1">
+              <div className="text-center">
+                <div className="mx-auto w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-4">
+                  <Users className="h-8 w-8 text-purple-600" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-3">전문 지원</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  24시간 전담 지원팀이 연동부터 운영까지 모든 과정을 도와드립니다.
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-3">전문 지원</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                24시간 전담 지원팀이 연동부터 운영까지 모든 과정을 도와드립니다.
-              </p>
             </div>
           </div>
         </div>
