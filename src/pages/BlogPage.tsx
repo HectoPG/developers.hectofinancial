@@ -13,8 +13,8 @@ const BlogPage: React.FC = () => {
       readTime: "5분",
       category: "가이드",
       icon: BookOpen,
-      bgColor: "bg-hecto-50",
-      borderColor: "border-hecto-100",
+      bgColor: "bg-white",
+      borderColor: "border-gray-100",
       iconColor: "text-hecto-500"
     },
     {
@@ -25,8 +25,8 @@ const BlogPage: React.FC = () => {
       readTime: "8분",
       category: "보안",
       icon: Shield,
-      bgColor: "bg-hecto-50",
-      borderColor: "border-hecto-100",
+      bgColor: "bg-white",
+      borderColor: "border-gray-100",
       iconColor: "text-hecto-500"
     },
     {
@@ -37,8 +37,8 @@ const BlogPage: React.FC = () => {
       readTime: "6분",
       category: "기술",
       icon: Zap,
-      bgColor: "bg-hecto-50",
-      borderColor: "border-hecto-100",
+      bgColor: "bg-white",
+      borderColor: "border-gray-100",
       iconColor: "text-hecto-500"
     }
   ]
@@ -75,9 +75,9 @@ const BlogPage: React.FC = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <div className="bg-hecto-50 border-b border-hecto-100">
+      <div className="bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
@@ -145,11 +145,11 @@ const BlogPage: React.FC = () => {
               <Link
                 key={post.id}
                 to={`/blog/${post.id}`}
-                className="bg-hecto-50 rounded-2xl border border-hecto-100 p-6 hover:shadow-md transition-all duration-200 group flex flex-col sm:flex-row shadow-sm"
+                className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-md transition-all duration-200 group flex flex-col sm:flex-row shadow-sm"
               >
                 <div className="flex-shrink-0 mb-4 sm:mb-0 sm:mr-6">
-                  <div className="w-full sm:w-48 h-32 bg-gradient-to-br from-hecto-100 to-hecto-200 rounded-xl flex items-center justify-center border border-hecto-200">
-                    <Code className="w-8 h-8 text-hecto-600" />
+                  <div className="w-full sm:w-48 h-32 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center border border-gray-200">
+                    <Code className="w-8 h-8 text-gray-500" />
                   </div>
                 </div>
                 <div className="flex-1">

@@ -15,4 +15,15 @@ export default defineConfig({
     },
     react()
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
+      }
+    }
+  },
+  preview: {
+    port: 3000,
+    strictPort: true
+  }
 })
