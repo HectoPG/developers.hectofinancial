@@ -146,7 +146,10 @@ export default function HomePage() {
                   className="bg-white rounded-2xl border border-gray-200 shadow-lg hover:shadow-2xl p-6 transition-all duration-300 transform hover:-translate-y-1"
                 >
                   <div className="flex items-center mb-4">
-                    <div className={`${service.color} p-3 rounded-xl mr-3`}>
+                    <div 
+                      className="p-3 rounded-xl mr-3"
+                      style={{ backgroundColor: '#ffb089' }}
+                    >
                       <Icon className="h-6 w-6 text-white" />
                     </div>
                     <div>
