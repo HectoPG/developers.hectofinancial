@@ -256,6 +256,23 @@ export default function Layout({ children }: LayoutProps) {
           children
         )}
       </main>
+      
+      {/* Footer */}
+      <footer className="bg-gray-50 border-t border-gray-200 py-8">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center text-sm text-gray-600">
+            <div className="mb-2">
+              <strong>(주)헥토파이낸셜</strong> (06220) 서울특별시 강남구 테헤란로 34길 6, 9~10층 (역삼동, 태광타워)
+            </div>
+            <div className="mb-2">
+              사업자등록번호 : 101-81-63383 | TEL. 1688-5130 | FAX. 02-6008-5158 | E-mail. info_F@hecto.co.kr
+            </div>
+            <div className="text-gray-500">
+              Copyrightⓒ Hecto Financial Co., Ltd. All Rights Reserved.
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }

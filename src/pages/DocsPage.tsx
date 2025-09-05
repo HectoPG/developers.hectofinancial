@@ -93,8 +93,6 @@ export default function DocsPage() {
 
   const MdxComponent = getMdxComponent(category, page)
   
-  // 컴포넌트 로딩 상태 로그
-  console.log('MDX Component:', MdxComponent ? 'Found' : 'Not found', { category, page })
   
   if (!MdxComponent) {
     return (
