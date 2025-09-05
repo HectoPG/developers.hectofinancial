@@ -64,7 +64,7 @@ const stats = [
   { label: '누적 거래액', value: '1조+', unit: '원' },
   { label: '연동 기업', value: '10,000+', unit: '개' },
   { label: '일 거래량', value: '100만+', unit: '건' },
-  { label: '서비스 가동률', value: '99.9', unit: '%' }
+  { label: '서비스 가동률', value: '100', unit: '%' }
 ]
 
 export default function HomePage() {
