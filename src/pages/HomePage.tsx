@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { CreditCard, Banknote, FileText, Layers, ArrowRight, Zap, Shield, BookOpen, Users, CheckCircle, ExternalLink, Calendar } from 'lucide-react'
+import CountUp from '../components/CountUp'
 
 const services = [
   {
@@ -61,10 +62,10 @@ const news = [
 ]
 
 const stats = [
-  { label: '누적 거래액', value: '1조+', unit: '원' },
-  { label: '연동 기업', value: '10,000+', unit: '개' },
-  { label: '일 거래량', value: '100만+', unit: '건' },
-  { label: '서비스 가동률', value: '100', unit: '%' }
+  { label: '누적 거래액', value: 1000000000000, unit: '원', suffix: '+' },
+  { label: '연동 기업', value: 10000, unit: '개', suffix: '+' },
+  { label: '일 거래량', value: 1000000, unit: '건', suffix: '+' },
+  { label: '서비스 가동률', value: 100, unit: '%' }
 ]
 
 export default function HomePage() {
@@ -118,7 +119,12 @@ export default function HomePage() {
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
                 <div className="text-2xl md:text-3xl font-bold text-white mb-1">
-                  {stat.value}
+                  <CountUp 
+                    end={stat.value}
+                    duration={2500}
+                    suffix={stat.suffix || ''}
+                    className="text-2xl md:text-3xl font-bold text-white"
+                  />
                   <span className="text-white opacity-80 text-lg ml-1">{stat.unit}</span>
                 </div>
                 <div className="text-white opacity-90 font-medium text-sm">{stat.label}</div>
