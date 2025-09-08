@@ -11,6 +11,7 @@ import NextSteps from './components/NextSteps'
 import TestScenario from './components/TestScenario'
 import ErrorGuide from './components/ErrorGuide'
 import DocumentFooter from './components/DocumentFooter'
+import ScrollToTop from './components/ScrollToTop'
 
 // 헤딩에서 ID 생성하는 함수
 const generateId = (text: string) => {
@@ -76,6 +77,7 @@ function App() {
   return (
     <MDXProvider components={mdxComponents}>
       <Router>
+        <ScrollToTop />
         <Layout>
           <Routes>
             <Route path="/" element={<HomePage />} />
