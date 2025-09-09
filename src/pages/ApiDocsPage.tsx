@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import SwaggerUI from 'swagger-ui-react';
 import 'swagger-ui-react/swagger-ui.css';
-import { ChevronRight, Play, Code, FileText, Zap } from 'lucide-react';
+import { Play, Code, FileText, Zap } from 'lucide-react';
 
 const ApiDocsPage: React.FC = () => {
-  const [swaggerSpec, setSwaggerSpec] = useState<any>(null);
+  const [, setSwaggerSpec] = useState<any>(null);
   const [selectedApi, setSelectedApi] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'docs' | 'test'>('docs');
 
@@ -12,7 +11,7 @@ const ApiDocsPage: React.FC = () => {
     // Swagger 스펙 로드
     fetch('/api/swagger.yaml')
       .then(response => response.text())
-      .then(yamlText => {
+      .then((_yamlText: string) => {
         // 간단한 YAML 파싱 (실제로는 yaml 라이브러리 사용 권장)
         const spec = {
           openapi: "3.0.0",
@@ -164,9 +163,9 @@ const ApiDocsPage: React.FC = () => {
                 {activeTab === 'docs' ? (
                   <div>
                     <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                      {apiGroups[Object.keys(apiGroups).find(group => 
-                        apiGroups[group].some(api => api.path === selectedApi)
-                      )!].find(api => api.path === selectedApi)?.title}
+                      {apiGroups[Object.keys(apiGroups).find(group =>
+                        apiGroups[group as keyof typeof apiGroups].some((api: any) => api.path === selectedApi)
+                      )! as keyof typeof apiGroups].find((api: any) => api.path === selectedApi)?.title}
                     </h2>
                     
                     <div className="space-y-6">
@@ -178,9 +177,9 @@ const ApiDocsPage: React.FC = () => {
                             <code className="text-sm font-mono">{selectedApi}</code>
                           </div>
                           <p className="text-sm text-gray-600">
-                            {apiGroups[Object.keys(apiGroups).find(group => 
-                              apiGroups[group].some(api => api.path === selectedApi)
-                            )!].find(api => api.path === selectedApi)?.description}
+                            {apiGroups[Object.keys(apiGroups).find(group =>
+                              apiGroups[group as keyof typeof apiGroups].some((api: any) => api.path === selectedApi)
+                            )! as keyof typeof apiGroups].find((api: any) => api.path === selectedApi)?.description}
                           </p>
                         </div>
                       </div>

@@ -91,15 +91,13 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-  const searchIndex = useRef<FlexSearch.Index<SearchResult>>()
+  const searchIndex = useRef<any>(null)
 
   // FlexSearch 인덱스 초기화
   useEffect(() => {
     searchIndex.current = new FlexSearch.Index({
       tokenize: 'forward',
-      threshold: 1,
-      resolution: 3,
-      depth: 2
+      resolution: 3
     })
 
     // 문서 데이터 인덱싱
@@ -117,7 +115,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
     if (searchIndex.current) {
       const searchResults = searchIndex.current.search(query)
-      const foundResults = searchResults.map(index => documentData[index]).filter(Boolean)
+      const foundResults = searchResults.map((index: number) => documentData[index]).filter(Boolean)
       setResults(foundResults)
       setSelectedIndex(0)
     }
