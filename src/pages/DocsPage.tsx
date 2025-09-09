@@ -1,5 +1,5 @@
-import { useParams, Link } from 'react-router-dom'
-import { lazy, Suspense } from 'react'
+import { useParams, Link, useLocation } from 'react-router-dom'
+import { lazy, Suspense, useEffect } from 'react'
 import { ArrowLeft, FileText } from 'lucide-react'
 
 // 미리 정의된 lazy 컴포넌트들
@@ -64,15 +64,42 @@ const getMdxComponent = (category: string, page?: string) => {
 
 
 const categoryDescriptions: Record<string, string> = {
-  pg: '결제 서비스 연동 가이드',
-  ezauth: '간편 계좌 결제 서비스 연동 가이드',
-  ezcp: '현금 결제 서비스 연동 가이드',
+  pg: 'PG 결제 서비스 연동 가이드',
+  ezauth: '내통장 결제 서비스 연동 가이드',
+  ezcp: '간편현금 결제 서비스 연동 가이드',
   whitelabel: '통합 결제 서비스 연동 가이드',
 }
 
 
 export default function DocsPage() {
   const { category, page } = useParams<{ category: string; page?: string }>()
+  const location = useLocation()
+
+  // URL 해시를 처리하여 해당 헤딩으로 스크롤
+  useEffect(() => {
+    const handleHashScroll = () => {
+      const hash = location.hash.replace('#', '')
+      if (hash) {
+        // 컴포넌트가 로드된 후 스크롤 실행
+        setTimeout(() => {
+          const element = document.getElementById(hash)
+          if (element) {
+            // 서비스 페이지에서는 메인 콘텐츠 영역을 스크롤
+            const contentArea = document.querySelector('.flex-1.min-w-0.lg\\:ml-64.lg\\:mr-56.overflow-y-auto')
+            if (contentArea) {
+              const elementPosition = element.offsetTop - 20 // 약간의 여백
+              contentArea.scrollTo({
+                top: elementPosition,
+                behavior: 'smooth'
+              })
+            }
+          }
+        }, 500) // MDX 컴포넌트 로딩을 위한 지연
+      }
+    }
+
+    handleHashScroll()
+  }, [location.hash, category, page])
   
   if (!category) {
     return (
@@ -82,7 +109,7 @@ export default function DocsPage() {
         <p className="text-gray-600 mb-6">올바른 문서 카테고리를 선택해주세요.</p>
         <Link 
           to="/" 
-          className="inline-flex items-center px-4 py-2 bg-hecto-400 text-white rounded-lg hover:bg-hecto-500 transition-colors"
+          className="inline-flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors focus:outline-none"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           홈으로 돌아가기
@@ -102,7 +129,7 @@ export default function DocsPage() {
         <p className="text-gray-600 mb-6">요청하신 카테고리의 문서가 존재하지 않습니다.</p>
         <Link 
           to="/" 
-          className="inline-flex items-center px-4 py-2 bg-hecto-400 text-white rounded-lg hover:bg-hecto-500 transition-colors"
+          className="inline-flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors focus:outline-none"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           홈으로 돌아가기
@@ -117,7 +144,7 @@ export default function DocsPage() {
       <div className="mb-6">
         <Link 
           to="/" 
-          className="inline-flex items-center text-hecto-600 hover:text-hecto-800 transition-colors"
+          className="inline-flex items-center text-orange-600 hover:text-orange-800 transition-colors focus:outline-none"
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
           홈으로 돌아가기
@@ -127,7 +154,7 @@ export default function DocsPage() {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">
-          PG 결제 연동 가이드
+          
         </h1>
         <p className="text-base text-gray-600 mb-4">
           {categoryDescriptions[category]}
