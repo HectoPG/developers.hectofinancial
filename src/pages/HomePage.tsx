@@ -182,7 +182,7 @@ export default function HomePage() {
                   
                   <Link
                     to={service.href}
-                    className="inline-flex items-center text-orange-600 hover:text-orange-700 font-semibold transition-colors focus:outline-none"
+                    className="inline-flex items-center text-hecto-600 hover:text-hecto-700 font-semibold transition-colors focus:outline-none"
                   >
                     자세히 보기
                     <ArrowRight className="ml-2 h-4 w-4" />

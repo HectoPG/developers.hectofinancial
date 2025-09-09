@@ -1,6 +1,7 @@
 import { useParams, Link, useLocation } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
 import { ArrowLeft, FileText } from 'lucide-react'
+import { getCategoryDescription } from '../config/documentation'
 
 // 미리 정의된 lazy 컴포넌트들
 const PgGettingStarted = lazy(() => import('../docs/pg/01-getting-started.mdx'))
@@ -63,11 +64,9 @@ const getMdxComponent = (category: string, page?: string) => {
 }
 
 
-const categoryDescriptions: Record<string, string> = {
-  pg: 'PG 결제 서비스 연동 가이드',
-  ezauth: '내통장 결제 서비스 연동 가이드',
-  ezcp: '간편현금 결제 서비스 연동 가이드',
-  whitelabel: '통합 결제 서비스 연동 가이드',
+// 중앙화된 설정에서 카테고리 설명 가져오기
+const getCategoryDescriptionText = (category: string): string => {
+  return getCategoryDescription(category)
 }
 
 
@@ -109,7 +108,7 @@ export default function DocsPage() {
         <p className="text-gray-600 mb-6">올바른 문서 카테고리를 선택해주세요.</p>
         <Link 
           to="/" 
-          className="inline-flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors focus:outline-none"
+          className="inline-flex items-center px-4 py-2 bg-hecto-500 text-white rounded-lg hover:bg-hecto-600 transition-colors focus:outline-none"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           홈으로 돌아가기
@@ -129,7 +128,7 @@ export default function DocsPage() {
         <p className="text-gray-600 mb-6">요청하신 카테고리의 문서가 존재하지 않습니다.</p>
         <Link 
           to="/" 
-          className="inline-flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors focus:outline-none"
+          className="inline-flex items-center px-4 py-2 bg-hecto-500 text-white rounded-lg hover:bg-hecto-600 transition-colors focus:outline-none"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           홈으로 돌아가기
@@ -144,7 +143,7 @@ export default function DocsPage() {
       <div className="mb-6">
         <Link 
           to="/" 
-          className="inline-flex items-center text-orange-600 hover:text-orange-800 transition-colors focus:outline-none"
+          className="inline-flex items-center text-hecto-600 hover:text-hecto-800 transition-colors focus:outline-none"
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
           홈으로 돌아가기
@@ -157,7 +156,7 @@ export default function DocsPage() {
           
         </h1>
         <p className="text-base text-gray-600 mb-4">
-          {categoryDescriptions[category]}
+          {getCategoryDescriptionText(category || '')}
         </p>
       </div>
       

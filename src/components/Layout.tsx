@@ -1,28 +1,37 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, FileText, CreditCard, Banknote, Layers, Home, ChevronDown, BookOpen, Search } from 'lucide-react'
+import { Menu, X, FileText, Layers, Home, ChevronDown, BookOpen, Search } from 'lucide-react'
 import clsx from 'clsx'
 import TableOfContents from './TableOfContents'
 import ServiceSidebar from './ServiceSidebar'
 import SearchModal from './SearchModal'
+import { getNavigationCategories } from '../config/documentation'
+import { getIcon } from '../utils/icons'
 
-const navigation = [
-  { name: '홈', href: '/', icon: Home },
-  { 
-    name: '서비스', 
-    href: '/services', 
-    icon: Layers, 
-    description: '결제 서비스',
-    children: [
-      { name: 'PG 결제', href: '/docs/pg', description: '신용카드, 간편결제, 가상계좌 등', icon: CreditCard },
-      { name: '내통장결제', href: '/docs/ezauth', description: '실시간 계좌이체 서비스', icon: Banknote },
-      { name: '간편현금결제', href: '/docs/ezcp', description: '현금 결제 서비스', icon: FileText },
-      { name: '화이트라벨', href: '/docs/whitelabel', description: '통합 결제 서비스', icon: Layers },
-    ]
-  },
-  { name: 'API 문서', href: '/api-docs', icon: BookOpen, description: '인터랙티브 API 문서' },
-  { name: '블로그', href: '/blog', icon: FileText, description: '기술 블로그 및 소식' },
-]
+// 중앙화된 설정에서 네비게이션 생성
+const generateNavigation = () => {
+  const categories = getNavigationCategories()
+  
+  return [
+    { name: '홈', href: '/', icon: Home },
+    { 
+      name: '서비스', 
+      href: '/services', 
+      icon: Layers, 
+      description: '결제 서비스',
+      children: categories.map(category => ({
+        name: category.name,
+        href: category.href,
+        description: category.description,
+        icon: getIcon(category.icon)
+      }))
+    },
+    { name: 'API 문서', href: '/api-docs', icon: BookOpen, description: '인터랙티브 API 문서' },
+    { name: '블로그', href: '/blog', icon: FileText, description: '기술 블로그 및 소식' },
+  ]
+}
+
+const navigation = generateNavigation()
 
 
 interface LayoutProps {
@@ -78,7 +87,12 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 bg-white border-b border-gray-100 z-50">
+      <header className={clsx(
+        "fixed top-0 left-0 right-0 z-50",
+        location.pathname === '/' 
+          ? "bg-transparent border-b-0" 
+          : "bg-white border-b border-gray-100"
+      )}>
         <div className="w-full pl-6 pr-4">
           <div className="flex justify-start items-center h-16 space-x-8">
             {/* Logo */}
@@ -90,6 +104,9 @@ export default function Layout({ children }: LayoutProps) {
             <nav className="hidden md:flex items-center space-x-1 flex-1" ref={dropdownRef}>
               {navigation.map((item) => {
                 const isActive = location.pathname === item.href || location.pathname.startsWith(item.href + '/')
+                // 서비스 페이지인지 확인 (docs로 시작하는 경로)
+                const isServicePage = location.pathname.startsWith('/docs/')
+                const isServiceMenu = item.name === '서비스'
                 
                 return (
                   <div key={item.name} className="relative">
@@ -99,9 +116,9 @@ export default function Layout({ children }: LayoutProps) {
                         <button
                           onClick={() => setActiveDropdown(activeDropdown === item.name ? null : item.name)}
                           className={clsx(
-                            isActive
-                              ? 'text-orange-600 bg-orange-50' 
-                              : 'text-gray-700 hover:text-orange-600 hover:bg-gray-50',
+                        isActive || (isServicePage && isServiceMenu)
+                          ? 'text-hecto-600'
+                          : 'text-gray-700 hover:text-hecto-600 hover:bg-gray-50',
                             'flex items-center px-4 py-2 text-base font-medium rounded-md transition-all duration-200 focus:outline-none'
                           )}
                         >
@@ -123,8 +140,8 @@ export default function Layout({ children }: LayoutProps) {
                                     to={child.href}
                                     className={clsx(
                                       location.pathname === child.href || location.pathname.startsWith(child.href + '/')
-                                        ? 'bg-orange-50 text-orange-700' 
-                                        : 'text-gray-700 hover:bg-gray-50 hover:text-orange-600',
+                                        ? 'bg-gray-50 text-hecto-600' 
+                                        : 'text-gray-700 hover:bg-gray-50 hover:text-hecto-600',
                                       'block px-4 py-3 transition-all duration-200 focus:outline-none'
                                     )}
                                   >
@@ -145,8 +162,8 @@ export default function Layout({ children }: LayoutProps) {
                         to={item.href}
                         className={clsx(
                           isActive
-                            ? 'text-orange-600 bg-orange-50' 
-                            : 'text-gray-700 hover:text-orange-600 hover:bg-gray-50',
+                            ? 'text-hecto-600' 
+                            : 'text-gray-700 hover:text-hecto-600 hover:bg-gray-50',
                           'flex items-center px-4 py-2 text-base font-medium rounded-md transition-all duration-200 focus:outline-none'
                         )}
                       >
@@ -201,6 +218,9 @@ export default function Layout({ children }: LayoutProps) {
               </button>
               {navigation.map((item) => {
                 const isActive = location.pathname === item.href || location.pathname.startsWith(item.href + '/')
+                // 서비스 페이지인지 확인 (docs로 시작하는 경로)
+                const isServicePage = location.pathname.startsWith('/docs/')
+                const isServiceMenu = item.name === '서비스'
                 
                 return (
                   <div key={item.name}>
@@ -209,9 +229,9 @@ export default function Layout({ children }: LayoutProps) {
                       <div>
                         <div
                           className={clsx(
-                            isActive
-                              ? 'bg-orange-100 text-orange-900' 
-                              : 'text-gray-700',
+                        isActive || (isServicePage && isServiceMenu)
+                          ? 'text-hecto-600'
+                          : 'text-gray-700',
                             'px-3 py-3 text-base font-medium'
                           )}
                         >
@@ -230,8 +250,8 @@ export default function Layout({ children }: LayoutProps) {
                                 to={child.href}
                                 className={clsx(
                                   location.pathname === child.href || location.pathname.startsWith(child.href + '/')
-                                    ? 'bg-orange-50 text-orange-700' 
-                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-700',
+                                    ? 'bg-gray-50 text-hecto-600' 
+                                    : 'text-gray-600 hover:bg-gray-50 hover:text-hecto-600',
                                   'block px-3 py-2 text-sm font-medium transition-all duration-200 focus:outline-none'
                                 )}
                                 onClick={() => setMobileMenuOpen(false)}
@@ -251,7 +271,7 @@ export default function Layout({ children }: LayoutProps) {
                         to={item.href}
                         className={clsx(
                           isActive
-                            ? 'bg-orange-100 text-orange-900' 
+                            ? 'bg-hecto-100 text-hecto-900' 
                             : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900',
                           'block px-3 py-3 text-base font-medium transition-all duration-200 focus:outline-none'
                         )}
@@ -283,7 +303,7 @@ export default function Layout({ children }: LayoutProps) {
               </div>
               
               {/* Content Area - Scrollable */}
-              <div className="flex-1 min-w-0 lg:ml-64 lg:mr-56 overflow-y-auto scrollbar-hide hover:scrollbar-show">
+              <div className="flex-1 min-w-0 lg:ml-64 lg:mr-56 overflow-y-auto docs-scrollbar">
                 <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
                   {/* Documentation Content */}
                   <div className="w-full overflow-x-hidden">

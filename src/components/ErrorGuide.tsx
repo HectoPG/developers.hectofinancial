@@ -7,7 +7,7 @@ interface ErrorGuideProps {
 
 export default function ErrorGuide({ title, content }: ErrorGuideProps) {
   return (
-    <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 p-6 rounded-2xl my-6 shadow-sm">
+    <div className="bg-gradient-to-r from-amber-50 to-hecto-50 border border-amber-200 p-6 rounded-2xl my-6 shadow-sm">
       <div className="flex items-start">
         <div className="flex-shrink-0">
           <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center shadow-sm">

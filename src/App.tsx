@@ -74,7 +74,7 @@ const mdxComponents = {
   ol: (props: any) => <ol className="list-decimal list-inside mb-3 text-gray-700 space-y-0.5 text-xs" {...props} />,
   li: (props: any) => <li className="leading-relaxed text-xs" {...props} />,
   blockquote: (props: any) => <blockquote className="border-l-4 border-hecto-400 pl-3 py-2 italic text-gray-600 mb-3 bg-hecto-50 rounded-r-lg text-xs" {...props} />,
-  a: (props: any) => <a className="text-orange-600 hover:text-orange-800 underline decoration-2 underline-offset-2 transition-colors focus:outline-none" {...props} />,
+  a: (props: any) => <a className="text-hecto-600 hover:text-hecto-800 underline decoration-2 underline-offset-2 transition-colors focus:outline-none" {...props} />,
   ParameterCard,
   FeatureGrid,
   NextSteps,
