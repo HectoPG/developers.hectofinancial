@@ -32,7 +32,7 @@ export const documentationConfig: CategoryConfig[] = [
       {
         id: 'getting-started',
         title: '시작하기',
-        path: '/docs/pg',
+        path: '/docs/pg/01-getting-started',
         category: 'PG 결제',
         description: '헥토파이낸셜 전자결제(PG) 서비스 연동 가이드',
         order: 1
@@ -40,7 +40,7 @@ export const documentationConfig: CategoryConfig[] = [
       {
         id: 'credit-card',
         title: '신용카드 결제',
-        path: '/docs/pg/credit-card',
+        path: '/docs/pg/02-credit-card',
         category: 'PG 결제',
         description: '신용카드 결제 연동 가이드',
         order: 2
@@ -48,7 +48,7 @@ export const documentationConfig: CategoryConfig[] = [
       {
         id: 'virtual-account',
         title: '가상계좌 결제',
-        path: '/docs/pg/virtual-account',
+        path: '/docs/pg/03-virtual-account',
         category: 'PG 결제',
         description: '가상계좌 발급 및 입금 확인',
         order: 3
@@ -56,7 +56,7 @@ export const documentationConfig: CategoryConfig[] = [
       {
         id: 'bank-transfer',
         title: '계좌이체 결제',
-        path: '/docs/pg/bank-transfer',
+        path: '/docs/pg/04-bank-transfer',
         category: 'PG 결제',
         description: '실시간 계좌이체 결제 연동',
         order: 4
@@ -64,7 +64,7 @@ export const documentationConfig: CategoryConfig[] = [
       {
         id: 'mobile-payment',
         title: '휴대폰 결제',
-        path: '/docs/pg/mobile-payment',
+        path: '/docs/pg/05-mobile-payment',
         category: 'PG 결제',
         description: '휴대폰 소액결제 연동',
         order: 5
@@ -72,7 +72,7 @@ export const documentationConfig: CategoryConfig[] = [
       {
         id: 'gift-card',
         title: '상품권 결제',
-        path: '/docs/pg/gift-card',
+        path: '/docs/pg/06-gift-card',
         category: 'PG 결제',
         description: '상품권 결제 연동',
         order: 6
@@ -80,7 +80,7 @@ export const documentationConfig: CategoryConfig[] = [
       {
         id: 'point-damoa',
         title: '포인트 다모아',
-        path: '/docs/pg/point-damoa',
+        path: '/docs/pg/07-point-damoa',
         category: 'PG 결제',
         description: '포인트 다모아 연동',
         order: 7
@@ -88,7 +88,7 @@ export const documentationConfig: CategoryConfig[] = [
       {
         id: 'simple-payment',
         title: '간편결제',
-        path: '/docs/pg/simple-payment',
+        path: '/docs/pg/08-simple-payment',
         category: 'PG 결제',
         description: '간편결제 연동',
         order: 8
@@ -96,7 +96,7 @@ export const documentationConfig: CategoryConfig[] = [
       {
         id: 'transaction-management',
         title: '거래 관리',
-        path: '/docs/pg/transaction-management',
+        path: '/docs/pg/09-transaction-management',
         category: 'PG 결제',
         description: '거래 조회 및 관리 기능',
         order: 9
@@ -104,7 +104,7 @@ export const documentationConfig: CategoryConfig[] = [
       {
         id: 'developer-reference',
         title: '개발자 참조',
-        path: '/docs/pg/developer-reference',
+        path: '/docs/pg/10-developer-reference',
         category: 'PG 결제',
         description: 'API 참조 및 개발 가이드',
         order: 10
@@ -122,7 +122,7 @@ export const documentationConfig: CategoryConfig[] = [
       {
         id: 'ezauth-guide',
         title: '내통장결제 연동',
-        path: '/docs/ezauth',
+        path: '/docs/ezauth/hecto_financial_ezauth',
         category: '내통장결제',
         description: '실시간 계좌이체 서비스 연동 방법',
         order: 1
@@ -140,7 +140,7 @@ export const documentationConfig: CategoryConfig[] = [
       {
         id: 'ezcp-guide',
         title: '간편현금결제 연동',
-        path: '/docs/ezcp',
+        path: '/docs/ezcp/hecto_financial_ezcp',
         category: '간편현금결제',
         description: '현금 결제 서비스 연동 방법',
         order: 1
@@ -158,7 +158,7 @@ export const documentationConfig: CategoryConfig[] = [
       {
         id: 'whitelabel-guide',
         title: '화이트라벨 연동',
-        path: '/docs/whitelabel',
+        path: '/docs/whitelabel/hecto_financial_whitelabel',
         category: '화이트라벨',
         description: '통합 결제 서비스 연동 방법',
         order: 1

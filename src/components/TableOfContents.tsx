@@ -117,7 +117,7 @@ export default function TableOfContents({ className }: TableOfContentsProps) {
         })
       },
       {
-        rootMargin: '-100px 0px -80% 0px',
+        rootMargin: '-80px 0px -80% 0px',
         threshold: 0
       }
     )
