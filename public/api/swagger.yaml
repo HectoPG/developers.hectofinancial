@@ -21,8 +21,18 @@ servers:
 paths:
   /spay/APICardActionPay.do:
     post:
-      summary: 신용카드 결제
-      description: 신용카드 결제 및 빌키 결제 API
+      summary: 신용카드 결제 (Non-UI)
+      description: |
+        신용카드 결제 및 빌키 결제 API
+        
+        **결제 방식:**
+        - 구인증: 카드번호, 유효기간(yyMM), 식별번호, 카드비밀번호로 결제 요청
+        - 비인증: 카드번호, 유효기간(yyMM)으로 결제 요청
+        - 빌키(자동결제 키) 발급: 상점 아이디 설정에 따라 빌키를 응답 값으로 내려 드리고 있으며, 빌키를 따로 저장 하였다가 결제가 필요할 경우 빌키 결제로 요청 주시길 바랍니다.
+        
+        **해시 생성 방법:**
+        - **요청 해시**: pktHash = SHA256(거래일자 + 거래시간 + 상점아이디 + 상점주문번호 + 거래금액(평문) + 해쉬키)
+        - **응답 해시**: pktHash = SHA256(거래상태코드 + 요청일자 + 요청시간 + 상점아이디 + 상점주문번호 + 거래금액 + 해쉬키)
       tags:
         - 결제 API
       requestBody:
@@ -33,27 +43,102 @@ paths:
               $ref: '#/components/schemas/CardPaymentRequest'
             examples:
               basic_payment:
-                summary: 기본 신용카드 결제
+                summary: 기본 신용카드 결제 (비인증)
                 value:
-                  mchtId: "nxca_jt_il"
-                  mchtTrdNo: "ORDER20231215143022"
-                  trdDt: "20231215"
-                  trdTm: "143022"
-                  trdAmt: "1000"
-                  mchtName: "테스트상점"
-                  pmtPrdtNm: "테스트상품"
-                  method: "card"
-                  pktHash: "생성된해시값"
-                  notiUrl: "https://yoursite.com/notify"
-                  nextUrl: "https://yoursite.com/success"
-                  cancUrl: "https://yoursite.com/cancel"
+                  params:
+                    mchtId: "nxca_jt_bi"
+                    ver: "0A19"
+                    method: "CA"
+                    bizType: "B0"
+                    encCd: "23"
+                    mchtTrdNo: "ORDER20211231100000"
+                    trdDt: "20211231"
+                    trdTm: "100000"
+                    mobileYn: "N"
+                    osType: "W"
+                  data:
+                    pktHash: "f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
+                    pmtprdNm: "테스트상품"
+                    mchtCustNm: "홍길동"
+                    mchtCustId: "HongGilDong"
+                    email: "HongGilDong@example.com"
+                    cardNo: "1111222233334444"
+                    vldDtMon: "12"
+                    vldDtYear: "24"
+                    instmtMon: "00"
+                    crcCd: "KRW"
+                    taxTypeCd: "N"
+                    trdAmt: "1000"
+                    notiUrl: "https://example.com/notiUrl"
+                    mchtParam: "name=HongGilDong&age=25"
+              legacy_payment:
+                summary: 구인증 신용카드 결제
+                value:
+                  params:
+                    mchtId: "nxca_ks_gu"
+                    ver: "0A19"
+                    method: "CA"
+                    bizType: "B0"
+                    encCd: "23"
+                    mchtTrdNo: "ORDER20211231100000"
+                    trdDt: "20211231"
+                    trdTm: "100000"
+                    mobileYn: "N"
+                    osType: "W"
+                  data:
+                    pktHash: "f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
+                    pmtprdNm: "테스트상품"
+                    mchtCustNm: "홍길동"
+                    mchtCustId: "HongGilDong"
+                    email: "HongGilDong@example.com"
+                    cardNo: "1111222233334444"
+                    vldDtMon: "12"
+                    vldDtYear: "24"
+                    idntNo: "991231"
+                    cardPwd: "00"
+                    instmtMon: "00"
+                    crcCd: "KRW"
+                    taxTypeCd: "N"
+                    trdAmt: "1000"
+                    notiUrl: "https://example.com/notiUrl"
+                    mchtParam: "name=HongGilDong&age=25"
       responses:
         '200':
           description: 결제 성공
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentResponse'
+                $ref: '#/components/schemas/CardPaymentResponse'
+              examples:
+                success:
+                  summary: 결제 성공 응답
+                  value:
+                    params:
+                      mchtId: "nxca_jt_bi"
+                      ver: "0A19"
+                      method: "CA"
+                      bizType: "B0"
+                      encCd: "23"
+                      mchtTrdNo: "ORDER20211231100000"
+                      trdNo: "STFP_PGCAnxca_jt_il0211129135810M1494620"
+                      trdDt: "20211231"
+                      trdTm: "100000"
+                      outStatCd: "0021"
+                      outRsltCd: "0000"
+                      outRsltMsg: "정상적으로 처리되었습니다."
+                    data:
+                      pktHash: "f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
+                      trdAmt: "1000"
+                      billKey: "SBILL_0123456789"
+                      cardNo: "111122xxxxxx4444"
+                      vldDtMon: "12"
+                      vldDtYear: "24"
+                      issrId: "NHC"
+                      cardNm: "NH 농협"
+                      cardKind: "NH 체크카드"
+                      ninstmtTypeCd: "N"
+                      instmtMon: "00"
+                      apprNo: "30001234"
         '400':
           description: 잘못된 요청
           content:
@@ -146,95 +231,292 @@ components:
     CardPaymentRequest:
       type: object
       required:
-        - mchtId
-        - mchtTrdNo
-        - trdDt
-        - trdTm
-        - trdAmt
-        - method
-        - pktHash
+        - params
+        - data
       properties:
-        mchtId:
-          type: string
-          description: 상점 ID
-          example: "nxca_jt_il"
-        mchtTrdNo:
-          type: string
-          description: 주문번호
-          example: "ORDER20231215143022"
-        trdDt:
-          type: string
-          description: 거래일자 (YYYYMMDD)
-          example: "20231215"
-        trdTm:
-          type: string
-          description: 거래시간 (HHMMSS)
-          example: "143022"
-        trdAmt:
-          type: string
-          description: 결제금액
-          example: "1000"
-        mchtName:
-          type: string
-          description: 상점명
-          example: "테스트상점"
-        pmtPrdtNm:
-          type: string
-          description: 상품명
-          example: "테스트상품"
-        method:
-          type: string
-          description: 결제수단
-          enum: ["card", "bank", "vbank", "phone", "gift", "point", "simple"]
-          example: "card"
-        pktHash:
-          type: string
-          description: 보안 해시값
-          example: "생성된해시값"
-        notiUrl:
-          type: string
-          description: 결과통보 URL
-          example: "https://yoursite.com/notify"
-        nextUrl:
-          type: string
-          description: 성공페이지 URL
-          example: "https://yoursite.com/success"
-        cancUrl:
-          type: string
-          description: 취소페이지 URL
-          example: "https://yoursite.com/cancel"
+        params:
+          type: object
+          required:
+            - mchtId
+            - ver
+            - method
+            - bizType
+            - encCd
+            - mchtTrdNo
+            - trdDt
+            - trdTm
+          properties:
+            mchtId:
+              type: string
+              description: 상점아이디 (헥토파이낸셜에서 부여하는 고유 상점아이디)
+              enum: ["nxca_ks_gu", "nxca_jt_bi"]
+              example: "nxca_jt_bi"
+            ver:
+              type: string
+              description: 전문의 버전
+              example: "0A19"
+            method:
+              type: string
+              description: 결제수단
+              example: "CA"
+            bizType:
+              type: string
+              description: 업무구분
+              example: "B0"
+            encCd:
+              type: string
+              description: 암호화 구분
+              example: "23"
+            mchtTrdNo:
+              type: string
+              description: 상점주문번호 (상점에서 생성하는 고유한 거래번호)
+              example: "ORDER20211231100000"
+            trdDt:
+              type: string
+              description: 요청일자 (현재 전문을 전송하는 일자 YYYYMMDD)
+              example: "20211231"
+            trdTm:
+              type: string
+              description: 요청시간 (현재 전문을 전송하는 시간 HHMMSS)
+              example: "100000"
+            mobileYn:
+              type: string
+              description: 모바일 여부 (Y:모바일웹/앱, N:PC 또는 그 외)
+              enum: ["Y", "N"]
+              example: "N"
+            osType:
+              type: string
+              description: OS 구분 (A:Android, I:IOS, W:windows, M:Mac, E:기타, 공백:확인불가)
+              enum: ["A", "I", "W", "M", "E", ""]
+              example: "W"
+        data:
+          type: object
+          required:
+            - pktHash
+            - pmtprdNm
+            - mchtCustNm
+            - mchtCustId
+            - cardNo
+            - vldDtMon
+            - vldDtYear
+            - instmtMon
+            - crcCd
+            - trdAmt
+          properties:
+            pktHash:
+              type: string
+              description: hash데이터 (SHA256 방식으로 생성한 해쉬값)
+              example: "f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
+            pmtprdNm:
+              type: string
+              description: 상품명 (결제상품명)
+              example: "테스트상품"
+            mchtCustNm:
+              type: string
+              description: 고객명 (상점 고객명)
+              example: "홍길동"
+            mchtCustId:
+              type: string
+              description: 상점고객아이디 (상점 고객아이디)
+              example: "HongGilDong"
+            email:
+              type: string
+              description: 이메일 (상점 고객 이메일주소)
+              example: "HongGilDong@example.com"
+            cardNo:
+              type: string
+              description: 카드번호 (AES 암호화)
+              example: "1111222233334444"
+            vldDtMon:
+              type: string
+              description: 유효기간(월) (AES 암호화)
+              example: "12"
+            vldDtYear:
+              type: string
+              description: 유효기간(년) (AES 암호화)
+              example: "24"
+            idntNo:
+              type: string
+              description: 식별번호 (생년월일 6자리 또는 사업자 번호 10자리, AES 암호화, 구인증만 사용)
+              example: "991231"
+            cardPwd:
+              type: string
+              description: 카드비밀번호 (카드비밀번호 앞 2자리, AES 암호화, 구인증만 사용)
+              example: "00"
+            instmtMon:
+              type: string
+              description: 할부개월수 (할부개월수 2자리)
+              example: "00"
+            crcCd:
+              type: string
+              description: 통화구분 (KRW:국내결제, USD:해외결제)
+              enum: ["KRW", "USD"]
+              example: "KRW"
+            taxTypeCd:
+              type: string
+              description: 세금유형 (N:과세, Y:면세, G:복합과세, 공백일 경우 상점 설정에 따름)
+              enum: ["N", "Y", "G", ""]
+              example: "N"
+            trdAmt:
+              type: string
+              description: 거래금액 (AES 암호화, 해외결제시 정수표기)
+              example: "1000"
+            taxAmt:
+              type: string
+              description: 과세금액 (거래금액 중 과세금액, 복합과세일 경우 필수, AES 암호화)
+              example: "909"
+            vatAmt:
+              type: string
+              description: 부가세금액 (거래금액 중 부가세금액, 복합과세일 경우 필수, AES 암호화)
+              example: "91"
+            taxFreeAmt:
+              type: string
+              description: 비과세금액 (거래금액 중 비과세금액, 복합과세일 경우 필수, AES 암호화)
+              example: "0"
+            svcAmt:
+              type: string
+              description: 봉사료 (신용카드 봉사료, AES 암호화)
+              example: "10"
+            notiUrl:
+              type: string
+              description: 결과처리URL (결제완료후, 헥토파이낸셜에서 상점으로 전달하는 노티를 수신하는Callback URL)
+              example: "https://example.com/notiUrl"
+            mchtParam:
+              type: string
+              description: 상점예약필드 (기타 주문 정보를 입력하는 상점 예약 필드)
+              example: "name=HongGilDong&age=25"
 
-    PaymentResponse:
+    CardPaymentResponse:
       type: object
+      required:
+        - params
+        - data
       properties:
-        resultCode:
-          type: string
-          description: 결과코드
-          example: "0000"
-        resultMsg:
-          type: string
-          description: 결과메시지
-          example: "성공"
-        trdNo:
-          type: string
-          description: 거래번호
-          example: "20231215143022001"
-        mchtTrdNo:
-          type: string
-          description: 주문번호
-          example: "ORDER20231215143022"
-        trdAmt:
-          type: string
-          description: 결제금액
-          example: "1000"
-        trdDt:
-          type: string
-          description: 거래일자
-          example: "20231215"
-        trdTm:
-          type: string
-          description: 거래시간
-          example: "143022"
+        params:
+          type: object
+          required:
+            - mchtId
+            - ver
+            - method
+            - bizType
+            - encCd
+            - mchtTrdNo
+            - trdNo
+            - trdDt
+            - trdTm
+            - outStatCd
+            - outRsltCd
+            - outRsltMsg
+          properties:
+            mchtId:
+              type: string
+              description: 상점아이디 (헥토파이낸셜에서 부여하는 고유 상점아이디)
+              example: "nxca_jt_bi"
+            ver:
+              type: string
+              description: 전문의 버전
+              example: "0A19"
+            method:
+              type: string
+              description: 결제수단
+              example: "CA"
+            bizType:
+              type: string
+              description: 업무구분
+              example: "B0"
+            encCd:
+              type: string
+              description: 암호화 구분
+              example: "23"
+            mchtTrdNo:
+              type: string
+              description: 상점주문번호 (상점에서 생성하는 고유한 주문번호)
+              example: "ORDER20211231100000"
+            trdNo:
+              type: string
+              description: 헥토파이낸셜거래번호 (헥토파이낸셜에서 발급한 고유한 거래번호)
+              example: "STFP_PGCAnxca_jt_il0211129135810M1494620"
+            trdDt:
+              type: string
+              description: 요청일자 (현재 전문을 전송하는 일자 YYYYMMDD)
+              example: "20211231"
+            trdTm:
+              type: string
+              description: 요청시간 (현재 전문을 전송하는 시간 HHMMSS)
+              example: "100000"
+            outStatCd:
+              type: string
+              description: 거래상태 (0021:성공, 0031:실패)
+              enum: ["0021", "0031"]
+              example: "0021"
+            outRsltCd:
+              type: string
+              description: 거절코드 (거래상태가 "0031"일 경우, 상세 코드 전달)
+              example: "0000"
+            outRsltMsg:
+              type: string
+              description: 결과메세지 (URL Encoding, UTF-8)
+              example: "정상적으로 처리되었습니다."
+        data:
+          type: object
+          required:
+            - pktHash
+            - trdAmt
+            - issrId
+            - cardNm
+            - cardKind
+            - ninstmtTypeCd
+            - apprNo
+          properties:
+            pktHash:
+              type: string
+              description: 해쉬값 (요청시, hash 값 그대로 return)
+              example: "f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
+            trdAmt:
+              type: string
+              description: 거래금액 (AES 암호화, 해외결제시 정수표기)
+              example: "1000"
+            billKey:
+              type: string
+              description: 빌키 (2회차 결제시 사용되는 빌키, 빌키 서비스 이용 상점에 한하여 제공)
+              example: "SBILL_0123456789"
+            cardNo:
+              type: string
+              description: 카드번호 (마스킹 된 카드번호, 특정 상점에 한하여 제공)
+              example: "111122xxxxxx4444"
+            vldDtMon:
+              type: string
+              description: 유효기간(월) (빌키 서비스 이용 상점에 한하여 제공)
+              example: "12"
+            vldDtYear:
+              type: string
+              description: 유효기간(년) (빌키 서비스 이용 상점에 한하여 제공)
+              example: "24"
+            issrId:
+              type: string
+              description: 발급사아이디 (카드발급사 코드)
+              example: "NHC"
+            cardNm:
+              type: string
+              description: 카드사명
+              example: "NH 농협"
+            cardKind:
+              type: string
+              description: 카드종류명
+              example: "NH 체크카드"
+            ninstmtTypeCd:
+              type: string
+              description: 무이자할부타입 (Y:무이자, N:일반할부/일시불)
+              enum: ["Y", "N"]
+              example: "N"
+            instmtMon:
+              type: string
+              description: 할부개월수 (요청 시 값 그대로 return)
+              example: "00"
+            apprNo:
+              type: string
+              description: 승인번호 (카드 승인번호)
+              example: "30001234"
 
     CardAuthRequest:
       type: object

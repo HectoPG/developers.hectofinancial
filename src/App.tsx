@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { MDXProvider } from '@mdx-js/react'
+import { Analytics } from '@vercel/analytics/react'
 import Layout from './components/Layout'
 import HomePage from './pages/HomePage'
 import DocsPage from './pages/DocsPage'
@@ -98,6 +99,7 @@ function App() {
             <Route path="/docs/:category/:page" element={<DocsPage />} />
           </Routes>
         </Layout>
+        <Analytics />
       </Router>
     </MDXProvider>
   )

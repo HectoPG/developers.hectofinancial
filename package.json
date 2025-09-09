@@ -14,6 +14,7 @@
     "@mdx-js/rollup": "^3.1.1",
     "@tailwindcss/postcss": "^4.1.12",
     "@tailwindcss/typography": "^0.5.16",
+    "@vercel/analytics": "^1.5.0",
     "autoprefixer": "^10.4.21",
     "clsx": "^2.1.1",
     "flexsearch": "^0.8.212",
@@ -25,7 +26,8 @@
     "remark-gfm": "^4.0.1",
     "swagger-ui-dist": "^5.28.1",
     "swagger-ui-react": "^5.28.1",
-    "tailwindcss": "^4.1.12"
+    "tailwindcss": "^4.1.12",
+    "yaml": "^2.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",

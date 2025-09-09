@@ -1,65 +1,67 @@
 import { useParams, Link, useLocation } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
 import { ArrowLeft, FileText } from 'lucide-react'
-import { getCategoryDescription } from '../config/documentation'
+import { getCategoryDescription, documentationConfig } from '../config/documentation'
 
-// 미리 정의된 lazy 컴포넌트들
-const PgGettingStarted = lazy(() => import('../docs/pg/01-getting-started.mdx'))
-const PgCreditCard = lazy(() => import('../docs/pg/02-credit-card.mdx'))
-const PgVirtualAccount = lazy(() => import('../docs/pg/03-virtual-account.mdx'))
-const PgBankTransfer = lazy(() => import('../docs/pg/04-bank-transfer.mdx'))
-const PgMobilePayment = lazy(() => import('../docs/pg/05-mobile-payment.mdx'))
-const PgGiftCard = lazy(() => import('../docs/pg/06-gift-card.mdx'))
-const PgPointDamoa = lazy(() => import('../docs/pg/07-point-damoa.mdx'))
-const PgSimplePayment = lazy(() => import('../docs/pg/08-simple-payment.mdx'))
-const PgTransactionManagement = lazy(() => import('../docs/pg/09-transaction-management.mdx'))
-const PgDeveloperReference = lazy(() => import('../docs/pg/10-developer-reference.mdx'))
-const EzAuth = lazy(() => import('../docs/ezauth/hecto_financial_ezauth.mdx'))
-const EzCp = lazy(() => import('../docs/ezcp/hecto_financial_ezcp.mdx'))
-const WhiteLabel = lazy(() => import('../docs/whitelabel/hecto_financial_whitelabel.mdx'))
+// 동적으로 MDX 컴포넌트를 생성하는 함수
+const createMdxComponent = (category: string, page?: string) => {
+  try {
+    // 문서 설정에서 해당 문서 찾기
+    const categoryConfig = documentationConfig.find(cat => cat.id === category);
+    if (!categoryConfig) return null;
 
-// 동적으로 MDX 컴포넌트를 선택하는 함수
-const getMdxComponent = (category: string, page?: string) => {
-  // 페이지가 지정된 경우 해당 페이지를 로드
-  if (page) {
-    switch (`${category}/${page}`) {
-      case 'pg/getting-started':
-        return PgGettingStarted
-      case 'pg/credit-card':
-        return PgCreditCard
-      case 'pg/virtual-account':
-        return PgVirtualAccount
-      case 'pg/bank-transfer':
-        return PgBankTransfer
-      case 'pg/mobile-payment':
-        return PgMobilePayment
-      case 'pg/gift-card':
-        return PgGiftCard
-      case 'pg/point-damoa':
-        return PgPointDamoa
-      case 'pg/simple-payment':
-        return PgSimplePayment
-      case 'pg/transaction-management':
-        return PgTransactionManagement
-      case 'pg/developer-reference':
-        return PgDeveloperReference
-      default:
-        return null
+    let documentItem;
+    if (page) {
+      // URL 파라미터에서 파일명 추출 (예: 01-getting-started -> getting-started)
+      const pageId = page.replace(/^\d+-/, ''); // 앞의 숫자와 대시 제거
+      
+      // 특정 페이지 찾기 (ID로 먼저 찾고, 없으면 파일명으로 찾기)
+      documentItem = categoryConfig.documents.find(doc => 
+        doc.id === pageId || 
+        doc.path.includes(page) ||
+        doc.path.includes(pageId)
+      );
+    } else {
+      // 첫 번째 문서 사용
+      documentItem = categoryConfig.documents[0];
     }
-  }
-  
-  // 기본 카테고리 페이지
-  switch (category) {
-    case 'pg':
-      return PgGettingStarted
-    case 'ezauth':
-      return EzAuth
-    case 'ezcp':
-      return EzCp
-    case 'whitelabel':
-      return WhiteLabel
-    default:
-      return null
+
+    if (!documentItem) {
+      // documentItem을 찾지 못한 경우, 직접 경로로 시도
+      if (page) {
+        const directPath = `/docs/${category}/${page}`;
+        const importPath = directPath.replace('/docs/', '../docs/') + '.mdx';
+        
+        return lazy(() => import(/* @vite-ignore */ importPath).catch(error => {
+          console.error(`Failed to load MDX component with direct path: ${importPath}`, error);
+          return { default: () => (
+            <div className="text-center py-16">
+              <h2 className="text-xl font-semibold text-gray-900 mb-2">문서를 로드할 수 없습니다</h2>
+              <p className="text-gray-600">요청하신 문서를 찾을 수 없습니다.</p>
+            </div>
+          )};
+        }));
+      }
+      return null;
+    }
+
+    // 동적으로 import 경로 생성
+    const importPath = documentItem.path.replace('/docs/', '../docs/') + '.mdx';
+    
+    // 동적으로 lazy 컴포넌트 생성
+    return lazy(() => import(/* @vite-ignore */ importPath).catch(error => {
+      console.error(`Failed to load MDX component: ${importPath}`, error);
+      // 에러 발생 시 빈 컴포넌트 반환
+      return { default: () => (
+        <div className="text-center py-16">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">문서를 로드할 수 없습니다</h2>
+          <p className="text-gray-600">요청하신 문서를 찾을 수 없습니다.</p>
+        </div>
+      )};
+    }));
+  } catch (error) {
+    console.error('Error creating MDX component:', error);
+    return null;
   }
 }
 
@@ -117,7 +119,7 @@ export default function DocsPage() {
     )
   }
 
-  const MdxComponent = getMdxComponent(category, page)
+  const MdxComponent = createMdxComponent(category, page)
   
   
   if (!MdxComponent) {

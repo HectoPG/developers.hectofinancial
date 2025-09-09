@@ -34,7 +34,13 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const searchIndex = useRef<any>(null)
 
   // MDX 파일의 원본 내용을 파싱하는 함수
-  const parseMdxContent = (mdxContent: string): string => {
+  const parseMdxContent = (mdxContent: any): string => {
+    // mdxContent가 문자열이 아닌 경우 처리
+    if (typeof mdxContent !== 'string') {
+      console.warn('MDX content is not a string:', typeof mdxContent, mdxContent);
+      return '';
+    }
+    
     // MDX에서 텍스트만 추출 (마크다운 문법 제거)
     let text = mdxContent
       // MDX 컴포넌트 파라미터 추출 (예: <Component title="제목" description="설명">)
@@ -93,11 +99,24 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
       if (mdxKey && mdxModules[mdxKey]) {
         try {
           // MDX 파일의 원본 내용 가져오기
-          const mdxContent = await mdxModules[mdxKey]() as string
-          const parsedContent = parseMdxContent(mdxContent)
+          const mdxModule = await mdxModules[mdxKey]()
+          let mdxContent = '';
           
-          if (parsedContent && parsedContent.length > 50) {
-            content = parsedContent.length > 500 ? parsedContent.substring(0, 500) + '...' : parsedContent
+          // MDX 모듈에서 원본 내용 추출
+          if (typeof mdxModule === 'string') {
+            mdxContent = mdxModule;
+          } else if (mdxModule && typeof mdxModule === 'object') {
+            // MDX 모듈 객체에서 원본 내용 찾기
+            const moduleObj = mdxModule as any;
+            mdxContent = moduleObj.default?.__content || moduleObj.__content || '';
+          }
+          
+          if (mdxContent) {
+            const parsedContent = parseMdxContent(mdxContent)
+            
+            if (parsedContent && parsedContent.length > 50) {
+              content = parsedContent.length > 500 ? parsedContent.substring(0, 500) + '...' : parsedContent
+            }
           }
         } catch (error) {
           console.warn(`Failed to load MDX content for ${doc.path}:`, error)
