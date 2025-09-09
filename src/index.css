@@ -46,11 +46,51 @@ a {
   transition: all 0.2s ease-in-out;
 }
 
-/* 포커스 스타일 개선 - 헥토 브랜드 색상 */
+/* 포커스 스타일 제거 */
 button:focus,
-a:focus {
-  outline: 2px solid #FFB089;
-  outline-offset: 2px;
+a:focus,
+*:focus {
+  outline: none !important;
 }
 
+/* 스크롤바 숨기기/보이기 */
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.hover\:scrollbar-show:hover {
+  scrollbar-width: thin; /* Firefox */
+  -ms-overflow-style: auto; /* IE and Edge */
+}
+
+.hover\:scrollbar-show:hover::-webkit-scrollbar {
+  display: block; /* Chrome, Safari, Opera */
+  width: 6px;
+}
+
+.hover\:scrollbar-show:hover::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.hover\:scrollbar-show:hover::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.hover\:scrollbar-show:hover::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Line clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 

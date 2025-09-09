@@ -108,7 +108,7 @@ export default function NextSteps({ title, steps, excludeTitle }: NextStepsProps
           <a 
             key={index}
             href={step.href} 
-            className="block p-6 border rounded-2xl transition-all duration-200 group shadow-sm hover:shadow-md"
+            className="block p-6 border rounded-2xl transition-all duration-200 group shadow-sm hover:shadow-md focus:outline-none"
             style={{ 
               backgroundColor: '#fff7f0',
               borderColor: '#ffd9c1'

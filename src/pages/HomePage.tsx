@@ -90,7 +90,7 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link
                 to="/docs/pg"
-                className="inline-flex items-center px-8 py-3 text-base font-semibold text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1"
+                className="inline-flex items-center px-8 py-3 text-base font-semibold text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1 focus:outline-none"
                 style={{ backgroundColor: '#ff9566' }}
                 onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f07a42' }}
                 onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#ff9566' }}
@@ -100,7 +100,7 @@ export default function HomePage() {
               </Link>
               <a
                 href="#services"
-                className="inline-flex items-center px-8 py-3 text-base font-semibold bg-white hover:bg-gray-50 border-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+                className="inline-flex items-center px-8 py-3 text-base font-semibold bg-white hover:bg-gray-50 border-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none"
                 style={{ color: '#e6652a', borderColor: '#ffc199' }}
                 onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#ffb089' }}
                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#ffc199' }}
@@ -182,7 +182,7 @@ export default function HomePage() {
                   
                   <Link
                     to={service.href}
-                    className="inline-flex items-center text-hecto-600 hover:text-hecto-700 font-semibold transition-colors"
+                    className="inline-flex items-center text-orange-600 hover:text-orange-700 font-semibold transition-colors focus:outline-none"
                   >
                     자세히 보기
                     <ArrowRight className="ml-2 h-4 w-4" />
@@ -270,7 +270,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {news.map((item, index) => (
               <article key={index} className="group cursor-pointer">
-                <Link to={item.href} className="block">
+                <Link to={item.href} className="block focus:outline-none">
                   <div className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg transition-all duration-300 h-full">
                     <div className="flex items-center justify-between mb-4">
                       <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-hecto-100 text-hecto-800">

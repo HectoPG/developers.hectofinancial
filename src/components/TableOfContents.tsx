@@ -136,13 +136,29 @@ export default function TableOfContents({ className }: TableOfContentsProps) {
   const scrollToHeading = (id: string) => {
     const element = document.getElementById(id)
     if (element) {
-      const headerHeight = 80 // 고정 헤더 높이
-      const elementPosition = element.offsetTop - headerHeight
+      // 서비스 페이지인지 확인 (메인 콘텐츠 영역이 스크롤되는 경우)
+      const isServicePage = window.location.pathname.startsWith('/docs/')
       
-      window.scrollTo({
-        top: elementPosition,
-        behavior: 'smooth'
-      })
+      if (isServicePage) {
+        // 서비스 페이지에서는 메인 콘텐츠 영역을 스크롤
+        const contentArea = document.querySelector('.flex-1.min-w-0.lg\\:ml-64.lg\\:mr-56.overflow-y-auto')
+        if (contentArea) {
+          const elementPosition = element.offsetTop - 20 // 약간의 여백
+          contentArea.scrollTo({
+            top: elementPosition,
+            behavior: 'smooth'
+          })
+        }
+      } else {
+        // 일반 페이지에서는 전체 페이지를 스크롤
+        const headerHeight = 80 // 고정 헤더 높이
+        const elementPosition = element.offsetTop - headerHeight
+        
+        window.scrollTo({
+          top: elementPosition,
+          behavior: 'smooth'
+        })
+      }
     }
   }
 
@@ -151,7 +167,7 @@ export default function TableOfContents({ className }: TableOfContentsProps) {
   }
 
   return (
-    <div className={clsx('sticky top-24', className)}>
+    <div className={clsx('', className)}>
       <div className="p-4 max-h-[calc(100vh-120px)] overflow-hidden hover:overflow-y-auto">
         <h4 className="text-sm font-semibold text-gray-900 mb-4 flex items-center whitespace-nowrap">
           목차
@@ -174,14 +190,14 @@ export default function TableOfContents({ className }: TableOfContentsProps) {
                 onClick={() => scrollToHeading(item.id)}
                 data-toc-id={item.id}
                 className={clsx(
-                  'block w-full text-left py-2 px-3 text-sm rounded transition-colors whitespace-nowrap overflow-hidden text-ellipsis relative z-10',
+                  'block w-full text-left py-2 px-3 text-sm rounded transition-colors whitespace-nowrap overflow-hidden text-ellipsis relative z-10 focus:outline-none',
                   item.level === 1 && 'font-semibold pl-3',
                   item.level === 2 && 'pl-7',
                   item.level === 3 && 'pl-11',
                   item.level === 4 && 'pl-15',
                   item.level >= 5 && 'pl-19',
                   activeId === item.id
-                    ? 'bg-hecto-50 text-hecto-700 border-l-2 border-hecto-400'
+                    ? 'bg-orange-50 text-orange-700'
                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                 )}
                 title={item.text} // 전체 텍스트를 툴팁으로 표시

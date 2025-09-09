@@ -52,7 +52,7 @@ export default function ServiceSidebar({ className }: ServiceSidebarProps) {
   }, [location.pathname])
 
   return (
-    <div className={clsx('w-64 bg-white border-r border-gray-200', className)}>
+    <div className={clsx('w-full h-full overflow-y-auto scrollbar-hide hover:scrollbar-show', className)}>
       <div className="p-4">
         <nav className="space-y-2">
           {serviceNavigation.map((service) => {
@@ -68,9 +68,9 @@ export default function ServiceSidebar({ className }: ServiceSidebarProps) {
                     <button
                       onClick={() => toggleExpanded(service.name)}
                       className={clsx(
-                        'w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                        'w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none',
                         isActive 
-                          ? 'bg-hecto-50 text-hecto-700' 
+                          ? 'bg-orange-50 text-orange-700' 
                           : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                       )}
                     >
@@ -94,9 +94,9 @@ export default function ServiceSidebar({ className }: ServiceSidebarProps) {
                             key={child.name}
                             to={child.href}
                             className={clsx(
-                              'block px-3 py-2 text-sm rounded-md transition-colors',
+                              'block px-3 py-2 text-sm rounded-md transition-colors focus:outline-none',
                               location.pathname === child.href
-                                ? 'bg-hecto-100 text-hecto-800 font-medium border-l-2 border-hecto-400'
+                                ? 'bg-orange-100 text-orange-800 font-medium'
                                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                             )}
                           >
@@ -111,9 +111,9 @@ export default function ServiceSidebar({ className }: ServiceSidebarProps) {
                   <Link
                     to={service.href}
                     className={clsx(
-                      'flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                      'flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none',
                       isActive 
-                        ? 'bg-hecto-50 text-hecto-700' 
+                        ? 'bg-orange-50 text-orange-700' 
                         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                     )}
                   >

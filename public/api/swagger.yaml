@@ -1,0 +1,446 @@
+openapi: 3.0.0
+info:
+  title: 헥토파이낸셜 API
+  version: 1.0.0
+  description: 헥토파이낸셜 결제 시스템 API 문서
+  contact:
+    name: 헥토파이낸셜 개발팀
+    email: dev@hectofinancial.com
+  license:
+    name: Proprietary
+servers:
+  - url: https://tbgw.settlebank.co.kr
+    description: 테스트 환경
+  - url: https://gw.settlebank.co.kr
+    description: 운영 환경
+  - url: https://tbnpg.settlebank.co.kr
+    description: 테스트 PG 환경
+  - url: https://npg.settlebank.co.kr
+    description: 운영 PG 환경
+
+paths:
+  /spay/APICardActionPay.do:
+    post:
+      summary: 신용카드 결제
+      description: 신용카드 결제 및 빌키 결제 API
+      tags:
+        - 결제 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardPaymentRequest'
+            examples:
+              basic_payment:
+                summary: 기본 신용카드 결제
+                value:
+                  mchtId: "nxca_jt_il"
+                  mchtTrdNo: "ORDER20231215143022"
+                  trdDt: "20231215"
+                  trdTm: "143022"
+                  trdAmt: "1000"
+                  mchtName: "테스트상점"
+                  pmtPrdtNm: "테스트상품"
+                  method: "card"
+                  pktHash: "생성된해시값"
+                  notiUrl: "https://yoursite.com/notify"
+                  nextUrl: "https://yoursite.com/success"
+                  cancUrl: "https://yoursite.com/cancel"
+      responses:
+        '200':
+          description: 결제 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+        '400':
+          description: 잘못된 요청
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /spay/APICardAuth.do:
+    post:
+      summary: 신용카드 빌키 발급
+      description: 신용카드 빌키 발급 API
+      tags:
+        - 결제 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardAuthRequest'
+      responses:
+        '200':
+          description: 빌키 발급 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardAuthResponse'
+
+  /spay/APICancel.do:
+    post:
+      summary: 결제 취소
+      description: 신용카드, 계좌이체, 휴대폰결제 등 결제 취소 API
+      tags:
+        - 취소 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelRequest'
+      responses:
+        '200':
+          description: 취소 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelResponse'
+
+  /spay/APIVBank.do:
+    post:
+      summary: 가상계좌 채번
+      description: 가상계좌 발급 및 채번취소 API
+      tags:
+        - 가상계좌 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VBankRequest'
+      responses:
+        '200':
+          description: 가상계좌 발급 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VBankResponse'
+
+  /spay/APITrdStatInq.do:
+    post:
+      summary: 거래 상태 조회
+      description: 실시간 거래 상태 조회 API
+      tags:
+        - 거래 관리 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionInquiryRequest'
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionInquiryResponse'
+
+components:
+  schemas:
+    CardPaymentRequest:
+      type: object
+      required:
+        - mchtId
+        - mchtTrdNo
+        - trdDt
+        - trdTm
+        - trdAmt
+        - method
+        - pktHash
+      properties:
+        mchtId:
+          type: string
+          description: 상점 ID
+          example: "nxca_jt_il"
+        mchtTrdNo:
+          type: string
+          description: 주문번호
+          example: "ORDER20231215143022"
+        trdDt:
+          type: string
+          description: 거래일자 (YYYYMMDD)
+          example: "20231215"
+        trdTm:
+          type: string
+          description: 거래시간 (HHMMSS)
+          example: "143022"
+        trdAmt:
+          type: string
+          description: 결제금액
+          example: "1000"
+        mchtName:
+          type: string
+          description: 상점명
+          example: "테스트상점"
+        pmtPrdtNm:
+          type: string
+          description: 상품명
+          example: "테스트상품"
+        method:
+          type: string
+          description: 결제수단
+          enum: ["card", "bank", "vbank", "phone", "gift", "point", "simple"]
+          example: "card"
+        pktHash:
+          type: string
+          description: 보안 해시값
+          example: "생성된해시값"
+        notiUrl:
+          type: string
+          description: 결과통보 URL
+          example: "https://yoursite.com/notify"
+        nextUrl:
+          type: string
+          description: 성공페이지 URL
+          example: "https://yoursite.com/success"
+        cancUrl:
+          type: string
+          description: 취소페이지 URL
+          example: "https://yoursite.com/cancel"
+
+    PaymentResponse:
+      type: object
+      properties:
+        resultCode:
+          type: string
+          description: 결과코드
+          example: "0000"
+        resultMsg:
+          type: string
+          description: 결과메시지
+          example: "성공"
+        trdNo:
+          type: string
+          description: 거래번호
+          example: "20231215143022001"
+        mchtTrdNo:
+          type: string
+          description: 주문번호
+          example: "ORDER20231215143022"
+        trdAmt:
+          type: string
+          description: 결제금액
+          example: "1000"
+        trdDt:
+          type: string
+          description: 거래일자
+          example: "20231215"
+        trdTm:
+          type: string
+          description: 거래시간
+          example: "143022"
+
+    CardAuthRequest:
+      type: object
+      required:
+        - mchtId
+        - mchtTrdNo
+        - trdDt
+        - trdTm
+        - pktHash
+      properties:
+        mchtId:
+          type: string
+          description: 상점 ID
+        mchtTrdNo:
+          type: string
+          description: 주문번호
+        trdDt:
+          type: string
+          description: 거래일자
+        trdTm:
+          type: string
+          description: 거래시간
+        pktHash:
+          type: string
+          description: 보안 해시값
+
+    CardAuthResponse:
+      type: object
+      properties:
+        resultCode:
+          type: string
+          description: 결과코드
+        resultMsg:
+          type: string
+          description: 결과메시지
+        billKey:
+          type: string
+          description: 빌키
+
+    CancelRequest:
+      type: object
+      required:
+        - mchtId
+        - orgTrdNo
+        - orgMchtTrdNo
+        - orgTrdDt
+        - canAmt
+        - pktHash
+      properties:
+        mchtId:
+          type: string
+          description: 상점 ID
+        orgTrdNo:
+          type: string
+          description: 원거래번호
+        orgMchtTrdNo:
+          type: string
+          description: 원주문번호
+        orgTrdDt:
+          type: string
+          description: 원거래일자
+        canAmt:
+          type: string
+          description: 취소금액
+        pktHash:
+          type: string
+          description: 보안 해시값
+
+    CancelResponse:
+      type: object
+      properties:
+        resultCode:
+          type: string
+          description: 결과코드
+        resultMsg:
+          type: string
+          description: 결과메시지
+        canTrdNo:
+          type: string
+          description: 취소거래번호
+
+    VBankRequest:
+      type: object
+      required:
+        - mchtId
+        - mchtTrdNo
+        - trdDt
+        - trdTm
+        - trdAmt
+        - pktHash
+      properties:
+        mchtId:
+          type: string
+          description: 상점 ID
+        mchtTrdNo:
+          type: string
+          description: 주문번호
+        trdDt:
+          type: string
+          description: 거래일자
+        trdTm:
+          type: string
+          description: 거래시간
+        trdAmt:
+          type: string
+          description: 결제금액
+        pktHash:
+          type: string
+          description: 보안 해시값
+
+    VBankResponse:
+      type: object
+      properties:
+        resultCode:
+          type: string
+          description: 결과코드
+        resultMsg:
+          type: string
+          description: 결과메시지
+        vbankNo:
+          type: string
+          description: 가상계좌번호
+        vbankNm:
+          type: string
+          description: 가상계좌 은행명
+        expDt:
+          type: string
+          description: 만료일자
+
+    TransactionInquiryRequest:
+      type: object
+      required:
+        - mchtId
+        - mchtTrdNo
+        - trdDt
+        - trdTm
+        - method
+        - trdAmt
+        - pktHash
+      properties:
+        mchtId:
+          type: string
+          description: 상점 ID
+        mchtTrdNo:
+          type: string
+          description: 주문번호
+        trdDt:
+          type: string
+          description: 거래일자
+        trdTm:
+          type: string
+          description: 거래시간
+        method:
+          type: string
+          description: 결제수단
+        trdAmt:
+          type: string
+          description: 결제금액
+        pktHash:
+          type: string
+          description: 보안 해시값
+
+    TransactionInquiryResponse:
+      type: object
+      properties:
+        resultCode:
+          type: string
+          description: 결과코드
+        resultMsg:
+          type: string
+          description: 결과메시지
+        trdStat:
+          type: string
+          description: 거래상태
+        trdNo:
+          type: string
+          description: 거래번호
+        mchtTrdNo:
+          type: string
+          description: 주문번호
+
+    ErrorResponse:
+      type: object
+      properties:
+        resultCode:
+          type: string
+          description: 오류코드
+          example: "9999"
+        resultMsg:
+          type: string
+          description: 오류메시지
+          example: "오류가 발생했습니다"
+
+  securitySchemes:
+    HashAuth:
+      type: apiKey
+      in: header
+      name: pktHash
+      description: 보안 해시값
+
+tags:
+  - name: 결제 API
+    description: 신용카드, 계좌이체, 휴대폰결제 등 결제 관련 API
+  - name: 취소 API
+    description: 결제 취소 관련 API
+  - name: 가상계좌 API
+    description: 가상계좌 발급 및 관리 API
+  - name: 거래 관리 API
+    description: 거래 조회 및 관리 API

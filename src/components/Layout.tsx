@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, FileText, CreditCard, Banknote, Layers, Home, ChevronDown } from 'lucide-react'
+import { Menu, X, FileText, CreditCard, Banknote, Layers, Home, ChevronDown, BookOpen, Search } from 'lucide-react'
 import clsx from 'clsx'
 import TableOfContents from './TableOfContents'
 import ServiceSidebar from './ServiceSidebar'
+import SearchModal from './SearchModal'
 
 const navigation = [
   { name: '홈', href: '/', icon: Home },
@@ -19,6 +20,7 @@ const navigation = [
       { name: '화이트라벨', href: '/docs/whitelabel', description: '통합 결제 서비스', icon: Layers },
     ]
   },
+  { name: 'API 문서', href: '/api-docs', icon: BookOpen, description: '인터랙티브 API 문서' },
   { name: '블로그', href: '/blog', icon: FileText, description: '기술 블로그 및 소식' },
 ]
 
@@ -30,6 +32,7 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
+  const [searchModalOpen, setSearchModalOpen] = useState(false)
   const location = useLocation()
   const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -54,10 +57,28 @@ export default function Layout({ children }: LayoutProps) {
     setMobileMenuOpen(false)
   }, [location.pathname])
 
+  // 키보드 단축키 처리
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ctrl+K 또는 Cmd+K로 검색 모달 열기
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault()
+        setSearchModalOpen(true)
+      }
+      // Escape로 검색 모달 닫기
+      if (e.key === 'Escape') {
+        setSearchModalOpen(false)
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-100">
+      <header className="fixed top-0 left-0 right-0 bg-white border-b border-gray-100 z-50">
         <div className="w-full pl-6 pr-4">
           <div className="flex justify-start items-center h-16 space-x-8">
             {/* Logo */}
@@ -66,7 +87,7 @@ export default function Layout({ children }: LayoutProps) {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-1" ref={dropdownRef}>
+            <nav className="hidden md:flex items-center space-x-1 flex-1" ref={dropdownRef}>
               {navigation.map((item) => {
                 const isActive = location.pathname === item.href || location.pathname.startsWith(item.href + '/')
                 
@@ -79,9 +100,9 @@ export default function Layout({ children }: LayoutProps) {
                           onClick={() => setActiveDropdown(activeDropdown === item.name ? null : item.name)}
                           className={clsx(
                             isActive
-                              ? 'text-hecto-600 bg-hecto-50' 
-                              : 'text-gray-700 hover:text-hecto-600 hover:bg-gray-50',
-                            'flex items-center px-4 py-2 text-base font-medium rounded-md transition-all duration-200'
+                              ? 'text-orange-600 bg-orange-50' 
+                              : 'text-gray-700 hover:text-orange-600 hover:bg-gray-50',
+                            'flex items-center px-4 py-2 text-base font-medium rounded-md transition-all duration-200 focus:outline-none'
                           )}
                         >
                           {item.name}
@@ -102,9 +123,9 @@ export default function Layout({ children }: LayoutProps) {
                                     to={child.href}
                                     className={clsx(
                                       location.pathname === child.href || location.pathname.startsWith(child.href + '/')
-                                        ? 'bg-hecto-50 text-hecto-700 border-l-4 border-hecto-400' 
-                                        : 'text-gray-700 hover:bg-gray-50 hover:text-hecto-600',
-                                      'block px-4 py-3 transition-all duration-200'
+                                        ? 'bg-orange-50 text-orange-700' 
+                                        : 'text-gray-700 hover:bg-gray-50 hover:text-orange-600',
+                                      'block px-4 py-3 transition-all duration-200 focus:outline-none'
                                     )}
                                   >
                                     <div className="font-medium">{child.name}</div>
@@ -124,9 +145,9 @@ export default function Layout({ children }: LayoutProps) {
                         to={item.href}
                         className={clsx(
                           isActive
-                            ? 'text-hecto-600 bg-hecto-50' 
-                            : 'text-gray-700 hover:text-hecto-600 hover:bg-gray-50',
-                          'flex items-center px-4 py-2 text-base font-medium rounded-md transition-all duration-200'
+                            ? 'text-orange-600 bg-orange-50' 
+                            : 'text-gray-700 hover:text-orange-600 hover:bg-gray-50',
+                          'flex items-center px-4 py-2 text-base font-medium rounded-md transition-all duration-200 focus:outline-none'
                         )}
                       >
                         {item.name}
@@ -137,10 +158,21 @@ export default function Layout({ children }: LayoutProps) {
               })}
             </nav>
 
+            {/* Search Button */}
+            <button
+              onClick={() => setSearchModalOpen(true)}
+              className="hidden md:flex items-center px-3 py-2 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-colors focus:outline-none"
+              title="검색 (Ctrl+K)"
+            >
+              <Search className="h-4 w-4 mr-2" />
+              <span className="hidden lg:inline">검색</span>
+              <kbd className="hidden lg:inline ml-2 px-1.5 py-0.5 bg-gray-100 border border-gray-300 rounded text-xs">⌘K</kbd>
+            </button>
+
             {/* Mobile menu button */}
             <button
               type="button"
-              className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+              className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors focus:outline-none"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? (
@@ -156,6 +188,17 @@ export default function Layout({ children }: LayoutProps) {
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-gray-200">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white shadow-lg">
+              {/* Mobile Search Button */}
+              <button
+                onClick={() => {
+                  setSearchModalOpen(true)
+                  setMobileMenuOpen(false)
+                }}
+                className="w-full flex items-center px-3 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors focus:outline-none"
+              >
+                <Search className="h-5 w-5 mr-3" />
+                검색
+              </button>
               {navigation.map((item) => {
                 const isActive = location.pathname === item.href || location.pathname.startsWith(item.href + '/')
                 
@@ -167,7 +210,7 @@ export default function Layout({ children }: LayoutProps) {
                         <div
                           className={clsx(
                             isActive
-                              ? 'bg-hecto-100 text-hecto-900' 
+                              ? 'bg-orange-100 text-orange-900' 
                               : 'text-gray-700',
                             'px-3 py-3 text-base font-medium'
                           )}
@@ -187,9 +230,9 @@ export default function Layout({ children }: LayoutProps) {
                                 to={child.href}
                                 className={clsx(
                                   location.pathname === child.href || location.pathname.startsWith(child.href + '/')
-                                    ? 'bg-hecto-50 text-hecto-700 border-l-2 border-hecto-400' 
+                                    ? 'bg-orange-50 text-orange-700' 
                                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-700',
-                                  'block px-3 py-2 text-sm font-medium transition-all duration-200'
+                                  'block px-3 py-2 text-sm font-medium transition-all duration-200 focus:outline-none'
                                 )}
                                 onClick={() => setMobileMenuOpen(false)}
                               >
@@ -208,9 +251,9 @@ export default function Layout({ children }: LayoutProps) {
                         to={item.href}
                         className={clsx(
                           isActive
-                            ? 'bg-hecto-100 text-hecto-900 border-l-4 border-hecto-400' 
+                            ? 'bg-orange-100 text-orange-900' 
                             : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900',
-                          'block px-3 py-3 text-base font-medium transition-all duration-200'
+                          'block px-3 py-3 text-base font-medium transition-all duration-200 focus:outline-none'
                         )}
                         onClick={() => setMobileMenuOpen(false)}
                       >
@@ -229,50 +272,64 @@ export default function Layout({ children }: LayoutProps) {
       </header>
 
       {/* Main content */}
-      <main>
+      <main className="pt-16">
         {isServicePage ? (
-          <div className="flex">
-            {/* Service Sidebar - Desktop only */}
-            <div className="hidden lg:block">
-              <ServiceSidebar />
-            </div>
-            
-            {/* Content Area */}
-            <div className="flex-1 min-w-0 lg:mr-56">
-              <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
-                {/* Documentation Content */}
-                <div className="w-full overflow-x-hidden">
-                  {children}
+          <div className="fixed inset-0 top-16 flex flex-col">
+            {/* Main Content Area */}
+            <div className="flex flex-1 min-h-0">
+              {/* Service Sidebar - Fixed to left */}
+              <div className="hidden lg:block w-64 h-full overflow-y-auto bg-white border-r border-gray-200 z-10 fixed left-0 top-16">
+                <ServiceSidebar />
+              </div>
+              
+              {/* Content Area - Scrollable */}
+              <div className="flex-1 min-w-0 lg:ml-64 lg:mr-56 overflow-y-auto scrollbar-hide hover:scrollbar-show">
+                <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
+                  {/* Documentation Content */}
+                  <div className="w-full overflow-x-hidden">
+                    {children}
+                  </div>
                 </div>
+              </div>
+              
+              {/* Table of Contents - Fixed to right edge */}
+              <div className="hidden lg:block w-56 h-full overflow-y-auto bg-white border-l border-gray-200 z-10 fixed right-0 top-16">
+                <TableOfContents />
               </div>
             </div>
             
-            {/* Table of Contents - Fixed to right edge */}
-            <div className="hidden lg:block fixed right-0 top-20 w-56 h-[calc(100vh-5rem)] overflow-y-auto bg-white border-l border-gray-200 p-4">
-              <TableOfContents />
-            </div>
           </div>
         ) : (
-          children
+          <div className="min-h-screen">
+            {children}
+          </div>
         )}
       </main>
       
-      {/* Footer */}
-      <footer className="bg-gray-50 border-t border-gray-200 py-8">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center text-sm text-gray-600">
-            <div className="mb-2">
-              <strong>(주)헥토파이낸셜</strong> (06220) 서울특별시 강남구 테헤란로 34길 6, 9~10층 (역삼동, 태광타워)
-            </div>
-            <div className="mb-2">
-              사업자등록번호 : 101-81-63383 | TEL. 1688-5130 | FAX. 02-6008-5158 | E-mail. info_F@hecto.co.kr
-            </div>
-            <div className="text-gray-500">
-              Copyrightⓒ Hecto Financial Co., Ltd. All Rights Reserved.
+      {/* Footer - Only for home page */}
+      {location.pathname === '/' && (
+        <footer className="bg-gray-50 border-t border-gray-200 py-8">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="text-center text-sm text-gray-600">
+              <div className="mb-2">
+                <strong>(주)헥토파이낸셜</strong> (06220) 서울특별시 강남구 테헤란로 34길 6, 9~10층 (역삼동, 태광타워)
+              </div>
+              <div className="mb-2">
+                사업자등록번호 : 101-81-63383 | TEL. 1688-5130 | FAX. 02-6008-5158 | E-mail. info_F@hecto.co.kr
+              </div>
+              <div className="text-gray-500">
+                Copyrightⓒ Hecto Financial Co., Ltd. All Rights Reserved.
+              </div>
             </div>
           </div>
-        </div>
-      </footer>
+        </footer>
+      )}
+
+      {/* Search Modal */}
+      <SearchModal 
+        isOpen={searchModalOpen} 
+        onClose={() => setSearchModalOpen(false)} 
+      />
     </div>
   )
 }
