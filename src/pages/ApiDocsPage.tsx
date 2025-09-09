@@ -103,7 +103,7 @@ const ApiDocsPage: React.FC = () => {
                       onClick={() => setSelectedApi(api.path)}
                       className={`w-full text-left p-3 rounded-lg border transition-all focus:outline-none ${
                         selectedApi === api.path
-                          ? 'bg-orange-50 border-orange-200 text-orange-900'
+                          ? 'bg-hecto-50 border-hecto-200 text-hecto-900'
                           : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'
                       }`}
                     >
@@ -137,7 +137,7 @@ const ApiDocsPage: React.FC = () => {
                     onClick={() => setActiveTab('docs')}
                     className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors focus:outline-none ${
                       activeTab === 'docs'
-                        ? 'border-orange-500 text-orange-600'
+                        ? 'border-hecto-500 text-hecto-600'
                         : 'border-transparent text-gray-500 hover:text-gray-700'
                     }`}
                   >
@@ -148,7 +148,7 @@ const ApiDocsPage: React.FC = () => {
                     onClick={() => setActiveTab('test')}
                     className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors focus:outline-none ${
                       activeTab === 'test'
-                        ? 'border-orange-500 text-orange-600'
+                        ? 'border-hecto-500 text-hecto-600'
                         : 'border-transparent text-gray-500 hover:text-gray-700'
                     }`}
                   >
@@ -272,7 +272,7 @@ const ApiDocsPage: React.FC = () => {
                               />
                             </div>
                             
-                            <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-md transition-colors flex items-center justify-center focus:outline-none">
+                            <button className="w-full bg-hecto-500 hover:bg-hecto-600 text-white font-medium py-2 px-4 rounded-md transition-colors flex items-center justify-center focus:outline-none">
                               <Zap className="w-4 h-4 mr-2" />
                               API 실행
                             </button>
@@ -311,20 +311,20 @@ const ApiDocsPage: React.FC = () => {
               <div>
                 <h3 className="text-sm font-medium text-gray-700 mb-2">📚 문서</h3>
                 <ul className="space-y-1 text-sm">
-                  <li><a href="/docs/pg/01-getting-started" className="text-orange-600 hover:underline">PG 결제 시작하기</a></li>
-                  <li><a href="/docs/pg/02-credit-card" className="text-orange-600 hover:underline">신용카드 결제</a></li>
-                  <li><a href="/docs/pg/03-virtual-account" className="text-orange-600 hover:underline">가상계좌 결제</a></li>
-                  <li><a href="/docs/pg/09-transaction-management" className="text-orange-600 hover:underline">거래 관리</a></li>
+                  <li><a href="/docs/pg/01-getting-started" className="text-hecto-600 hover:underline">PG 결제 시작하기</a></li>
+                  <li><a href="/docs/pg/02-credit-card" className="text-hecto-600 hover:underline">신용카드 결제</a></li>
+                  <li><a href="/docs/pg/03-virtual-account" className="text-hecto-600 hover:underline">가상계좌 결제</a></li>
+                  <li><a href="/docs/pg/09-transaction-management" className="text-hecto-600 hover:underline">거래 관리</a></li>
                 </ul>
               </div>
               
               <div>
                 <h3 className="text-sm font-medium text-gray-700 mb-2">🛠️ 지원</h3>
                 <ul className="space-y-1 text-sm">
-                  <li><a href="/docs/pg/10-developer-reference" className="text-orange-600 hover:underline">개발자 참조</a></li>
-                  <li><a href="/docs/ezauth/hecto_financial_ezauth" className="text-orange-600 hover:underline">내통장결제</a></li>
-                  <li><a href="/docs/ezcp/hecto_financial_ezcp" className="text-orange-600 hover:underline">간편현금결제</a></li>
-                  <li><a href="/docs/whitelabel/hecto_financial_whitelabel" className="text-orange-600 hover:underline">화이트라벨</a></li>
+                  <li><a href="/docs/pg/10-developer-reference" className="text-hecto-600 hover:underline">개발자 참조</a></li>
+                  <li><a href="/docs/ezauth/hecto_financial_ezauth" className="text-hecto-600 hover:underline">내통장결제</a></li>
+                  <li><a href="/docs/ezcp/hecto_financial_ezcp" className="text-hecto-600 hover:underline">간편현금결제</a></li>
+                  <li><a href="/docs/whitelabel/hecto_financial_whitelabel" className="text-hecto-600 hover:underline">화이트라벨</a></li>
                 </ul>
               </div>
               

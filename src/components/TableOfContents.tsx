@@ -197,7 +197,7 @@ export default function TableOfContents({ className }: TableOfContentsProps) {
                   item.level === 4 && 'pl-15',
                   item.level >= 5 && 'pl-19',
                   activeId === item.id
-                    ? 'bg-orange-50 text-orange-700'
+                    ? 'text-hecto-600'
                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                 )}
                 title={item.text} // 전체 텍스트를 툴팁으로 표시

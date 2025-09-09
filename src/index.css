@@ -1,6 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
+/* 강제로 hecto 색상 클래스 포함 */
+.text-hecto-600 { color: #f07a42 !important; }
+.text-hecto-700 { color: #e6652a !important; }
+.text-hecto-800 { color: #cc5722 !important; }
+.bg-hecto-50 { background-color: #fff7f0 !important; }
+.bg-hecto-100 { background-color: #ffede0 !important; }
+.bg-hecto-200 { background-color: #ffd9c1 !important; }
+.bg-hecto-400 { background-color: #ffb089 !important; }
+.bg-hecto-500 { background-color: #ff9566 !important; }
+.bg-hecto-600 { background-color: #f07a42 !important; }
+
 :root {
   font-family: 'Noto Sans KR', 'Proxima Nova', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.6;
@@ -84,6 +95,31 @@ a:focus,
 
 .hover\:scrollbar-show:hover::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
+}
+
+/* 문서 영역 스크롤바 - 항상 보이기, 너비 고정 */
+.docs-scrollbar {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #d1d5db transparent; /* Firefox */
+  -ms-overflow-style: auto; /* IE and Edge */
+}
+
+.docs-scrollbar::-webkit-scrollbar {
+  width: 8px; /* Chrome, Safari, Opera */
+  display: block;
+}
+
+.docs-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.docs-scrollbar::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.docs-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
 }
 
 /* Line clamp utility */
