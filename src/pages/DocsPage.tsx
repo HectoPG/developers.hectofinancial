@@ -1,5 +1,5 @@
 import { useParams, Link, useLocation } from 'react-router-dom'
-import { lazy, Suspense, useEffect } from 'react'
+import React, { lazy, Suspense, useEffect } from 'react'
 import { ArrowLeft, FileText } from 'lucide-react'
 import { getCategoryDescription, documentationConfig } from '../config/documentation'
 
@@ -32,15 +32,30 @@ const createMdxComponent = (category: string, page?: string) => {
         const directPath = `/docs/${category}/${page}`;
         const importPath = directPath.replace('/docs/', '../docs/') + '.mdx';
         
-        return lazy(() => import(/* @vite-ignore */ importPath).catch(error => {
-          console.error(`Failed to load MDX component with direct path: ${importPath}`, error);
-          return { default: () => (
-            <div className="text-center py-16">
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">문서를 로드할 수 없습니다</h2>
-              <p className="text-gray-600">요청하신 문서를 찾을 수 없습니다.</p>
-            </div>
-          )};
-        }));
+        return lazy((): Promise<{ default: React.ComponentType<any> }> => {
+          const modules = import.meta.glob('../docs/**/*.mdx');
+          const modulePath = importPath.replace('../docs/', '../docs/');
+          
+          if (modules[modulePath]) {
+            return (modules[modulePath] as () => Promise<{ default: React.ComponentType<any> }>)().catch(error => {
+              console.error(`Failed to load MDX component with direct path: ${importPath}`, error);
+              return { default: () => (
+                <div className="text-center py-16">
+                  <h2 className="text-xl font-semibold text-gray-900 mb-2">문서를 로드할 수 없습니다</h2>
+                  <p className="text-gray-600">요청하신 문서를 찾을 수 없습니다.</p>
+                </div>
+              )};
+            });
+          } else {
+            console.error(`MDX module not found with direct path: ${modulePath}`);
+            return Promise.resolve({ default: () => (
+              <div className="text-center py-16">
+                <h2 className="text-xl font-semibold text-gray-900 mb-2">문서를 로드할 수 없습니다</h2>
+                <p className="text-gray-600">요청하신 문서를 찾을 수 없습니다.</p>
+              </div>
+            )});
+          }
+        });
       }
       return null;
     }
@@ -49,16 +64,31 @@ const createMdxComponent = (category: string, page?: string) => {
     const importPath = documentItem.path.replace('/docs/', '../docs/') + '.mdx';
     
     // 동적으로 lazy 컴포넌트 생성
-    return lazy(() => import(/* @vite-ignore */ importPath).catch(error => {
-      console.error(`Failed to load MDX component: ${importPath}`, error);
-      // 에러 발생 시 빈 컴포넌트 반환
-      return { default: () => (
-        <div className="text-center py-16">
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">문서를 로드할 수 없습니다</h2>
-          <p className="text-gray-600">요청하신 문서를 찾을 수 없습니다.</p>
-        </div>
-      )};
-    }));
+    return lazy((): Promise<{ default: React.ComponentType<any> }> => {
+      // Vite의 import.meta.glob을 사용하여 동적 import
+      const modules = import.meta.glob('../docs/**/*.mdx');
+      const modulePath = importPath.replace('../docs/', '../docs/');
+      
+      if (modules[modulePath]) {
+        return (modules[modulePath] as () => Promise<{ default: React.ComponentType<any> }>)().catch(error => {
+          console.error(`Failed to load MDX component: ${importPath}`, error);
+          return { default: () => (
+            <div className="text-center py-16">
+              <h2 className="text-xl font-semibold text-gray-900 mb-2">문서를 로드할 수 없습니다</h2>
+              <p className="text-gray-600">요청하신 문서를 찾을 수 없습니다.</p>
+            </div>
+          )};
+        });
+      } else {
+        console.error(`MDX module not found: ${modulePath}`);
+        return Promise.resolve({ default: () => (
+          <div className="text-center py-16">
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">문서를 로드할 수 없습니다</h2>
+            <p className="text-gray-600">요청하신 문서를 찾을 수 없습니다.</p>
+          </div>
+        )});
+      }
+    });
   } catch (error) {
     console.error('Error creating MDX component:', error);
     return null;
