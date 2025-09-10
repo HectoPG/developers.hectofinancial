@@ -52,7 +52,11 @@ export default function ServiceSidebar({ className }: ServiceSidebarProps) {
     const newExpandedItems: string[] = []
     
     serviceNavigation.forEach(service => {
-      if (service.children && service.children.some(child => location.pathname.startsWith(child.href))) {
+      // 서비스 메인 경로이거나 하위 문서 경로인 경우 펼치기
+      if (service.children && (
+        location.pathname === service.href || 
+        service.children.some(child => location.pathname.startsWith(child.href))
+      )) {
         newExpandedItems.push(service.name)
       }
     })
