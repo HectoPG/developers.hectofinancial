@@ -36,7 +36,7 @@ interface ServiceSidebarProps {
 }
 
 export default function ServiceSidebar({ className }: ServiceSidebarProps) {
-  const [expandedItems, setExpandedItems] = useState<string[]>(['PG 결제'])
+  const [expandedItems, setExpandedItems] = useState<string[]>([])
   const location = useLocation()
 
   const toggleExpanded = (itemName: string) => {
@@ -49,11 +49,15 @@ export default function ServiceSidebar({ className }: ServiceSidebarProps) {
 
   // 현재 경로에 따라 자동으로 펼치기
   useEffect(() => {
+    const newExpandedItems: string[] = []
+    
     serviceNavigation.forEach(service => {
       if (service.children && service.children.some(child => location.pathname.startsWith(child.href))) {
-        setExpandedItems(prev => prev.includes(service.name) ? prev : [...prev, service.name])
+        newExpandedItems.push(service.name)
       }
     })
+    
+    setExpandedItems(newExpandedItems)
   }, [location.pathname])
 
   return (
