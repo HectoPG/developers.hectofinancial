@@ -1,6 +1,6 @@
-import { useParams, Link, useLocation } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import React, { lazy, Suspense, useEffect } from 'react'
-import { ArrowLeft, FileText } from 'lucide-react'
+import { FileText } from 'lucide-react'
 import { getCategoryDescription, documentationConfig } from '../config/documentation'
 
 // 동적으로 MDX 컴포넌트를 생성하는 함수
@@ -37,8 +37,7 @@ const createMdxComponent = (category: string, page?: string) => {
           const modulePath = importPath.replace('../docs/', '../docs/');
           
           if (modules[modulePath]) {
-            return (modules[modulePath] as () => Promise<{ default: React.ComponentType<any> }>)().catch(error => {
-              console.error(`Failed to load MDX component with direct path: ${importPath}`, error);
+                        return (modules[modulePath] as () => Promise<{ default: React.ComponentType<any> }>)().catch(() => {
               return { default: () => (
                 <div className="text-center py-16">
                   <h2 className="text-xl font-semibold text-gray-900 mb-2">문서를 로드할 수 없습니다</h2>
@@ -46,9 +45,8 @@ const createMdxComponent = (category: string, page?: string) => {
                 </div>
               )};
             });
-          } else {
-            console.error(`MDX module not found with direct path: ${modulePath}`);
-            return Promise.resolve({ default: () => (
+                      } else {
+                        return Promise.resolve({ default: () => (
               <div className="text-center py-16">
                 <h2 className="text-xl font-semibold text-gray-900 mb-2">문서를 로드할 수 없습니다</h2>
                 <p className="text-gray-600">요청하신 문서를 찾을 수 없습니다.</p>
@@ -70,8 +68,7 @@ const createMdxComponent = (category: string, page?: string) => {
       const modulePath = importPath.replace('../docs/', '../docs/');
       
       if (modules[modulePath]) {
-        return (modules[modulePath] as () => Promise<{ default: React.ComponentType<any> }>)().catch(error => {
-          console.error(`Failed to load MDX component: ${importPath}`, error);
+                    return (modules[modulePath] as () => Promise<{ default: React.ComponentType<any> }>)().catch(() => {
           return { default: () => (
             <div className="text-center py-16">
               <h2 className="text-xl font-semibold text-gray-900 mb-2">문서를 로드할 수 없습니다</h2>
@@ -80,7 +77,6 @@ const createMdxComponent = (category: string, page?: string) => {
           )};
         });
       } else {
-        console.error(`MDX module not found: ${modulePath}`);
         return Promise.resolve({ default: () => (
           <div className="text-center py-16">
             <h2 className="text-xl font-semibold text-gray-900 mb-2">문서를 로드할 수 없습니다</h2>
@@ -90,7 +86,6 @@ const createMdxComponent = (category: string, page?: string) => {
       }
     });
   } catch (error) {
-    console.error('Error creating MDX component:', error);
     return null;
   }
 }
@@ -138,13 +133,6 @@ export default function DocsPage() {
         <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
         <h1 className="text-2xl font-bold text-gray-900 mb-2">카테고리를 찾을 수 없습니다</h1>
         <p className="text-gray-600 mb-6">올바른 문서 카테고리를 선택해주세요.</p>
-        <Link 
-          to="/" 
-          className="inline-flex items-center px-4 py-2 bg-hecto-500 text-white rounded-lg hover:bg-hecto-600 transition-colors focus:outline-none"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          홈으로 돌아가기
-        </Link>
       </div>
     )
   }
@@ -158,29 +146,12 @@ export default function DocsPage() {
         <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
         <h1 className="text-2xl font-bold text-gray-900 mb-2">문서를 찾을 수 없습니다</h1>
         <p className="text-gray-600 mb-6">요청하신 카테고리의 문서가 존재하지 않습니다.</p>
-        <Link 
-          to="/" 
-          className="inline-flex items-center px-4 py-2 bg-hecto-500 text-white rounded-lg hover:bg-hecto-600 transition-colors focus:outline-none"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          홈으로 돌아가기
-        </Link>
       </div>
     )
   }
 
   return (
     <div className="w-full">
-      {/* Breadcrumb */}
-      <div className="mb-6">
-        <Link 
-          to="/" 
-          className="inline-flex items-center text-hecto-600 hover:text-hecto-800 transition-colors focus:outline-none"
-        >
-          <ArrowLeft className="h-4 w-4 mr-1" />
-          홈으로 돌아가기
-        </Link>
-      </div>
 
       {/* Header */}
       <div className="mb-6">
