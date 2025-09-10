@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, FileText, Layers, Home, ChevronDown, BookOpen, Search } from 'lucide-react'
+import { Menu, X, FileText, Layers, Home, ChevronDown, BookOpen, Search, ChevronUp } from 'lucide-react'
 import clsx from 'clsx'
 import TableOfContents from './TableOfContents'
 import ServiceSidebar from './ServiceSidebar'
@@ -42,6 +42,8 @@ export default function Layout({ children }: LayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [searchModalOpen, setSearchModalOpen] = useState(false)
+  const [mobileExpandedItems, setMobileExpandedItems] = useState<string[]>([])
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const location = useLocation()
   const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -64,7 +66,18 @@ export default function Layout({ children }: LayoutProps) {
   useEffect(() => {
     setActiveDropdown(null)
     setMobileMenuOpen(false)
+    setMobileExpandedItems([])
+    setMobileSidebarOpen(false)
   }, [location.pathname])
+
+  // Toggle mobile menu item expansion
+  const toggleMobileExpanded = (itemName: string) => {
+    setMobileExpandedItems(prev => 
+      prev.includes(itemName) 
+        ? prev.filter(name => name !== itemName)
+        : [...prev, itemName]
+    )
+  }
 
   // 키보드 단축키 처리
   useEffect(() => {
@@ -88,10 +101,7 @@ export default function Layout({ children }: LayoutProps) {
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className={clsx(
-        "fixed top-0 left-0 right-0 z-50",
-        location.pathname === '/' 
-          ? "bg-transparent border-b-0" 
-          : "bg-white border-b border-gray-100"
+        "fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100"
       )}>
         <div className="w-full pl-6 pr-4">
           <div className="flex justify-start items-center h-16 space-x-8">
@@ -130,9 +140,11 @@ export default function Layout({ children }: LayoutProps) {
                         </button>
                         
                         {/* Dropdown menu */}
-                        {activeDropdown === item.name && (
-                          <div className="absolute top-full left-0 mt-1 w-96 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
-                            <div className="py-2">
+                        <div className={clsx(
+                          'absolute top-full left-0 mt-1 w-96 bg-white rounded-lg shadow-lg border border-gray-200 z-50 transition-all duration-300 ease-out overflow-hidden',
+                          activeDropdown === item.name ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                        )}>
+                          <div className="py-2">
                               {item.children.map((child) => {
                                 return (
                                   <Link
@@ -154,7 +166,7 @@ export default function Layout({ children }: LayoutProps) {
                               })}
                             </div>
                           </div>
-                        )}
+                        
                       </div>
                     ) : (
                       // Regular menu item
@@ -202,9 +214,11 @@ export default function Layout({ children }: LayoutProps) {
         </div>
 
         {/* Mobile menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-200">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-white shadow-lg">
+        <div className={clsx(
+          "md:hidden border-t border-gray-200 bg-white transition-all duration-500 ease-out overflow-hidden",
+          mobileMenuOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
+        )}>
+          <div className="px-2 pt-2 pb-3 space-y-1 bg-white shadow-lg">
               {/* Mobile Search Button */}
               <button
                 onClick={() => {
@@ -227,42 +241,63 @@ export default function Layout({ children }: LayoutProps) {
                     {item.children ? (
                       // Mobile dropdown menu
                       <div>
-                        <div
+                        <button
+                          onClick={() => toggleMobileExpanded(item.name)}
                           className={clsx(
-                        isActive || (isServicePage && isServiceMenu)
-                          ? 'text-hecto-600'
-                          : 'text-gray-700',
-                            'px-3 py-3 text-base font-medium'
+                            'w-full flex items-center justify-between px-3 py-3 text-base font-medium transition-colors focus:outline-none',
+                            isActive || (isServicePage && isServiceMenu)
+                              ? 'text-hecto-600'
+                              : 'text-gray-700 hover:bg-gray-50'
                           )}
                         >
-                          <div>{item.name}</div>
-                          {item.description && (
-                            <div className="text-sm text-gray-500 mt-1">{item.description}</div>
-                          )}
-                        </div>
+                          <div className="text-left">
+                            <div>{item.name}</div>
+                            {item.description && (
+                              <div className="text-sm text-gray-500 mt-1">{item.description}</div>
+                            )}
+                          </div>
+                          <ChevronDown 
+                            className={clsx(
+                              'h-4 w-4 transition-transform duration-200',
+                              mobileExpandedItems.includes(item.name) ? 'rotate-180' : ''
+                            )} 
+                          />
+                        </button>
                         
                         {/* Mobile submenu */}
-                        <div className="ml-6 mt-1 space-y-1">
-                          {item.children.map((child) => {
-                            return (
-                              <Link
-                                key={child.name}
-                                to={child.href}
-                                className={clsx(
-                                  location.pathname === child.href || location.pathname.startsWith(child.href + '/')
-                                    ? 'bg-gray-50 text-hecto-600' 
-                                    : 'text-gray-600 hover:bg-gray-50 hover:text-hecto-600',
-                                  'block px-3 py-2 text-sm font-medium transition-all duration-200 focus:outline-none'
-                                )}
-                                onClick={() => setMobileMenuOpen(false)}
-                              >
-                                <div>{child.name}</div>
-                                {child.description && (
-                                  <div className="text-xs text-gray-500 mt-1">{child.description}</div>
-                                )}
-                              </Link>
-                            )
-                          })}
+                        <div className={clsx(
+                          'overflow-hidden transition-all duration-300 ease-in-out',
+                          mobileExpandedItems.includes(item.name) ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'
+                        )}>
+                          <div className="ml-6 mt-1 space-y-1">
+                            {item.children.map((child) => {
+                              // 서비스 하위 메뉴인 경우 해당 서비스의 첫 번째 문서로 이동
+                              const servicePath = child.href === '/docs/pg' ? '/docs/pg/01-getting-started' :
+                                                child.href === '/docs/ezauth' ? '/docs/ezauth' :
+                                                child.href === '/docs/ezcp' ? '/docs/ezcp' :
+                                                child.href === '/docs/whitelabel' ? '/docs/whitelabel' :
+                                                child.href;
+                              
+                              return (
+                                <Link
+                                  key={child.name}
+                                  to={servicePath}
+                                  className={clsx(
+                                    location.pathname === child.href || location.pathname.startsWith(child.href + '/')
+                                      ? 'bg-gray-50 text-hecto-600' 
+                                      : 'text-gray-600 hover:bg-gray-50 hover:text-hecto-600',
+                                    'block px-3 py-2 text-sm font-medium transition-all duration-200 focus:outline-none'
+                                  )}
+                                  onClick={() => setMobileMenuOpen(false)}
+                                >
+                                  <div>{child.name}</div>
+                                  {child.description && (
+                                    <div className="text-xs text-gray-500 mt-1">{child.description}</div>
+                                  )}
+                                </Link>
+                              )
+                            })}
+                          </div>
                         </div>
                       </div>
                     ) : (
@@ -288,19 +323,52 @@ export default function Layout({ children }: LayoutProps) {
               })}
             </div>
           </div>
-        )}
       </header>
 
       {/* Main content */}
       <main className="pt-16">
         {isServicePage ? (
           <div className="fixed inset-0 top-16 flex flex-col">
+            {/* Mobile Sidebar Toggle */}
+            <div className="lg:hidden flex items-center justify-between px-4 py-1 bg-white z-20">
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
+                  className="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-all duration-200 focus:outline-none"
+                >
+                  {mobileSidebarOpen ? (
+                    <>
+                      <ChevronUp className="h-4 w-4 mr-2" />
+                      목록
+                    </>
+                  ) : (
+                    <>
+                      <ChevronDown className="h-4 w-4 mr-2" />
+                      목록
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+            
+            {/* Mobile Sidebar Content */}
+            <div className={clsx(
+              "lg:hidden bg-white border-b border-gray-200 transition-all duration-500 ease-out overflow-hidden",
+              mobileSidebarOpen ? "max-h-[700px] opacity-100" : "max-h-0 opacity-0"
+            )}>
+              <div className="pb-4 px-4">
+                <ServiceSidebar />
+              </div>
+            </div>
+
             {/* Main Content Area */}
             <div className="flex flex-1 min-h-0">
-              {/* Service Sidebar - Fixed to left */}
+              {/* Service Sidebar - Desktop */}
               <div className="hidden lg:block w-64 h-full overflow-y-auto bg-white border-r border-gray-200 z-10 fixed left-0 top-16">
                 <ServiceSidebar />
               </div>
+              
+              
               
               {/* Content Area - Scrollable */}
               <div className="flex-1 min-w-0 lg:ml-64 lg:mr-56 overflow-y-auto docs-scrollbar">
@@ -312,10 +380,11 @@ export default function Layout({ children }: LayoutProps) {
                 </div>
               </div>
               
-              {/* Table of Contents - Fixed to right edge */}
+              {/* Table of Contents - Desktop */}
               <div className="hidden lg:block w-56 h-full overflow-y-auto bg-white border-l border-gray-200 z-10 fixed right-0 top-16">
                 <TableOfContents />
               </div>
+              
             </div>
             
           </div>

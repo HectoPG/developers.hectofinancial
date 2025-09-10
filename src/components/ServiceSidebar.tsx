@@ -57,7 +57,7 @@ export default function ServiceSidebar({ className }: ServiceSidebarProps) {
   }, [location.pathname])
 
   return (
-    <div className={clsx('w-full h-full overflow-y-auto scrollbar-hide hover:scrollbar-show', className)}>
+    <div className={clsx('w-full h-full', className)}>
       <div className="p-4">
         <nav className="space-y-2">
           {serviceNavigation.map((service) => {
@@ -90,7 +90,10 @@ export default function ServiceSidebar({ className }: ServiceSidebarProps) {
                     </button>
                     
                     {/* Children */}
-                    {isExpanded && (
+                    <div className={clsx(
+                      'overflow-hidden transition-all duration-300 ease-in-out',
+                      isExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+                    )}>
                       <div className="mt-1 ml-8 space-y-1">
                         {service.children.map((child) => (
                           <Link
@@ -107,7 +110,7 @@ export default function ServiceSidebar({ className }: ServiceSidebarProps) {
                           </Link>
                         ))}
                       </div>
-                    )}
+                    </div>
                   </div>
                 ) : (
                   // Service without children

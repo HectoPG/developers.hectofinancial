@@ -18,13 +18,11 @@ const ApiDocsPage: React.FC = () => {
           const spec = yaml.parse(yamlText);
           setSwaggerSpec(spec);
         } catch (error) {
-          console.error('YAML 파싱 오류:', error);
         // 빈 스펙으로 설정
         setSwaggerSpec({ paths: {} });
         }
       })
-      .catch(error => {
-        console.error('Swagger YAML 로드 오류:', error);
+      .catch(() => {
         // 빈 스펙으로 설정
         setSwaggerSpec({ paths: {} });
       });

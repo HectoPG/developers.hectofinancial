@@ -37,7 +37,6 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const parseMdxContent = (mdxContent: any): string => {
     // mdxContent가 문자열이 아닌 경우 처리
     if (typeof mdxContent !== 'string') {
-      console.warn('MDX content is not a string:', typeof mdxContent, mdxContent);
       return '';
     }
     
@@ -119,7 +118,6 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             }
           }
         } catch (error) {
-          console.warn(`Failed to load MDX content for ${doc.path}:`, error)
         }
       } else {
         // MDX 파일이 없으면 현재 페이지의 DOM에서 추출
