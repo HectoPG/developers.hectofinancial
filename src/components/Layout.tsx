@@ -139,14 +139,33 @@ export default function Layout({ children }: LayoutProps) {
                         {/* Dropdown menu */}
                         <div 
                           className={clsx(
-                            'absolute top-full left-0 mt-1 w-96 bg-white rounded-lg shadow-lg border border-gray-200 z-50 transition-all duration-300 ease-out overflow-hidden',
-                            activeDropdown === item.name ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                            'absolute top-full left-0 mt-1 w-64 bg-white rounded-md shadow-lg border border-gray-200 z-50 transition-all duration-300 ease-out overflow-hidden',
+                            activeDropdown === item.name ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'
                           )}
                           onMouseEnter={() => setActiveDropdown(item.name)}
                           onMouseLeave={() => setActiveDropdown(null)}
                         >
-                          <div className="py-2">
+                          <div className="py-1">
                               {item.children.map((child) => {
+                                // 각 메뉴별 호버 시 표시될 텍스트 정의
+                                const getHoverText = (menuName: string) => {
+                                  switch (menuName) {
+                                    case 'PG 결제':
+                                      return '다양한 간편 결제'
+                                    case '내통장결제':
+                                      return '실시간 계좌이체 서비스'
+                                    case '간편현금결제':
+                                      return '계좌 등록 / 결제 / 송금'
+                                    case '화이트라벨':
+                                      return '브랜드페이-통합결제지원'
+                                    default:
+                                      return null
+                                  }
+                                }
+                                
+                                const hoverText = getHoverText(child.name)
+                                const hasHoverEffect = hoverText !== null
+                                
                                 return (
                                   <Link
                                     key={child.name}
@@ -155,12 +174,23 @@ export default function Layout({ children }: LayoutProps) {
                                       location.pathname === child.href || location.pathname.startsWith(child.href + '/')
                                         ? 'bg-gray-50 text-hecto-600' 
                                         : 'text-gray-700 hover:bg-gray-50 hover:text-hecto-600',
-                                      'block px-4 py-3 transition-all duration-200 focus:outline-none'
+                                      'block px-3 py-2 transition-all duration-200 focus:outline-none relative overflow-hidden group'
                                     )}
                                   >
-                                    <div className="font-medium">{child.name}</div>
+                                    {hasHoverEffect ? (
+                                      <div className="relative">
+                                        <div className="text-sm font-medium transition-all duration-500 ease-in-out group-hover:opacity-0 group-hover:translate-y-[-100%]">
+                                          {child.name}
+                                        </div>
+                                        <div className="text-sm font-medium absolute top-0 left-0 opacity-0 translate-y-[100%] transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:translate-y-0">
+                                          {hoverText}
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      <div className="text-sm font-medium">{child.name}</div>
+                                    )}
                                     {child.description && (
-                                      <div className="text-sm text-gray-500 mt-1">{child.description}</div>
+                                      <div className="text-xs text-gray-500 mt-1">{child.description}</div>
                                     )}
                                   </Link>
                                 )
