@@ -1,78 +1,37 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Calendar, Clock, ArrowRight, BookOpen, Code, Shield, Zap } from 'lucide-react'
+import { Calendar, Clock, ArrowRight, Code } from 'lucide-react'
+import { useBlogPosts } from '../hooks/useBlogPosts'
 
 const BlogPage: React.FC = () => {
-  // 추천 글 데이터 (샘플)
-  const featuredPosts = [
-    {
-      id: "01-sample-article-1",
-      title: "헥토파이낸셜 PG 서비스 시작하기",
-      description: "헥토파이낸셜 전자결제(PG) 서비스 연동을 위한 첫 번째 단계를 알아보세요.",
-      date: "2024-12-05",
-      readTime: "5분",
-      category: "가이드",
-      icon: BookOpen,
-      bgColor: "bg-white",
-      borderColor: "border-gray-100",
-      iconColor: "text-hecto-500"
-    },
-    {
-      id: "02-sample-article-2",
-      title: "헥토파이낸셜 결제 보안 가이드",
-      description: "안전한 결제 시스템 구축을 위한 보안 베스트 프랙티스를 알아보세요.",
-      date: "2024-11-28",
-      readTime: "8분",
-      category: "보안",
-      icon: Shield,
-      bgColor: "bg-white",
-      borderColor: "border-gray-100",
-      iconColor: "text-hecto-500"
-    },
-    {
-      id: "03-sample-article-3",
-      title: "헥토파이낸셜 결과통보 URL 설정 가이드",
-      description: "Server-to-Server 결과 통보를 위한 notiUrl 설정 방법을 알아보세요.",
-      date: "2024-11-20",
-      readTime: "6분",
-      category: "기술",
-      icon: Zap,
-      bgColor: "bg-white",
-      borderColor: "border-gray-100",
-      iconColor: "text-hecto-500"
-    }
-  ]
+  const { featuredPosts, latestPosts, loading, error } = useBlogPosts()
 
-  // 최신 아티클 데이터 (샘플)
-  const latestPosts = [
-    {
-      id: "01-sample-article-1",
-      title: "헥토파이낸셜 PG 서비스 시작하기",
-      description: "헥토파이낸셜 전자결제(PG) 서비스 연동을 위한 첫 번째 단계를 알아보세요.",
-      date: "2024-12-05",
-      readTime: "5분",
-      category: "가이드",
-      thumbnail: "/api/placeholder/300/200"
-    },
-    {
-      id: "02-sample-article-2",
-      title: "헥토파이낸셜 결제 보안 가이드",
-      description: "안전한 결제 시스템 구축을 위한 보안 베스트 프랙티스를 알아보세요.",
-      date: "2024-11-28",
-      readTime: "8분",
-      category: "보안",
-      thumbnail: "/api/placeholder/300/200"
-    },
-    {
-      id: "03-sample-article-3",
-      title: "헥토파이낸셜 결과통보 URL 설정 가이드",
-      description: "Server-to-Server 결과 통보를 위한 notiUrl 설정 방법을 알아보세요.",
-      date: "2024-11-20",
-      readTime: "6분",
-      category: "기술",
-      thumbnail: "/api/placeholder/300/200"
-    }
-  ]
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-hecto-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">블로그 포스트를 불러오는 중...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">오류가 발생했습니다: {error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="px-4 py-2 bg-hecto-500 text-white rounded-lg hover:bg-hecto-600 transition-colors"
+          >
+            다시 시도
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -97,11 +56,11 @@ const BlogPage: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-8">추천 글</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredPosts.map((post) => {
-              const IconComponent = post.icon
+              const IconComponent = post.iconComponent
               return (
                 <Link
                   key={post.id}
-                  to={`/blog/${post.id}`}
+                  to={`/blog/${post.slug}`}
                   className={`${post.bgColor} ${post.borderColor} border rounded-2xl p-6 hover:shadow-md transition-all duration-200 group shadow-sm`}
                 >
                   <div className="flex items-center mb-4">
@@ -144,12 +103,28 @@ const BlogPage: React.FC = () => {
             {latestPosts.map((post) => (
               <Link
                 key={post.id}
-                to={`/blog/${post.id}`}
+                to={`/blog/${post.slug}`}
                 className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-md transition-all duration-200 group flex flex-col sm:flex-row shadow-sm"
               >
                 <div className="flex-shrink-0 mb-4 sm:mb-0 sm:mr-6">
-                  <div className="w-full sm:w-48 h-32 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center border border-gray-200">
-                    <Code className="w-8 h-8 text-gray-500" />
+                  <div className="w-full sm:w-48 h-32 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center border border-gray-200 overflow-hidden">
+                    {post.thumbnail ? (
+                      <img 
+                        src={post.thumbnail} 
+                        alt={post.title}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none'
+                          const nextElement = e.currentTarget.nextElementSibling as HTMLElement
+                          if (nextElement) {
+                            nextElement.style.display = 'flex'
+                          }
+                        }}
+                      />
+                    ) : null}
+                    <div className="w-full h-full flex items-center justify-center" style={{ display: post.thumbnail ? 'none' : 'flex' }}>
+                      <Code className="w-8 h-8 text-gray-500" />
+                    </div>
                   </div>
                 </div>
                 <div className="flex-1">

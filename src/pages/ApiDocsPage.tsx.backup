@@ -1,0 +1,852 @@
+import React, { useState, useEffect } from 'react';
+import 'swagger-ui-react/swagger-ui.css';
+import { Play, Code, Zap, ChevronDown } from 'lucide-react';
+import * as yaml from 'yaml';
+import clsx from 'clsx';
+
+const ApiDocsPage: React.FC = () => {
+  const [swaggerSpec, setSwaggerSpec] = useState<any>(null);
+  const [selectedApi, setSelectedApi] = useState<string | null>(null);
+  const [expandedServices, setExpandedServices] = useState<Set<string>>(new Set());
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    // Swagger 스펙 로드
+    fetch('/api/swagger.yaml')
+      .then(response => response.text())
+      .then((yamlText: string) => {
+        try {
+          // YAML 파싱
+          const spec = yaml.parse(yamlText);
+          setSwaggerSpec(spec);
+        } catch (error) {
+          console.error('YAML 파싱 오류:', error);
+          // 파싱 실패 시 기본 스펙 사용
+          const fallbackSpec = {
+            openapi: "3.0.0",
+            info: {
+              title: "헥토파이낸셜 API",
+              version: "1.0.0"
+            },
+            paths: {}
+          };
+          setSwaggerSpec(fallbackSpec);
+        }
+      })
+      .catch(error => {
+        console.error('Swagger YAML 로드 오류:', error);
+        // 로드 실패 시 기본 스펙 사용
+        const fallbackSpec = {
+          openapi: "3.0.0",
+          info: {
+            title: "헥토파이낸셜 API",
+            version: "1.0.0"
+          },
+          paths: {}
+        };
+        setSwaggerSpec(fallbackSpec);
+      });
+  }, []);
+
+  // Swagger 스펙에서 API 그룹 생성
+  const generateApiGroups = (spec: any) => {
+    if (!spec || !spec.paths) {
+      return {};
+    }
+
+    const apiGroups: any = {};
+
+    // Swagger paths에서 API 정보 추출
+    Object.entries(spec.paths).forEach(([path, pathItem]: [string, any]) => {
+      Object.entries(pathItem).forEach(([method, operation]: [string, any]) => {
+        if (['get', 'post', 'put', 'delete', 'patch'].includes(method.toLowerCase())) {
+          const apiInfo = {
+            path,
+            method: method.toUpperCase(),
+            title: operation.summary || path.split('/').pop()?.replace('.do', '') || 'API',
+            description: operation.description || 'API 설명이 없습니다.',
+            tags: operation.tags || ['기타']
+          };
+
+          // tags를 기반으로 카테고리 생성
+          const tags = operation.tags || ['기타'];
+          tags.forEach((tag: string) => {
+            if (!apiGroups[tag]) {
+              apiGroups[tag] = {};
+            }
+
+            // API 경로에서 자동으로 세부 카테고리명 추출
+            const pathParts = path.split('/');
+            const lastPart = pathParts[pathParts.length - 1] || '';
+            const apiName = lastPart.replace('.do', '').replace('API', '');
+            
+            // API 이름을 기반으로 카테고리명 생성
+            let subCategory = '기타';
+            if (apiName) {
+              // API 이름을 그대로 카테고리명으로 사용하거나, 간단한 변환
+              subCategory = apiName
+                .replace(/^API/, '')
+                .replace(/([A-Z])/g, ' $1')
+                .trim()
+                .replace(/^./, str => str.toUpperCase());
+            }
+
+            if (!apiGroups[tag][subCategory]) {
+              apiGroups[tag][subCategory] = [];
+            }
+
+            apiGroups[tag][subCategory].push(apiInfo);
+          });
+        }
+      });
+    });
+
+    return apiGroups;
+  };
+
+  const apiGroups = generateApiGroups(swaggerSpec);
+
+  // 선택된 API 정보 가져오기
+  const getSelectedApiInfo = () => {
+    if (!selectedApi) return null;
+    
+    for (const serviceName of Object.keys(apiGroups)) {
+      for (const categoryName of Object.keys(apiGroups[serviceName])) {
+        const api = apiGroups[serviceName][categoryName].find((api: any) => api.path === selectedApi);
+        if (api) return api;
+      }
+    }
+    return null;
+  };
+
+  const selectedApiInfo = getSelectedApiInfo();
+
+  // 선택된 API의 파라미터 정보 추출
+  const getApiParameters = (apiPath: string) => {
+    if (!swaggerSpec || !swaggerSpec.paths || !swaggerSpec.paths[apiPath]) {
+      return [];
+    }
+
+    const pathItem = swaggerSpec.paths[apiPath];
+    const parameters: any[] = [];
+
+    // 각 HTTP 메소드에서 파라미터 추출
+    Object.entries(pathItem).forEach(([method, operation]: [string, any]) => {
+      if (['get', 'post', 'put', 'delete', 'patch'].includes(method.toLowerCase())) {
+        // requestBody에서 스키마 추출
+        if (operation.requestBody && operation.requestBody.content) {
+          const content = operation.requestBody.content['application/json'];
+          if (content && content.schema) {
+            const schema = content.schema;
+            
+            // $ref 참조인 경우 components에서 스키마 가져오기
+            if (schema.$ref) {
+              const refPath = schema.$ref.replace('#/', '').split('/');
+              let refSchema = swaggerSpec;
+              for (const path of refPath) {
+                refSchema = refSchema[path];
+              }
+              
+              if (refSchema && refSchema.properties) {
+                // params와 data 객체의 properties 추출
+                Object.entries(refSchema.properties).forEach(([parentKey, parentSchema]: [string, any]) => {
+                  if (parentSchema.properties) {
+                    Object.entries(parentSchema.properties).forEach(([paramName, paramSchema]: [string, any]) => {
+                      const fullParamName = `${parentKey}.${paramName}`;
+                      const isRequired = refSchema.required && refSchema.required.includes(parentKey) && 
+                                       parentSchema.required && parentSchema.required.includes(paramName);
+                      
+                      parameters.push({
+                        name: fullParamName,
+                        type: paramSchema.type || 'string',
+                        required: isRequired,
+                        description: paramSchema.description || '',
+                        example: paramSchema.example || ''
+                      });
+                    });
+                  }
+                });
+              }
+            }
+          }
+        }
+      }
+    });
+
+    return parameters;
+  };
+
+  const apiParameters = selectedApi ? getApiParameters(selectedApi) : [];
+
+  // 드롭다운 토글 함수들
+  const toggleService = (serviceName: string) => {
+    const newExpanded = new Set(expandedServices);
+    if (newExpanded.has(serviceName)) {
+      newExpanded.delete(serviceName);
+    } else {
+      newExpanded.add(serviceName);
+    }
+    setExpandedServices(newExpanded);
+  };
+
+  const toggleCategory = (categoryKey: string) => {
+    const newExpanded = new Set(expandedCategories);
+    if (newExpanded.has(categoryKey)) {
+      newExpanded.delete(categoryKey);
+    } else {
+      newExpanded.add(categoryKey);
+    }
+    setExpandedCategories(newExpanded);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="flex">
+        {/* 왼쪽 사이드바 - API 리스트 */}
+        <div className="w-64 bg-white border-r border-gray-200 h-[calc(100vh-80px)] overflow-y-auto scrollbar-hide hover:scrollbar-show">
+          <div className="p-4">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">API 목록</h2>
+            
+            {Object.entries(apiGroups).map(([serviceName, categories]: [string, any]) => {
+              const isServiceExpanded = expandedServices.has(serviceName);
+              
+              return (
+                <div key={serviceName} className="mb-4">
+                  <button
+                    onClick={() => toggleService(serviceName)}
+                    className={clsx(
+                      'w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none',
+                      'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    )}
+                  >
+                    <div className="flex items-center">
+                      {serviceName}
+                    </div>
+                    <ChevronDown 
+                      className={clsx(
+                        'h-4 w-4 transition-transform duration-200',
+                        isServiceExpanded ? 'rotate-180' : ''
+                      )} 
+                    />
+                  </button>
+                  
+                  {isServiceExpanded && (
+                    <div className="mt-1 ml-8 space-y-1">
+                      {Object.entries(categories).map(([categoryName, apis]: [string, any]) => {
+                        const categoryKey = `${serviceName}-${categoryName}`;
+                        const isCategoryExpanded = expandedCategories.has(categoryKey);
+                        
+                        return (
+                          <div key={categoryName} className="mb-3">
+                            <button
+                              onClick={() => toggleCategory(categoryKey)}
+                              className={clsx(
+                                'w-full flex items-center justify-between px-3 py-2 text-sm rounded-md transition-colors focus:outline-none',
+                                'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                              )}
+                            >
+                              <div className="flex items-center">
+                                {categoryName}
+                              </div>
+                              <ChevronDown 
+                                className={clsx(
+                                  'h-4 w-4 transition-transform duration-200',
+                                  isCategoryExpanded ? 'rotate-180' : ''
+                                )} 
+                              />
+                            </button>
+                            
+                            {isCategoryExpanded && (
+                              <div className="mt-1 ml-8 space-y-1">
+                                {apis.map((api: any, index: number) => (
+                                  <button
+                                    key={index}
+                                    onClick={() => setSelectedApi(api.path)}
+                                    className={clsx(
+                                      'w-full text-left p-3 rounded-lg border transition-all focus:outline-none',
+                                      selectedApi === api.path
+                                        ? 'bg-hecto-50 border-hecto-200 text-hecto-900'
+                                        : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+                                    )}
+                                  >
+                                    <div className="flex items-center justify-between mb-1">
+                                      <span className="font-medium text-sm">{api.title}</span>
+                                      <span className={clsx(
+                                        'text-xs px-2 py-1 rounded',
+                                        api.method === 'POST' 
+                                          ? 'bg-green-100 text-green-700' 
+                                          : 'bg-blue-100 text-blue-700'
+                                      )}>
+                                        {api.method}
+                                      </span>
+                                    </div>
+                                    <p className="text-xs text-gray-500 truncate">{api.path}</p>
+                                  </button>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 가운데 메인 콘텐츠 - 문서 */}
+        <div className="flex-1 bg-white">
+          {selectedApi ? (
+            <div className="h-full">
+              {/* 문서 헤더 */}
+              <div className="border-b border-gray-200 p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                  {selectedApiInfo?.title || 'API 문서'}
+                </h2>
+                <p className="text-gray-600">
+                  {selectedApiInfo?.description || 'API 설명이 없습니다.'}
+                </p>
+                <div className="mt-2 flex items-center">
+                  <span className={`text-xs px-2 py-1 rounded mr-2 ${
+                    selectedApiInfo?.method === 'POST' 
+                      ? 'bg-green-100 text-green-700' 
+                      : 'bg-blue-100 text-blue-700'
+                  }`}>
+                    {selectedApiInfo?.method}
+                  </span>
+                  <span className="text-sm font-mono text-gray-500">{selectedApiInfo?.path}</span>
+                </div>
+              </div>
+
+              {/* 문서 콘텐츠 */}
+              <div className="p-6 h-[calc(100vh-180px)] overflow-y-auto">
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">요청 정보</h3>
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <div className="flex items-center mb-2">
+                        <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded mr-2">POST</span>
+                        <code className="text-sm font-mono">{selectedApi}</code>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">요청 파라미터</h3>
+                    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden max-h-96 overflow-y-auto">
+                      <table className="min-w-full">
+                        <thead className="bg-gray-50 sticky top-0">
+                          <tr>
+                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">파라미터</th>
+                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">타입</th>
+                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">필수</th>
+                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">설명</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200">
+                          {apiParameters.map((param: any, index: number) => (
+                            <tr key={index}>
+                              <td className="px-4 py-2 text-sm font-mono">{param.name}</td>
+                              <td className="px-4 py-2 text-sm text-gray-600">{param.type}</td>
+                              <td className={`px-4 py-2 text-sm ${
+                                param.required 
+                                  ? 'text-red-600' 
+                                  : 'text-gray-500'
+                              }`}>
+                                {param.required ? '필수' : '선택'}
+                              </td>
+                              <td className="px-4 py-2 text-sm text-gray-600">
+                                {param.description || '설명이 없습니다.'}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">params.ver</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">전문의 버전 (고정값: "0A19")</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">params.method</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">결제수단 (고정값: "CA")</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">params.bizType</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">업무구분 (고정값: "B0")</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">params.encCd</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">암호화 구분 (고정값: "23")</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">params.mchtTrdNo</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">상점주문번호</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">params.trdDt</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">요청일자 (YYYYMMDD)</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">params.trdTm</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">요청시간 (HHMMSS)</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">params.mobileYn</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-gray-500">선택</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">모바일 여부 (Y:모바일, N:PC)</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">params.osType</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-gray-500">선택</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">OS 구분 (A:Android, I:IOS, W:Windows, M:Mac, E:기타)</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">data.pktHash</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">해시데이터 (SHA256)</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">data.pmtprdNm</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">상품명</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">data.mchtCustNm</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">고객명</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">data.mchtCustId</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">상점고객아이디</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">data.email</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-gray-500">선택</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">이메일 주소</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">data.cardNo</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">카드번호 (AES 암호화)</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">data.vldDtMon</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">유효기간(월) (AES 암호화)</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">data.vldDtYear</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">유효기간(년) (AES 암호화)</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">data.idntNo</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-orange-600">구인증</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">식별번호 (생년월일 6자리 또는 사업자번호 10자리, AES 암호화)</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">data.cardPwd</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-orange-600">구인증</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">카드비밀번호 앞 2자리 (AES 암호화)</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">data.instmtMon</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">할부개월수 (00:일시불)</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">data.crcCd</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">통화구분 (KRW:국내, USD:해외)</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">data.taxTypeCd</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-gray-500">선택</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">세금유형 (N:과세, Y:면세, G:복합과세)</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">data.trdAmt</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">거래금액 (AES 암호화)</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">data.taxAmt</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-gray-500">복합과세</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">과세금액 (복합과세일 경우 필수, AES 암호화)</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">data.vatAmt</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-gray-500">복합과세</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">부가세금액 (복합과세일 경우 필수, AES 암호화)</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">data.taxFreeAmt</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-gray-500">복합과세</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">비과세금액 (복합과세일 경우 필수, AES 암호화)</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">data.svcAmt</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-gray-500">선택</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">봉사료 (AES 암호화)</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm font-mono">data.notiUrl</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                            <td className="px-4 py-2 text-sm text-gray-500">선택</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">결과처리URL (결제완료 후 노티 수신)</td>
+                          </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">data.mchtParam</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-gray-500">선택</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">상점예약필드 (기타 주문 정보)</td>
+                              </tr>
+                            </>
+                          )}
+                          
+                          {selectedApi === "/spay/APICardAuth.do" && (
+                            <>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">mchtId</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">상점아이디</td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">mchtTrdNo</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">상점주문번호</td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">trdDt</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">거래일자 (YYYYMMDD)</td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">trdTm</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">거래시간 (HHMMSS)</td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">pktHash</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">해시데이터 (SHA256)</td>
+                              </tr>
+                            </>
+                          )}
+                          
+                          {selectedApi === "/spay/APICancel.do" && (
+                            <>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">mchtId</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">상점아이디</td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">orgTrdNo</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">원거래번호</td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">orgMchtTrdNo</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">원주문번호</td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">orgTrdDt</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">원거래일자</td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">canAmt</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">취소금액</td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">pktHash</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">해시데이터 (SHA256)</td>
+                              </tr>
+                            </>
+                          )}
+                          
+                          {selectedApi === "/spay/APIVBank.do" && (
+                            <>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">mchtId</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">상점아이디</td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">mchtTrdNo</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">상점주문번호</td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">trdDt</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">거래일자 (YYYYMMDD)</td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">trdTm</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">거래시간 (HHMMSS)</td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">trdAmt</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">거래금액</td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">pktHash</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">해시데이터 (SHA256)</td>
+                              </tr>
+                            </>
+                          )}
+                          
+                          {selectedApi === "/spay/APITrdStatInq.do" && (
+                            <>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">mchtId</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">상점아이디</td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">mchtTrdNo</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">상점주문번호</td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">trdDt</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">거래일자 (YYYYMMDD)</td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">trdTm</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">거래시간 (HHMMSS)</td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">method</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">결제수단</td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">trdAmt</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">거래금액</td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-2 text-sm font-mono">pktHash</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">string</td>
+                                <td className="px-4 py-2 text-sm text-red-600">필수</td>
+                                <td className="px-4 py-2 text-sm text-gray-600">해시데이터 (SHA256)</td>
+                              </tr>
+                            </>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">응답 예시</h3>
+                    <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg text-sm overflow-x-auto">
+{`{
+  "params": {
+    "mchtId": "nxca_jt_bi",
+    "ver": "0A19",
+    "method": "CA",
+    "bizType": "B0",
+    "encCd": "23",
+    "mchtTrdNo": "ORDER20211231100000",
+    "trdNo": "STFP_PGCAnxca_jt_il0211129135810M1494620",
+    "trdDt": "20211231",
+    "trdTm": "100000",
+    "outStatCd": "0021",
+    "outRsltCd": "0000",
+    "outRsltMsg": "정상적으로 처리되었습니다."
+  },
+  "data": {
+    "pktHash": "f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c",
+    "trdAmt": "1000",
+    "billKey": "SBILL_0123456789",
+    "cardNo": "111122xxxxxx4444",
+    "vldDtMon": "12",
+    "vldDtYear": "24",
+    "issrId": "NHC",
+    "cardNm": "NH 농협",
+    "cardKind": "NH 체크카드",
+    "ninstmtTypeCd": "N",
+    "instmtMon": "00",
+    "apprNo": "30001234"
+  }
+}`}
+                    </pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <div className="text-center">
+                <Code className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">API를 선택하세요</h3>
+                <p className="text-gray-500">왼쪽에서 테스트하고 싶은 API를 선택해주세요.</p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* 오른쪽 사이드바 - 테스트 */}
+        <div className="w-80 bg-gray-50 border-l border-gray-200 h-[calc(100vh-80px)] overflow-y-auto">
+          <div className="p-4">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+              <Play className="w-5 h-5 mr-2" />
+              API 테스트
+            </h2>
+            
+            {selectedApi ? (
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-sm font-medium text-gray-700 mb-2">요청 설정</h3>
+                  <div className="bg-white border border-gray-200 rounded-lg p-4">
+                    <div className="flex items-center mb-4">
+                      <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded mr-2">POST</span>
+                      <code className="text-sm font-mono">{selectedApi}</code>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">서버 환경</label>
+                        <select className="w-full p-2 border border-gray-300 rounded-md text-sm">
+                          <option value="test">테스트 환경 (tbgw.settlebank.co.kr)</option>
+                          <option value="prod">운영 환경 (gw.settlebank.co.kr)</option>
+                        </select>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">요청 본문 (JSON)</label>
+                        <textarea 
+                          className="w-full h-32 p-3 border border-gray-300 rounded-md text-sm font-mono"
+                          placeholder={`{
+  "params": {
+    "mchtId": "nxca_jt_bi",
+    "ver": "0A19",
+    "method": "CA",
+    "bizType": "B0",
+    "encCd": "23",
+    "mchtTrdNo": "ORDER20211231100000",
+    "trdDt": "20211231",
+    "trdTm": "100000",
+    "mobileYn": "N",
+    "osType": "W"
+  },
+  "data": {
+    "pktHash": "f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c",
+    "pmtprdNm": "테스트상품",
+    "mchtCustNm": "홍길동",
+    "mchtCustId": "HongGilDong",
+    "email": "HongGilDong@example.com",
+    "cardNo": "1111222233334444",
+    "vldDtMon": "12",
+    "vldDtYear": "24",
+    "instmtMon": "00",
+    "crcCd": "KRW",
+    "taxTypeCd": "N",
+    "trdAmt": "1000",
+    "notiUrl": "https://example.com/notiUrl",
+    "mchtParam": "name=HongGilDong&age=25"
+  }
+}`}
+                        />
+                      </div>
+                      
+                      <button className="w-full bg-hecto-500 hover:bg-hecto-600 text-white font-medium py-2 px-4 rounded-md transition-colors flex items-center justify-center focus:outline-none">
+                        <Zap className="w-4 h-4 mr-2" />
+                        API 실행
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-sm font-medium text-gray-700 mb-2">응답 결과</h3>
+                  <div className="bg-gray-900 text-gray-100 p-4 rounded-lg">
+                    <div className="text-sm text-gray-400 mb-2">응답을 받으려면 API를 실행하세요</div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <Play className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                <p className="text-sm text-gray-500">API를 선택하면 테스트할 수 있습니다</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ApiDocsPage;
