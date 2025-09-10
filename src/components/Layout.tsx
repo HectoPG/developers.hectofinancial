@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, FileText, Layers, Home, ChevronDown, BookOpen, Search, ChevronUp } from 'lucide-react'
+import { Menu, X, FileText, Layers, ChevronDown, BookOpen, Search, ChevronUp } from 'lucide-react'
 import clsx from 'clsx'
 import TableOfContents from './TableOfContents'
 import ServiceSidebar from './ServiceSidebar'
@@ -13,7 +13,6 @@ const generateNavigation = () => {
   const categories = getNavigationCategories()
   
   return [
-    { name: '홈', href: '/', icon: Home },
     { 
       name: '서비스', 
       href: '/services', 
@@ -50,17 +49,17 @@ export default function Layout({ children }: LayoutProps) {
   // 서비스 페이지인지 확인
   const isServicePage = location.pathname.startsWith('/docs/')
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setActiveDropdown(null)
-      }
-    }
+  // Close dropdown when clicking outside (disabled for hover mode)
+  // useEffect(() => {
+  //   const handleClickOutside = (event: MouseEvent) => {
+  //     if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+  //       setActiveDropdown(null)
+  //     }
+  //   }
 
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+  //   document.addEventListener('mousedown', handleClickOutside)
+  //   return () => document.removeEventListener('mousedown', handleClickOutside)
+  // }, [])
 
   // Close dropdown when route changes
   useEffect(() => {
@@ -103,15 +102,15 @@ export default function Layout({ children }: LayoutProps) {
       <header className={clsx(
         "fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100"
       )}>
-        <div className="w-full pl-6 pr-4">
-          <div className="flex justify-start items-center h-16 space-x-8">
+        <div className="w-full px-6">
+          <div className="flex justify-start items-center h-12 space-x-6">
             {/* Logo */}
             <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
-              <img src="/site-mark.svg" alt="헥토파이낸셜" className="h-8" /> 
+              <img src="/site-mark.svg" alt="헥토파이낸셜" className="h-6" /> 
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-1 flex-1" ref={dropdownRef}>
+            <nav className="hidden md:flex items-center space-x-0 flex-1" ref={dropdownRef}>
               {navigation.map((item) => {
                 const isActive = location.pathname === item.href || location.pathname.startsWith(item.href + '/')
                 // 서비스 페이지인지 확인 (docs로 시작하는 경로)
@@ -122,28 +121,30 @@ export default function Layout({ children }: LayoutProps) {
                   <div key={item.name} className="relative">
                     {item.children ? (
                       // Dropdown menu item
-                      <div>
+                      <div
+                        onMouseEnter={() => setActiveDropdown(item.name)}
+                        onMouseLeave={() => setActiveDropdown(null)}
+                      >
                         <button
-                          onClick={() => setActiveDropdown(activeDropdown === item.name ? null : item.name)}
                           className={clsx(
                         isActive || (isServicePage && isServiceMenu)
                           ? 'text-hecto-600'
                           : 'text-gray-700 hover:text-hecto-600 hover:bg-gray-50',
-                            'flex items-center px-4 py-2 text-base font-medium rounded-md transition-all duration-200 focus:outline-none'
+                            'flex items-center px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 focus:outline-none'
                           )}
                         >
                           {item.name}
-                          <ChevronDown className={clsx(
-                            'ml-2 h-4 w-4 transition-transform duration-200',
-                            activeDropdown === item.name ? 'rotate-180' : ''
-                          )} />
                         </button>
                         
                         {/* Dropdown menu */}
-                        <div className={clsx(
-                          'absolute top-full left-0 mt-1 w-96 bg-white rounded-lg shadow-lg border border-gray-200 z-50 transition-all duration-300 ease-out overflow-hidden',
-                          activeDropdown === item.name ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                        )}>
+                        <div 
+                          className={clsx(
+                            'absolute top-full left-0 mt-1 w-96 bg-white rounded-lg shadow-lg border border-gray-200 z-50 transition-all duration-300 ease-out overflow-hidden',
+                            activeDropdown === item.name ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                          )}
+                          onMouseEnter={() => setActiveDropdown(item.name)}
+                          onMouseLeave={() => setActiveDropdown(null)}
+                        >
                           <div className="py-2">
                               {item.children.map((child) => {
                                 return (
@@ -176,7 +177,7 @@ export default function Layout({ children }: LayoutProps) {
                           isActive
                             ? 'text-hecto-600' 
                             : 'text-gray-700 hover:text-hecto-600 hover:bg-gray-50',
-                          'flex items-center px-4 py-2 text-base font-medium rounded-md transition-all duration-200 focus:outline-none'
+                          'flex items-center px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 focus:outline-none'
                         )}
                       >
                         {item.name}
@@ -190,7 +191,7 @@ export default function Layout({ children }: LayoutProps) {
             {/* Search Button */}
             <button
               onClick={() => setSearchModalOpen(true)}
-              className="hidden md:flex items-center px-3 py-2 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-colors focus:outline-none"
+              className="hidden md:flex items-center px-2 py-1.5 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-colors focus:outline-none"
               title="검색 (Ctrl+K)"
             >
               <Search className="h-4 w-4 mr-2" />
@@ -326,9 +327,9 @@ export default function Layout({ children }: LayoutProps) {
       </header>
 
       {/* Main content */}
-      <main className="pt-16">
+      <main className="pt-12">
         {isServicePage ? (
-          <div className="fixed inset-0 top-16 flex flex-col">
+          <div className="fixed inset-0 top-12 flex flex-col">
             {/* Mobile Sidebar Toggle */}
             <div className="lg:hidden flex items-center justify-between px-4 py-1 bg-white z-20">
               <div className="flex items-center space-x-2">
