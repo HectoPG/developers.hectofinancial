@@ -83,7 +83,7 @@ export default function ServiceSidebar({ className }: ServiceSidebarProps) {
                         'w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none',
                         isActive 
                           ? 'text-hecto-600' 
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                          : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                       )}
                     >
                       <div className="flex items-center">
@@ -128,7 +128,7 @@ export default function ServiceSidebar({ className }: ServiceSidebarProps) {
                       'flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none',
                                 isActive 
                                   ? 'text-hecto-600' 
-                                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                  : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                     )}
                   >
                     {service.name}
