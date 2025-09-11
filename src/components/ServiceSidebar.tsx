@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, ChevronRight } from 'lucide-react'
 import clsx from 'clsx'
 import { documentationConfig } from '../config/documentation'
 
@@ -66,8 +66,8 @@ export default function ServiceSidebar({ className }: ServiceSidebarProps) {
 
   return (
     <div className={clsx('w-full h-full', className)}>
-      <div className="p-4">
-        <nav className="space-y-2">
+      <div className="px-3 py-4">
+        <nav className="space-y-1">
           {serviceNavigation.map((service) => {
             const isActive = location.pathname === service.href || location.pathname.startsWith(service.href + '/')
             const isExpanded = expandedItems.includes(service.name)
@@ -80,21 +80,20 @@ export default function ServiceSidebar({ className }: ServiceSidebarProps) {
                     <button
                       onClick={() => toggleExpanded(service.name)}
                       className={clsx(
-                        'w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none',
+                        'w-full flex items-center justify-between px-2 py-1.5 text-sm font-medium rounded-md transition-colors focus:outline-none',
                         isActive 
-                          ? 'text-hecto-600' 
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                          ? 'text-hecto-600 bg-gray-100' 
+                          : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                       )}
                     >
                       <div className="flex items-center">
                         {service.name}
                       </div>
-                      <ChevronDown 
-                        className={clsx(
-                          'h-4 w-4 transition-transform duration-200',
-                          isExpanded ? 'rotate-180' : ''
-                        )} 
-                      />
+                      {isExpanded ? (
+                        <ChevronDown className="h-3.5 w-3.5 transition-transform duration-200" />
+                      ) : (
+                        <ChevronRight className="h-3.5 w-3.5 transition-transform duration-200" />
+                      )}
                     </button>
                     
                     {/* Children */}
@@ -102,15 +101,15 @@ export default function ServiceSidebar({ className }: ServiceSidebarProps) {
                       'overflow-hidden transition-all duration-300 ease-in-out',
                       isExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
                     )}>
-                      <div className="mt-1 ml-8 space-y-1">
+                      <div className="mt-1 ml-6 space-y-0.5">
                         {service.children.map((child) => (
                           <Link
                             key={child.name}
                             to={child.href}
                             className={clsx(
-                              'block px-3 py-2 text-sm rounded-md transition-colors focus:outline-none',
+                              'block px-2 py-1.5 text-sm rounded-md transition-colors focus:outline-none',
                               location.pathname === child.href
-                                ? 'text-hecto-600 font-medium'
+                                ? 'text-hecto-600 font-medium bg-gray-100'
                                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                             )}
                           >
@@ -125,10 +124,10 @@ export default function ServiceSidebar({ className }: ServiceSidebarProps) {
                   <Link
                     to={service.href}
                     className={clsx(
-                      'flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none',
+                      'flex items-center px-2 py-1.5 text-sm font-medium rounded-md transition-colors focus:outline-none',
                                 isActive 
-                                  ? 'text-hecto-600' 
-                                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                  ? 'text-hecto-600 bg-gray-100' 
+                                  : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                     )}
                   >
                     {service.name}
