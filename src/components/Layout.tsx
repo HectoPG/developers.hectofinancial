@@ -103,14 +103,16 @@ export default function Layout({ children }: LayoutProps) {
         "fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100"
       )}>
         <div className="w-full px-6">
-          <div className="flex justify-start items-center h-12 space-x-6">
-            {/* Logo */}
-            <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
-              <img src="/site-mark.svg" alt="헥토파이낸셜" className="h-6" /> 
-            </Link>
+          <div className="flex justify-between items-center h-12">
+            {/* Left side: Logo and Desktop Navigation */}
+            <div className="flex items-center space-x-6">
+              {/* Logo */}
+              <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
+                <img src="/site-mark.svg" alt="헥토파이낸셜" className="h-6" /> 
+              </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-0 flex-1" ref={dropdownRef}>
+              {/* Desktop Navigation */}
+              <nav className="hidden md:flex items-center space-x-0" ref={dropdownRef}>
               {navigation.map((item) => {
                 const isActive = location.pathname === item.href || location.pathname.startsWith(item.href + '/')
                 // 서비스 페이지인지 확인 (docs로 시작하는 경로)
@@ -186,31 +188,35 @@ export default function Layout({ children }: LayoutProps) {
                   </div>
                 )
               })}
-            </nav>
+              </nav>
+            </div>
 
-            {/* Search Button */}
-            <button
-              onClick={() => setSearchModalOpen(true)}
-              className="hidden md:flex items-center px-2 py-1.5 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-colors focus:outline-none"
-              title="검색 (Ctrl+K)"
-            >
-              <Search className="h-4 w-4 mr-2" />
-              <span className="hidden lg:inline">검색</span>
-              <kbd className="hidden lg:inline ml-2 px-1.5 py-0.5 bg-gray-100 border border-gray-300 rounded text-xs">⌘K</kbd>
-            </button>
+            {/* Right side: Search and Mobile menu */}
+            <div className="flex items-center space-x-2">
+              {/* Search Button */}
+              <button
+                onClick={() => setSearchModalOpen(true)}
+                className="hidden md:flex items-center px-2 py-1.5 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-colors focus:outline-none"
+                title="검색 (Ctrl+K)"
+              >
+                <Search className="h-4 w-4 mr-2" />
+                <span className="hidden lg:inline">검색</span>
+                <kbd className="hidden lg:inline ml-2 px-1.5 py-0.5 bg-gray-100 border border-gray-300 rounded text-xs">⌘K</kbd>
+              </button>
 
-            {/* Mobile menu button */}
-            <button
-              type="button"
-              className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors focus:outline-none"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
+              {/* Mobile menu button */}
+              <button
+                type="button"
+                className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors focus:outline-none"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                {mobileMenuOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
 
