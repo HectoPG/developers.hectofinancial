@@ -12,7 +12,7 @@ thumbnail: "/images/blog/pg-thumbnail.jpg"
 
 # 헥토파이낸셜 PG 서비스 시작하기
 
-![헥토파이낸셜 PG 서비스 개요](/images/blog/pg-overview.png)
+![헥토파이낸셜 PG 서비스 개요](/images/blog/sample-stamp.jpg)
 
 헥토파이낸셜 전자결제(PG) 서비스에 오신 것을 환영합니다! 이 가이드를 통해 빠르고 안전하게 결제 서비스를 연동할 수 있습니다.
 
@@ -25,9 +25,87 @@ thumbnail: "/images/blog/pg-thumbnail.jpg"
 ### 💳 다양한 결제수단
 신용카드부터 간편결제까지 모든 주요 결제수단을 하나의 API로 지원합니다.
 
-![결제수단 다이어그램](/images/blog/payment-methods.png)
+![결제수단 다이어그램](/images/blog/sample-stamp.jpg)
 
 ### 🔒 강력한 보안
+
+#### JavaScript 연동 예제
+
+```javascript filename="payment-request.js"
+// 헥토파이낸셜 PG 연동 예제
+const paymentData = {
+  amount: 10000,
+  orderId: 'ORDER_' + Date.now(),
+  customerName: '홍길동',
+  customerEmail: 'customer@example.com'
+};
+
+// 결제 요청
+fetch('/api/payment/request', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer ' + apiKey
+  },
+  body: JSON.stringify(paymentData)
+})
+.then(response => response.json())
+.then(data => {
+  console.log('결제 요청 성공:', data);
+  // 결제 페이지로 리다이렉트
+  window.location.href = data.paymentUrl;
+});
+```
+
+#### Python 연동 예제
+
+```python filename="hecto_payment.py"
+import requests
+import json
+
+# 헥토파이낸셜 PG 연동 예제
+def create_payment(amount, order_id, customer_name, customer_email):
+    url = "https://api.hectofinancial.com/payment/request"
+    
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+    
+    data = {
+        "amount": amount,
+        "orderId": order_id,
+        "customerName": customer_name,
+        "customerEmail": customer_email
+    }
+    
+    response = requests.post(url, headers=headers, json=data)
+    return response.json()
+
+# 사용 예제
+payment_result = create_payment(
+    amount=10000,
+    order_id=f"ORDER_{int(time.time())}",
+    customer_name="홍길동",
+    customer_email="customer@example.com"
+)
+
+print(f"결제 URL: {payment_result['paymentUrl']}")
+```
+
+#### cURL 예제
+
+```bash filename="api-request.sh"
+curl -X POST "https://api.hectofinancial.com/payment/request" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "amount": 10000,
+    "orderId": "ORDER_12345",
+    "customerName": "홍길동",
+    "customerEmail": "customer@example.com"
+  }'
+```
 PCI DSS 준수, AES-256 암호화, 해시 검증으로 안전한 결제 환경을 제공합니다.
 
 ### ⚡ 빠른 연동
@@ -38,7 +116,7 @@ PCI DSS 준수, AES-256 암호화, 해시 검증으로 안전한 결제 환경�
 
 ## 빠른 시작 (5분 연동)
 
-```html
+```html filename="payment-page.html"
 <!-- 1. 헥토파이낸셜 JavaScript SDK 로드 -->
 <script src="https://tbnpg.settlebank.co.kr/resources/js/v1/SettlePG_v1.2.js"></script>
 
