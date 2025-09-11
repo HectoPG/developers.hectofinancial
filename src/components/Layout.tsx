@@ -401,15 +401,13 @@ export default function Layout({ children }: LayoutProps) {
             {/* Main Content Area */}
             <div className="flex flex-1 min-h-0">
               {/* Service Sidebar - Desktop */}
-              <div className="hidden lg:block w-64 h-full overflow-y-auto bg-white border-r border-gray-200 z-10 fixed left-0 top-16">
+              <div className="hidden lg:block w-56 h-full overflow-y-auto bg-white border-r border-gray-200 z-10 fixed left-0 top-12">
                 <ServiceSidebar />
               </div>
               
-              
-              
               {/* Content Area - Scrollable */}
-              <div className="flex-1 min-w-0 lg:ml-64 lg:mr-56 overflow-y-auto docs-scrollbar">
-                <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
+              <div className="flex-1 min-w-0 lg:ml-56 lg:mr-48 overflow-y-auto docs-scrollbar">
+                <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                   {/* Documentation Content */}
                   <div className="w-full overflow-x-hidden">
                     {children}
@@ -418,7 +416,7 @@ export default function Layout({ children }: LayoutProps) {
               </div>
               
               {/* Table of Contents - Desktop */}
-              <div className="hidden lg:block w-56 h-full overflow-y-auto bg-white border-l border-gray-200 z-10 fixed right-0 top-16">
+              <div className="hidden lg:block w-48 h-full overflow-y-auto bg-white border-l border-gray-200 z-10 fixed right-0 top-12">
                 <TableOfContents />
               </div>
               
