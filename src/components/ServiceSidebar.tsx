@@ -82,7 +82,7 @@ export default function ServiceSidebar({ className }: ServiceSidebarProps) {
                       className={clsx(
                         'w-full flex items-center justify-between px-2 py-1.5 text-sm font-medium rounded-md transition-colors focus:outline-none',
                         isActive 
-                          ? 'text-hecto-600 bg-gray-100' 
+                          ? 'text-hecto-600' 
                           : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                       )}
                     >
@@ -109,7 +109,7 @@ export default function ServiceSidebar({ className }: ServiceSidebarProps) {
                             className={clsx(
                               'block px-2 py-1.5 text-sm rounded-md transition-colors focus:outline-none',
                               location.pathname === child.href
-                                ? 'text-hecto-600 font-medium bg-gray-100'
+                                ? 'text-hecto-600 font-medium'
                                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                             )}
                           >
@@ -126,7 +126,7 @@ export default function ServiceSidebar({ className }: ServiceSidebarProps) {
                     className={clsx(
                       'flex items-center px-2 py-1.5 text-sm font-medium rounded-md transition-colors focus:outline-none',
                                 isActive 
-                                  ? 'text-hecto-600 bg-gray-100' 
+                                  ? 'text-hecto-600' 
                                   : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                     )}
                   >
