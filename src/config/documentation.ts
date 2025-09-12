@@ -200,7 +200,7 @@ export const getDocumentByPath = (path: string): DocumentItem | null => {
 
 export const getCategoryDescription = (categoryId: string): string => {
   const category = documentationConfig.find(cat => cat.id === categoryId)
-  return category?.description || '문서'
+  return category?.description || ''
 }
 
 // 네비게이션용 카테고리 정보

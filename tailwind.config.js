@@ -26,6 +26,29 @@ export default {
         'noto': ['Noto Sans KR', 'sans-serif'],
         'proxima': ['Proxima Nova', 'sans-serif'],
       },
+      keyframes: {
+        'scroll-left': {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        'scroll-right': {
+          '0%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+        'rotate-y': {
+          '0%': { transform: 'rotateY(0deg)' },
+          '25%': { transform: 'rotateY(90deg)' },
+          '50%': { transform: 'rotateY(180deg)' },
+          '75%': { transform: 'rotateY(270deg)' },
+          '100%': { transform: 'rotateY(360deg)' },
+        },
+      },
+      animation: {
+        'scroll-left': 'scroll-left 30s linear infinite',
+        'scroll-right': 'scroll-right 30s linear infinite',
+        'scroll-left-slow': 'scroll-left 60s linear infinite',
+        'rotate-y': 'rotate-y 4s ease-in-out infinite',
+      },
     },
   },
   plugins: [
