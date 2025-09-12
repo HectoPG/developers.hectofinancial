@@ -24,7 +24,7 @@ export const documentationConfig: CategoryConfig[] = [
   {
     id: 'pg',
     name: 'PG 결제',
-    description: 'PG 결제 연동하기',
+    description: '',
     icon: 'CreditCard',
     path: '/docs/pg',
     color: 'orange',
@@ -114,7 +114,7 @@ export const documentationConfig: CategoryConfig[] = [
   {
     id: 'ezauth',
     name: '내통장결제',
-    description: '실시간 계좌이체 서비스',
+    description: '',
     icon: 'Banknote',
     path: '/docs/ezauth',
     color: 'blue',
@@ -132,7 +132,7 @@ export const documentationConfig: CategoryConfig[] = [
   {
     id: 'ezcp',
     name: '간편현금결제',
-    description: '현금 결제 서비스',
+    description: '',
     icon: 'FileText',
     path: '/docs/ezcp',
     color: 'green',
@@ -150,7 +150,7 @@ export const documentationConfig: CategoryConfig[] = [
   {
     id: 'whitelabel',
     name: '화이트라벨',
-    description: '통합 결제 서비스',
+    description: '',
     icon: 'Layers',
     path: '/docs/whitelabel',
     color: 'purple',
@@ -200,7 +200,7 @@ export const getDocumentByPath = (path: string): DocumentItem | null => {
 
 export const getCategoryDescription = (categoryId: string): string => {
   const category = documentationConfig.find(cat => cat.id === categoryId)
-  return category?.description || ''
+  return category?.description || '문서'
 }
 
 // 네비게이션용 카테고리 정보
