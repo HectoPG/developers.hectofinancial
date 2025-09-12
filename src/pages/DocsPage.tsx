@@ -1,7 +1,8 @@
 import { useParams, useLocation } from 'react-router-dom'
 import React, { lazy, Suspense, useEffect } from 'react'
 import { FileText } from 'lucide-react'
-import { getCategoryDescription, documentationConfig } from '../config/documentation'
+import { documentationConfig } from '../config/documentation'
+import Breadcrumb from '../components/Breadcrumb'
 
 // 동적으로 MDX 컴포넌트를 생성하는 함수
 const createMdxComponent = (category: string, page?: string) => {
@@ -92,9 +93,6 @@ const createMdxComponent = (category: string, page?: string) => {
 
 
 // 중앙화된 설정에서 카테고리 설명 가져오기
-const getCategoryDescriptionText = (category: string): string => {
-  return getCategoryDescription(category)
-}
 
 
 export default function DocsPage() {
@@ -153,15 +151,8 @@ export default function DocsPage() {
   return (
     <div className="w-full">
 
-      {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
-          
-        </h1>
-        <p className="text-base text-gray-600 mb-4">
-          {getCategoryDescriptionText(category || '')}
-        </p>
-      </div>
+      {/* Breadcrumb */}
+      <Breadcrumb />
       
       {/* Content */}
       <div>
