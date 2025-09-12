@@ -16,6 +16,7 @@ import ErrorGuide from './components/ErrorGuide'
 import DocumentFooter from './components/DocumentFooter'
 import ScrollToTop from './components/ScrollToTop'
 import EnhancedCodeBlock from './components/EnhancedCodeBlock'
+import CreditCardCarousel from './components/CreditCardCarousel'
 import { Link as LinkIcon } from 'lucide-react'
 
 const generateId = (text: string) => {
@@ -52,29 +53,29 @@ const createHeadingComponent = (Tag: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6', cl
 }
 
 const mdxComponents = {
-  h1: createHeadingComponent('h1', 'text-xl font-bold mb-3 text-gray-900'),
-  h2: createHeadingComponent('h2', 'text-lg font-semibold mb-2 mt-5 text-gray-900'),
-  h3: createHeadingComponent('h3', 'text-base font-semibold mb-2 mt-3 text-gray-800'),
+  h1: createHeadingComponent('h1', 'text-2xl font-bold mb-4 text-gray-900'),
+  h2: createHeadingComponent('h2', 'text-xl font-semibold mb-3 mt-6 text-gray-900'),
+  h3: createHeadingComponent('h3', 'text-lg font-semibold mb-3 mt-4 text-gray-800'),
   h4: createHeadingComponent('h4', 'text-base font-semibold mb-2 mt-3 text-gray-800'),
   h5: createHeadingComponent('h5', 'text-sm font-semibold mb-2 mt-3 text-gray-800'),
-  h6: createHeadingComponent('h6', 'text-xs font-semibold mb-1 mt-2 text-gray-800'),
-  p: (props: any) => <p className="mb-2 text-gray-700 leading-relaxed text-xs" {...props} />,
+  h6: createHeadingComponent('h6', 'text-sm font-semibold mb-2 mt-2 text-gray-800'),
+  p: (props: any) => <p className="mb-3 text-gray-700 leading-relaxed text-sm" {...props} />,
   code: (props: any) => <code className="bg-slate-100 text-rose-600 px-1 py-0.5 rounded text-sm font-mono font-medium" {...props} />,
   pre: (props: any) => <EnhancedCodeBlock {...props} />,
   table: (props: any) => (
-    <div className="overflow-x-auto mb-4 shadow-sm">
-      <table className="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg bg-white text-xs" {...props} />
+    <div className="overflow-x-auto mb-5 shadow-sm">
+      <table className="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg bg-white text-sm" {...props} />
     </div>
   ),
   thead: (props: any) => <thead className="bg-gray-50" {...props} />,
   tbody: (props: any) => <tbody className="bg-white divide-y divide-gray-100" {...props} />,
   tr: (props: any) => <tr className="hover:bg-gray-50 transition-colors" {...props} />,
-  th: (props: any) => <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider" {...props} />,
-  td: (props: any) => <td className="px-3 py-2 text-xs text-gray-900" {...props} />,
-  ul: (props: any) => <ul className="list-disc list-inside mb-3 text-gray-700 space-y-0.5 text-xs" {...props} />,
-  ol: (props: any) => <ol className="list-decimal list-inside mb-3 text-gray-700 space-y-0.5 text-xs" {...props} />,
-  li: (props: any) => <li className="leading-relaxed text-xs" {...props} />,
-  blockquote: (props: any) => <blockquote className="border-l-4 border-hecto-400 pl-3 py-2 italic text-gray-600 mb-3 bg-hecto-50 rounded-r-lg text-xs" {...props} />,
+  th: (props: any) => <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider" {...props} />,
+  td: (props: any) => <td className="px-4 py-3 text-sm text-gray-900" {...props} />,
+  ul: (props: any) => <ul className="list-disc list-inside mb-4 text-gray-700 space-y-1 text-sm" {...props} />,
+  ol: (props: any) => <ol className="list-decimal list-inside mb-4 text-gray-700 space-y-1 text-sm" {...props} />,
+  li: (props: any) => <li className="leading-relaxed text-sm" {...props} />,
+  blockquote: (props: any) => <blockquote className="border-l-4 border-hecto-400 pl-4 py-3 italic text-gray-600 mb-4 bg-hecto-50 rounded-r-lg text-sm" {...props} />,
   a: (props: any) => <a className="text-hecto-600 hover:text-hecto-800 underline decoration-2 underline-offset-2 transition-colors focus:outline-none" {...props} />,
   ParameterCard,
   ConfigCard,
@@ -83,6 +84,7 @@ const mdxComponents = {
   TestScenario,
   ErrorGuide,
   DocumentFooter,
+  CreditCardCarousel,
 }
 
 function App() {
