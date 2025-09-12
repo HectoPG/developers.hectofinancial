@@ -1,0 +1,40 @@
+# 환경 설정 예시
+
+## 테스트베드 서버 정보
+
+테스트 및 개발을 위한 환경 정보입니다:
+
+<ConfigCard
+  title="테스트베드 도메인"
+  type="URL"
+  description="헥토파이낸셜 테스트베드 결제창 서버 도메인입니다."
+  value="tbnpg.settlebank.co.kr"
+  required={true}
+  note="방화벽 설정 시 참고하세요."
+/>
+
+<ConfigCard
+  title="테스트베드 IP (결제창)"
+  type="IP Address"
+  description="테스트베드 결제창 서버의 IP 주소입니다. 방화벽 설정 시 참고하세요."
+  value="211.33.136.39"
+  note="IP 주소는 변경될 수 있으니 주기적으로 확인해주세요."
+/>
+
+## 운영 환경 정보
+
+<ConfigCard
+  title="운영 도메인"
+  type="URL"
+  description="헥토파이낸셜 운영 결제창 서버 도메인입니다."
+  value="npg.settlebank.co.kr"
+  required={true}
+/>
+
+<ConfigCard
+  title="운영 IP (결제창)"
+  type="IP Address"
+  description="운영 결제창 서버의 IP 주소입니다."
+  value="211.33.136.40"
+  note="운영 환경에서는 반드시 이 IP를 허용해주세요."
+/>

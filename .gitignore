@@ -23,10 +23,3 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
-
-# 자동 생성되는 Markdown 파일들 (MDX에서 변환)
-public/pg/
-public/blog/
-public/ezauth/
-public/ezcp/
-public/whitelabel/

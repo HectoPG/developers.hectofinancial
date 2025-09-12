@@ -1,8 +1,4 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "installCommand": "npm ci",
-  "framework": "vite",
   "rewrites": [
     {
       "source": "/(.*)",
@@ -11,17 +7,13 @@
   ],
   "headers": [
     {
-      "source": "/assets/(.*)",
+      "source": "/docs/(.*)\\.mdx",
       "headers": [
         {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
+          "key": "Content-Type",
+          "value": "text/plain"
         }
       ]
     }
-  ],
-  "github": {
-    "autoAlias": true,
-    "enabled": true
-  }
+  ]
 }

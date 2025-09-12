@@ -5,9 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run generate:md && tsc -b && vite build",
-    "build:md": "npm run generate:md",
-    "generate:md": "node scripts/generateMarkdown.cjs",
+    "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -36,7 +34,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
-    "@mdx-js/mdx": "^3.1.1",
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.2",
