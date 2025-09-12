@@ -1,0 +1,106 @@
+---
+title: "헥토파이낸셜 결제 보안 가이드"
+description: "안전한 결제 시스템 구축을 위한 보안 베스트 프랙티스를 알아보세요."
+date: "2024-11-28"
+readTime: "8분"
+category: "보안"
+featured: true
+tags: ["보안", "PG", "암호화"]
+icon: "Shield"
+thumbnail: "/images/blog/security-thumbnail.jpg"
+---
+
+# 헥토파이낸셜 결제 보안 가이드
+
+헥토파이낸셜의 강력한 보안 기능과 개인정보 보호 방법을 알아보세요.
+
+## 강력한 보안
+
+헥토파이낸셜은 **PCI DSS 준수, AES-256 암호화, 해시 검증**으로 안전한 결제 환경을 제공합니다.
+
+## 중요 정보 보안
+
+### 🔐 개인정보 암복호화
+
+**암호화 대상 필드:**
+- 거래금액 (`trdAmt`)
+- 고객명 (`mchtCustNm`)
+- 고객 전화번호 (`mchtCustTel`)
+- 고객 이메일 (`mchtCustEmail`)
+- 상품명 (`pmtPrdtNm`)
+- 봉사료 (`svcAmt`)
+
+### 🔑 AES 암호화 방식
+
+**알고리즘**: AES-256/ECB/PKCS5Padding + **Base64 인코딩**
+
+```javascript
+// AES-256-ECB 암호화 예시 (Base64 인코딩)
+const CryptoJS = require('crypto-js');
+
+function encryptAES(plainText, secretKey) {
+    const key = CryptoJS.enc.Utf8.parse(secretKey);
+    const encrypted = CryptoJS.AES.encrypt(plainText, key, {
+        mode: CryptoJS.mode.ECB,
+        padding: CryptoJS.pad.Pkcs5
+    });
+    return encrypted.toString();
+}
+
+// 사용 예시
+const encryptedAmount = encryptAES("1000", "pgSettle30y739r82jtd709yOfZ2yK5K");
+// 결과: "AntV/eDpxIaKF0hJiePDKA==" (Base64 인코딩)
+```
+
+## 보안 키 관리
+
+### 🔐 개인정보 암호키
+
+암호화에 사용되는 키는 **헥토파이낸셜에서 별도 제공**합니다.
+- 키 관리는 **보안이 중요**합니다
+- 소스코드에 하드코딩하지 마세요
+- 환경변수나 보안 저장소를 이용하세요
+
+### 🔒 해시 인증키
+
+결제 요청의 무결성을 보장하기 위한 해시 인증키도 제공됩니다.
+
+## 환경별 키 사용
+
+### 테스트 환경
+```javascript
+const config = {
+  apiUrl: "https://tbgw.settlebank.co.kr",
+  
+  // 암호화키 (실제로는 환경변수에서 가져오세요)
+  encryptionKey: "pgSettle30y739r82jtd709yOfZ2yK5K",
+  
+  // 해시 인증키
+  hashKey: "your-test-hash-key"
+}
+```
+
+### 운영 환경
+```javascript
+const config = {
+  apiUrl: "https://gw.settlebank.co.kr",
+  
+  // 암호화키 (헥토파이낸셜에서 발급받은 고유 키)
+  encryptionKey: process.env.HECTO_ENCRYPTION_KEY,
+  
+  // 해시 인증키
+  hashKey: process.env.HECTO_HASH_KEY
+}
+```
+
+## 보안 주의사항
+
+- 테스트베드에서 발생하는 모든 거래는 **실제 결제되지 않습니다**
+- 운영 환경 이행 시 **헥토파이낸셜에서 별도 제공하는 고유 키**를 사용해야 합니다
+- 테스트용 키를 운영 환경에 사용하면 **보안 문제**가 발생할 수 있습니다
+
+---
+
+**작성일**: 2025-09-05  
+**카테고리**: 보안  
+**읽기 시간**: 8분
