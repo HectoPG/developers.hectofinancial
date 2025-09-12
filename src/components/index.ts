@@ -1,7 +1,6 @@
 // MDX 컴포넌트들 (MDX 파일에서 직접 사용)
 export { default as FeatureGrid } from './FeatureGrid'
 export { default as TestScenario } from './TestScenario'
-export { default as CreditCardCarousel } from './CreditCardCarousel'
 export { default as NextSteps } from './NextSteps'
 export { default as ErrorGuide } from './ErrorGuide'
 export { default as DocumentFooter } from './DocumentFooter'
