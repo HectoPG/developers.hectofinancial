@@ -36,6 +36,13 @@
     }
   },
   "github": {
-    "autoAlias": true
+    "autoAlias": true,
+    "enabled": true
+  },
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "feature/*": true
+    }
   }
 }
