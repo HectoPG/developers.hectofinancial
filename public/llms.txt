@@ -1,0 +1,59 @@
+# Hecto Financial 개발자 문서
+
+## 문서 개요
+이 사이트는 Hecto Financial의 결제 솔루션 API 문서를 제공합니다.
+
+## 주요 문서 섹션
+
+### PG 결제 서비스
+- **시작하기**: https://developers.hectofinancial.com/docs/pg/01-getting-started
+- **신용카드 결제**: https://developers.hectofinancial.com/docs/pg/02-credit-card
+- **가상계좌 결제**: https://developers.hectofinancial.com/docs/pg/03-virtual-account
+- **계좌이체 결제**: https://developers.hectofinancial.com/docs/pg/04-bank-transfer
+- **휴대폰 결제**: https://developers.hectofinancial.com/docs/pg/05-mobile-payment
+- **상품권 결제**: https://developers.hectofinancial.com/docs/pg/06-gift-card
+- **포인트다모아**: https://developers.hectofinancial.com/docs/pg/07-point-damoa
+- **간편결제**: https://developers.hectofinancial.com/docs/pg/08-simple-payment
+- **거래조회 및 관리**: https://developers.hectofinancial.com/docs/pg/09-transaction-management
+- **개발 참고 문서**: https://developers.hectofinancial.com/docs/pg/10-developer-reference
+
+### 내통장결제 서비스 (ezauth)
+- **내통장결제 가이드**: https://developers.hectofinancial.com/docs/ezauth/hecto_financial_ezauth
+
+### 간편현금결제 서비스 (ezcp)
+- **간편현금결제 가이드**: https://developers.hectofinancial.com/docs/ezcp/hecto_financial_ezcp
+
+### 화이트라벨 서비스
+- **화이트라벨 가이드**: https://developers.hectofinancial.com/docs/whitelabel/hecto_financial_whitelabel
+
+## API 인증
+- 해시 인증 방식 사용
+- API 키와 시크릿 키를 통한 인증
+- 타임스탬프 기반 요청 검증
+
+## 주요 API 엔드포인트
+- 결제 요청: `/spay/request`
+- 결제 승인: `/spay/approve`
+- 결제 취소: `/spay/cancel`
+- 거래 조회: `/spay/status`
+
+## 마크다운 문서
+정적 마크다운 파일들:
+- PG 문서: `/pg/*.md`
+- 내통장결제 문서: `/ezauth/*.md`
+- 간편현금결제 문서: `/ezcp/*.md`
+- 화이트라벨 문서: `/whitelabel/*.md`
+- 블로그: `/blog/*.md`
+
+## 테스트 환경
+- 테스트용 API 키와 시크릿 키 제공
+- 샌드박스 환경에서 안전한 테스트 가능
+
+## 보안
+- HTTPS 통신 필수
+- 해시 기반 인증
+- 타임스탬프 검증으로 재전송 공격 방지
+
+## 지원
+- 기술 지원: 개발팀 문의
+- 문서 업데이트: GitHub을 통한 기여
