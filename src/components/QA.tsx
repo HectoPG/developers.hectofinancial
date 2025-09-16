@@ -18,7 +18,7 @@ export default function QA({ qaItems, maxHeight = "400px", maxVisibleItems = 3 }
       <div 
         className={shouldScroll ? "overflow-y-auto pr-2" : ""}
         style={{ 
-          maxHeight: shouldScroll ? "224px" : "auto",
+          maxHeight: shouldScroll ? maxHeight : "auto",
           scrollbarWidth: "thin",
           scrollbarColor: "#D1D5DB #F3F4F6"
         }}
