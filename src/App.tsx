@@ -17,6 +17,10 @@ import DocumentFooter from './components/DocumentFooter'
 import ScrollToTop from './components/ScrollToTop'
 import EnhancedCodeBlock from './components/EnhancedCodeBlock'
 import CreditCardCarousel from './components/CreditCardCarousel'
+import Tag from './components/Tag'
+import ServiceGrid from './components/ServiceGrid'
+import ResponsiveImage from './components/ResponsiveImage'
+import QA from './components/QA'
 import { Link as LinkIcon } from 'lucide-react'
 
 const generateId = (text: string) => {
@@ -85,6 +89,10 @@ const mdxComponents = {
   ErrorGuide,
   DocumentFooter,
   CreditCardCarousel,
+  Tag,
+  ServiceGrid,
+  ResponsiveImage,
+  QA,
 }
 
 function App() {

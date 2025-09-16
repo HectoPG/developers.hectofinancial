@@ -1,195 +1,74 @@
-# 💳 신용카드 결제
-가장 널리 사용되는 결제 수단인 신용카드 결제 서비스입니다. 국내외 주요 카드사를 지원하며, 안전하고 빠른 결제를 제공합니다.
+{/*
+태그 컴포넌트 사용 예시
+### 복수 태그  <Tag tags={[ { text: "예시1", color: "red", size: "sm" }, { text: "예시2", color: "blue", size: "md" }, { text: "예시3", color: "green", size: "lg" } ]} />
+*/}
+
+<br/>
+### 💳 신용카드 결 <Tag tagText="제" tag="표준" tagColor="red" />
+<br/>
+
+가장 널리 사용되는 결제 수단인 신용카드 결제 서비스입니다. <br/>
+국내외 주요 카드사를 지원하며, 안전하고 빠른 결제를 제공합니다.
 
 <CreditCardCarousel />
 
-## 📖 개요
+### 🎯 지원서비스
 
-### 🎯 주요 특징
+<ServiceGrid 
+  services={[
+    {
+      icon: "💳",
+      title: "간편 결제",
+      description: "카카오페이, 삼성페이, 네이버페이 등 간편결제 지원"
+    },
+    {
+      icon: "🔒",
+      title: "3D Secure",
+      description: "해외 결제, 안전한 인증 시스템으로 보안 강화"
+    },
+    {
+      icon: "📝",
+      title: "수기 결제",
+      description: "고객이 카드정보를 직접 입력하여 결제"
+    },
+    {
+      icon: "🔄",
+      title: "정기 결제",
+      description: "빌키 서비스로 편리한 정기 결제 관리"
+    }
+  ]}
+/>
 
-<FeatureGrid features={[
-  {
-    icon: "💳",
-    title: "다양한 카드사",
-    description: "국내외 주요 카드사 지원, 넓은 가맹점 네트워크",
-    bgColor: "from-hecto-50 to-hecto-100",
-    borderColor: "border-hecto-200",
-    iconBgColor: "bg-hecto-400"
-  },
-  {
-    icon: "🔒",
-    title: "3D Secure",
-    description: "안전한 인증 시스템으로 보안 강화",
-    bgColor: "from-slate-50 to-slate-100",
-    borderColor: "border-slate-200",
-    iconBgColor: "bg-slate-600"
-  },
-  {
-    icon: "📅",
-    title: "할부 결제",
-    description: "다양한 할부 옵션으로 고객 편의성 제공",
-    bgColor: "from-hecto-50 to-hecto-100",
-    borderColor: "border-hecto-200",
-    iconBgColor: "bg-hecto-400"
-  },
-  {
-    icon: "🔄",
-    title: "정기 결제",
-    description: "빌키 서비스로 편리한 정기 결제 관리",
-    bgColor: "from-hecto-50 to-hecto-100",
-    borderColor: "border-hecto-200",
-    iconBgColor: "bg-hecto-400"
-  }
-]} />
+<br/>
+### 📌 결제 흐름
 
----
+<ResponsiveImage 
+  src="/images/creadit_card/credit_card_image2.png"
+  alt="결제 흐름도 - 가맹점에서 PG, VAN, 카드사를 거쳐 결제가 처리되는 과정"
+  maxWidth="800"
+  marginTop="16"
+  marginBottom="16"
+  className="mx-auto"
+/>
 
-
-## 🏗️ 구현 가이드
-
-## 🔄 고급 기능
+<br/>
+<br/>
+### 🔢 지원 기능
+※ 빌키, 부분취소 등의 설정은 영업담당자와 협의가 필요합니다.
 
 ### 1️⃣ 정기결제 (빌키)
 
-빌키를 이용한 정기결제 구현 방법입니다.
-
-#### 📋 빌키 발급 요청
-
-```javascript
-// 첫 결제 시 빌키 발급 요청
-SETTLE_PG.pay({
-    // ... 기본 파라미터
-    billKeyYn: "Y",        // 빌키 발급 요청
-    // ... 나머지 파라미터
-});
-```
-
-#### 🔄 빌키로 결제
-
-```javascript
-// 빌키를 이용한 정기결제 API 호출
-const billingPayment = {
-    params: {
-        mchtId: "nxca_jt_il",
-        ver: "0A19",
-        mchtTrdNo: "BILLING20231215143022",
-        trdDt: "20231215",
-        trdTm: "143022"
-    },
-    data: {
-        method: "CA",
-        trdAmt: "10000",
-        billKey: "SBILL_1234567890", // 이전에 발급받은 빌키
-        pmtPrdtNm: "정기결제 상품",
-        pktHash: "생성된해시값"
-    }
-};
-```
+신용카드 정보를 입력하여 빌키를 발급받고 이후 해당일에 빌키로 결제를 요청하는 방법입니다. <br/>
 
 ### 2️⃣ 부분취소
-
 결제 금액의 일부만 취소하는 기능입니다.
 
-```javascript
-const partialCancel = {
-    params: {
-        mchtId: "nxca_jt_il",
-        ver: "0A19",
-        mchtTrdNo: "CANCEL20231215143022",
-        trdDt: "20231215",
-        trdTm: "143022"
-    },
-    data: {
-        method: "CA",
-        orgTrdNo: "STFP_PGCAnxca_jt_il0231215143022M1234567", // 원거래번호
-        orgTrdDt: "20231215",    // 원거래일자
-        cnclAmt: "3000",         // 취소금액 (부분취소)
-        cnclRsn: "고객 요청",     // 취소사유
-        pktHash: "생성된해시값"
-    }
-};
-```
-
 ### 3️⃣ WebView 연동 (모바일 앱)
-
-모바일 앱에서 WebView를 통한 결제 연동 방법입니다.
-
-#### Android 설정
-
-```java
-// WebView 설정
-WebView webView = findViewById(R.id.webview);
-WebSettings webSettings = webView.getSettings();
-webSettings.setJavaScriptEnabled(true);
-webSettings.setDomStorageEnabled(true);
-
-// 결제 완료 후 앱으로 복귀
-webView.setWebViewClient(new WebViewClient() {
-    @Override
-    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        if (url.startsWith("myapp://")) {
-            // 앱 스키마 처리
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            startActivity(intent);
-            return true;
-        }
-        return false;
-    }
-});
-```
-
-#### iOS 설정
-
-```swift
-// WKWebView 설정
-
-class PaymentViewController: UIViewController, WKNavigationDelegate {
-    @IBOutlet weak var webView: WKWebView!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        webView.navigationDelegate = self
-        
-        // 결제 페이지 로드
-        if let url = URL(string: paymentUrl) {
-            webView.load(URLRequest(url: url))
-        }
-    }
-    
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        
-        if let url = navigationAction.request.url?.absoluteString {
-            if url.hasPrefix("myapp://") {
-                // 앱 스키마 처리
-                decisionHandler(.cancel)
-                return
-            }
-        }
-        decisionHandler(.allow)
-    }
-}
-```
-
----
-
-## 🧪 테스트 가이드
-
-### 🔧 테스트 환경 설정
-
-**테스트 상점 정보:**
-- **상점ID**: `nxca_jt_il` (인증), `nxca_jt_bi` (비인증)
-- **환경**: `https://tbnpg.settlebank.co.kr`
-- **특징**: 실제 결제 없이 승인 테스트 가능
-
-### 💳 테스트 카드 정보
-
-| 카드사 | 카드번호 | 유효기간 | CVC | 비밀번호 |
-|--------|----------|----------|-----|----------|
-| **신한카드** | `4000-0000-0000-0002` | `12/25` | `123` | `00` |
-| **국민카드** | `4000-0000-0000-0010` | `12/25` | `123` | `00` |
-| **삼성카드** | `4000-0000-0000-0028` | `12/25` | `123` | `00` |
-| **현대카드** | `4000-0000-0000-0036` | `12/25` | `123` | `00` |
-| **하나카드** | `4000-0000-0000-0044` | `12/25` | `123` | `00` |
+모바일 앱에서 결제 연동이 필요하실 경우 > WebView를 통한 결제 연동 방법입니다. <br/>
+- Android 의 경우 > manifest.xml 에 설정 필요 <br/>
+- IOS 의 경우 > appScheme 추가 필요
+<div className="border-t border-gray-100 my-8"></div>
+<br/>
 
 ### 🎯 테스트 시나리오
 
@@ -207,70 +86,60 @@ class PaymentViewController: UIViewController, WKNavigationDelegate {
     "해시값 불일치"
   ]}
 />
+<br/>
+<br/>
 
----
-
-## ❌ 에러 처리
-
-### 🚨 주요 에러 코드
-
-| 코드 | 메시지 | 원인 | 해결방법 |
-|------|--------|------|----------|
-| `1009` | 결제 요청 정보 누락 (거래금액) | 필수 파라미터 누락 | 필수 파라미터 확인 |
-| `1901` | 해쉬값 불일치 오류 | 해시 생성 오류 | 해시 생성 로직 점검 |
-| `1902` | 암호화 항목 미처리 오류 | 암호화 필드 미처리 | AES 암호화 적용 |
-| `ST47` | 미등록 상점 | 잘못된 상점ID | 올바른 상점ID 사용 |
-| `ST50` | 중복요청 | 동일한 주문번호 재사용 | 고유한 주문번호 생성 |
-
-### 🔧 에러 해결 가이드
-
-<ErrorGuide 
-  title="일반적인 문제 해결"
-  content={
-    <ul className="mt-2 text-yellow-700 text-sm space-y-1">
-      <li>• <strong>해시 오류</strong>: 파라미터 순서와 인코딩 확인</li>
-      <li>• <strong>암호화 오류</strong>: AES-128-ECB 방식과 키 확인</li>
-      <li>• <strong>중복 주문번호</strong>: 타임스탬프나 UUID 활용</li>
-      <li>• <strong>금액 오류</strong>: 숫자 형태와 암호화 여부 확인</li>
-    </ul>
-  }
+<QA 
+  qaItems={[
+    {
+      question: "해외 카드도 결제 가능한가요?",
+      answer: "네, 외화 결제 전용 상점ID(`nxca_ab_bi`, `nxca_ab_il`)를 사용하면 해외 카드 결제가 가능합니다."
+    },
+    {
+      question: "빌키의 유효기간은 얼마나 되나요?",
+      answer: "빌키는 카드 유효기간과 동일하며, 카드가 재발급되면 새로운 빌키를 발급받아야 합니다."
+    },
+    {
+      question: "할부 수수료는 누가 부담하나요?",
+      answer: "일반적으로 고객이 부담하지만, 가맹점이 무이자 할부로 제공할 수도 있습니다."
+    },
+    {
+      question: "부분취소는 몇 번까지 가능한가요?",
+      answer: "원거래 금액 범위 내에서 여러 번 부분취소가 가능합니다."
+    }
+  ]}
 />
+<br/>
+<br/>
 
----
-
-## 💡 자주 묻는 질문
-
-### Q. 해외 카드도 결제 가능한가요?
-A. 네, 외화 결제 전용 상점ID(`nxca_ab_bi`, `nxca_ab_il`)를 사용하면 해외 카드 결제가 가능합니다.
-
-### Q. 빌키의 유효기간은 얼마나 되나요?
-A. 빌키는 카드 유효기간과 동일하며, 카드가 재발급되면 새로운 빌키를 발급받아야 합니다.
-
-### Q. 할부 수수료는 누가 부담하나요?
-A. 일반적으로 고객이 부담하지만, 가맹점이 무이자 할부로 제공할 수도 있습니다.
-
-### Q. 부분취소는 몇 번까지 가능한가요?
-A. 원거래 금액 범위 내에서 여러 번 부분취소가 가능합니다.
-
----
-
-## 🚀 다음 단계
+### 🚀 Next Step
 
 <NextSteps 
-  title="신용카드 결제 연동을 완료했다면, 다른 결제 수단도 확인해보세요:"
+  title="신용카드 결제를 알아봤어요! 다른 결제 수단도 확인해보세요  🥳🎉🎉"
   excludeTitle="신용카드"
 />
 
----
+<br/>
 
 <DocumentFooter 
-  title="신용카드 결제 연동에 대한 추가 문의사항이 있으시나요?"
-  primaryButton={{
-    text: "📧 기술지원 문의",
-    href: "mailto:support@hectofinancial.com"
+  leftSection={{
+    faq: {
+      text: "FAQ",
+      link: "/docs/faq"
+    },
+    support: {
+      realtime: {
+        text: "문의",
+        link: "/support/chat"
+      },
+      email: {
+        text: "이메일",
+        link: "mailto:support@hectofinancial.com"
+      }
+    }
   }}
-  secondaryButton={{
-    text: "📚 API 레퍼런스",
-    href: "/docs/pg/api-reference"
+  rightSection={{
+    text: "코드 샘플",
+    link: "https://github.com/hectofinancial"
   }}
 />
