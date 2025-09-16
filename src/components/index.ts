@@ -11,7 +11,10 @@ export { default as ConfigCard } from './ConfigCard'
 // 레이아웃 컴포넌트들
 export { default as Layout } from './Layout'
 export { default as ServiceSidebar } from './ServiceSidebar'
+export { default as ApiSidebar } from './ApiSidebar'
+export { default as ApiTestPanel } from './ApiTestPanel'
 export { default as TableOfContents } from './TableOfContents'
+export { default as Breadcrumb } from './Breadcrumb'
 
 // 유틸리티 컴포넌트들
 export { default as SearchModal } from './SearchModal'

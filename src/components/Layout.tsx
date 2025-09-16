@@ -35,9 +35,12 @@ const navigation = generateNavigation()
 
 interface LayoutProps {
   children: React.ReactNode
+  leftSidebar?: React.ReactNode | ((closeMobileSidebar: () => void) => React.ReactNode)
+  rightSidebar?: React.ReactNode
+  mobileSidebarTitle?: string
 }
 
-export default function Layout({ children }: LayoutProps) {
+export default function Layout({ children, leftSidebar, rightSidebar, mobileSidebarTitle = "목록" }: LayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [searchModalOpen, setSearchModalOpen] = useState(false)
@@ -46,8 +49,8 @@ export default function Layout({ children }: LayoutProps) {
   const location = useLocation()
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  // 서비스 페이지인지 확인
-  const isServicePage = location.pathname.startsWith('/docs/')
+  // 서비스 페이지 또는 API 문서 페이지인지 확인
+  const isDocumentationPage = location.pathname.startsWith('/docs/') || location.pathname.startsWith('/api-docs')
 
   // Close dropdown when clicking outside (disabled for hover mode)
   // useEffect(() => {
@@ -117,7 +120,9 @@ export default function Layout({ children }: LayoutProps) {
                 const isActive = location.pathname === item.href || location.pathname.startsWith(item.href + '/')
                 // 서비스 페이지인지 확인 (docs로 시작하는 경로)
                 const isServicePage = location.pathname.startsWith('/docs/')
+                const isApiPage = location.pathname.startsWith('/api-docs')
                 const isServiceMenu = item.name === '서비스'
+                const isApiMenu = item.name === 'API 문서'
                 
                 return (
                   <div key={item.name} className="relative">
@@ -129,7 +134,7 @@ export default function Layout({ children }: LayoutProps) {
                       >
                         <button
                           className={clsx(
-                        isActive || (isServicePage && isServiceMenu)
+                        isActive || (isServicePage && isServiceMenu) || (isApiPage && isApiMenu)
                           ? 'text-hecto-600'
                           : 'text-gray-700 hover:text-hecto-600 hover:bg-gray-50',
                             'flex items-center px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 focus:outline-none'
@@ -271,7 +276,9 @@ export default function Layout({ children }: LayoutProps) {
                 const isActive = location.pathname === item.href || location.pathname.startsWith(item.href + '/')
                 // 서비스 페이지인지 확인 (docs로 시작하는 경로)
                 const isServicePage = location.pathname.startsWith('/docs/')
+                const isApiPage = location.pathname.startsWith('/api-docs')
                 const isServiceMenu = item.name === '서비스'
+                const isApiMenu = item.name === 'API 문서'
                 
                 return (
                   <div key={item.name}>
@@ -282,7 +289,7 @@ export default function Layout({ children }: LayoutProps) {
                           onClick={() => toggleMobileExpanded(item.name)}
                           className={clsx(
                             'w-full flex items-center justify-between px-3 py-3 text-base font-medium transition-colors focus:outline-none',
-                            isActive || (isServicePage && isServiceMenu)
+                            isActive || (isServicePage && isServiceMenu) || (isApiPage && isApiMenu)
                               ? 'text-hecto-600'
                               : 'text-gray-700 hover:bg-gray-50'
                           )}
@@ -364,7 +371,7 @@ export default function Layout({ children }: LayoutProps) {
 
       {/* Main content */}
       <main className="pt-12">
-        {isServicePage ? (
+        {isDocumentationPage ? (
           <div className="fixed inset-0 top-12 flex flex-col">
             {/* Mobile Sidebar Toggle */}
             <div className="lg:hidden flex items-center justify-between px-4 py-1 bg-white z-20">
@@ -376,12 +383,12 @@ export default function Layout({ children }: LayoutProps) {
                   {mobileSidebarOpen ? (
                     <>
                       <ChevronUp className="h-4 w-4 mr-2" />
-                      목록
+                      {mobileSidebarTitle}
                     </>
                   ) : (
                     <>
                       <ChevronDown className="h-4 w-4 mr-2" />
-                      목록
+                      {mobileSidebarTitle}
                     </>
                   )}
                 </button>
@@ -394,19 +401,22 @@ export default function Layout({ children }: LayoutProps) {
               mobileSidebarOpen ? "max-h-[700px] opacity-100" : "max-h-0 opacity-0"
             )}>
               <div className="pb-4 px-4">
-                <ServiceSidebar />
+                {typeof leftSidebar === 'function' ? leftSidebar(() => setMobileSidebarOpen(false)) : (leftSidebar || <ServiceSidebar />)}
               </div>
             </div>
 
             {/* Main Content Area */}
             <div className="flex flex-1 min-h-0">
-              {/* Service Sidebar - Desktop */}
+              {/* Left Sidebar - Desktop */}
               <div className="hidden lg:block w-56 h-full overflow-y-auto bg-white border-r border-gray-200 z-10 fixed left-0 top-12">
-                <ServiceSidebar />
+                {typeof leftSidebar === 'function' ? leftSidebar(() => {}) : (leftSidebar || <ServiceSidebar />)}
               </div>
               
               {/* Content Area - Scrollable */}
-              <div className="flex-1 min-w-0 lg:ml-56 lg:mr-48 overflow-y-auto docs-scrollbar">
+              <div className={clsx(
+                "flex-1 min-w-0 lg:ml-56 overflow-y-auto docs-scrollbar",
+                rightSidebar ? "lg:mr-80" : "lg:mr-48"
+              )}>
                 <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                   {/* Documentation Content */}
                   <div className="w-full overflow-x-hidden">
@@ -415,9 +425,12 @@ export default function Layout({ children }: LayoutProps) {
                 </div>
               </div>
               
-              {/* Table of Contents - Desktop */}
-              <div className="hidden lg:block w-48 h-full overflow-y-auto bg-white border-l border-gray-200 z-10 fixed right-0 top-12">
-                <TableOfContents />
+              {/* Right Sidebar - Desktop */}
+              <div className={clsx(
+                "hidden lg:block h-full overflow-y-auto border-l border-gray-200 z-10 fixed right-0 top-12",
+                rightSidebar ? "w-80 bg-gray-50" : "w-48 bg-white"
+              )}>
+                {rightSidebar || <TableOfContents />}
               </div>
               
             </div>
