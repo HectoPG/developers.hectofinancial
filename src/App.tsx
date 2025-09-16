@@ -100,16 +100,20 @@ function App() {
     <MDXProvider components={mdxComponents}>
       <Router>
         <ScrollToTop />
-        <Layout>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/blog" element={<BlogPage />} />
-            <Route path="/blog/:id" element={<BlogDetailPage />} />
-            <Route path="/api-docs" element={<ApiDocsPage />} />
-            <Route path="/docs/:category" element={<DocsPage />} />
-            <Route path="/docs/:category/:page" element={<DocsPage />} />
-          </Routes>
-        </Layout>
+        <Routes>
+          <Route path="/api-docs" element={<ApiDocsPage />} />
+          <Route path="/*" element={
+            <Layout>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/blog" element={<BlogPage />} />
+                <Route path="/blog/:id" element={<BlogDetailPage />} />
+                <Route path="/docs/:category" element={<DocsPage />} />
+                <Route path="/docs/:category/:page" element={<DocsPage />} />
+              </Routes>
+            </Layout>
+          } />
+        </Routes>
         <Analytics />
       </Router>
     </MDXProvider>
