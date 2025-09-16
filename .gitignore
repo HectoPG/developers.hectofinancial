@@ -23,3 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Auto-generated markdown files
+public/pg/
+public/blog/
+public/ezauth/
+public/ezcp/
+public/whitelabel/
