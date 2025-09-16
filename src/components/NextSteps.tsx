@@ -100,30 +100,32 @@ export default function NextSteps({ title, steps, excludeTitle }: NextStepsProps
   const displaySteps = steps || (excludeTitle ? getOtherPaymentMethods(excludeTitle) : [])
   
   return (
-    <div>
-      <p className="mb-6 text-gray-700 text-lg font-medium">{title}</p>
+    <div className="my-8">
+      <p className="mb-6 text-gray-700 text-base font-medium">{title}</p>
       
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
         {displaySteps.map((step, index) => (
           <a 
             key={index}
-            href={step.href} 
-            className="block p-6 border rounded-2xl transition-all duration-200 group shadow-sm hover:shadow-md focus:outline-none"
-            style={{ 
-              backgroundColor: '#fff7f0',
-              borderColor: '#ffd9c1'
-            }}
+            href={step.href}
+            className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-orange-50 to-orange-100/50 p-4 transition-all duration-300 hover:shadow-lg hover:scale-[1.02]"
           >
-            <div className="text-center">
-              <div 
-                className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3 transition-all duration-200 shadow-sm group-hover:shadow-md"
-                style={{ backgroundColor: '#ffb089' }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#ff9566' }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#ffb089' }}
-              >
-                <span className="text-white text-xl">{step.icon}</span>
+            {/* 배경 그라데이션 효과 */}
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-100/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            
+            {/* 콘텐츠 - 세로 배치 */}
+            <div className="relative z-10 flex flex-col items-center text-center">
+              {/* 아이콘 */}
+              <div className="flex-shrink-0 mb-2">
+                <span className="text-2xl">{step.icon}</span>
               </div>
-              <span className="text-sm font-semibold text-gray-900 group-hover:text-gray-700 transition-colors">{step.title}</span>
+              
+              {/* 텍스트 */}
+              <div className="flex-1 min-w-0">
+                <span className="text-sm font-semibold text-gray-900 group-hover:text-orange-700 transition-colors duration-200">
+                  {step.title}
+                </span>
+              </div>
             </div>
           </a>
         ))}

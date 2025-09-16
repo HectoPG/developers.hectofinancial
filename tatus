@@ -1,0 +1,10 @@
+[33me9fbcb1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mcredit-card-docs[m[33m, [m[1;31morigin/credit-card-UI-detail[m[33m, [m[1;32mtest[m[33m)[m feat: UI 개선
+[33m6d3decd[m feat: 신용카드 문서 페이지 UI 개선 및 컴포넌트 통일
+[33m80af1fe[m feat: 신용카드 UI/UX 개선
+[33m76c8357[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m Merge pull request #49 from HectoPG/credit-card-carousel-update
+[33m6742971[m[33m ([m[1;31morigin/credit-card-carousel-update[m[33m)[m fix : carousel
+[33m089257c[m Merge pull request #46 from HectoPG/feature/sidebar_update_0911
+[33m1872943[m[33m ([m[1;31morigin/feature/sidebar_update_0911[m[33m)[m Merge pull request #45 from HectoPG/revert-44-main
+[33m0dc45e0[m[33m ([m[1;31morigin/revert-44-main[m[33m)[m Revert "fix : Side Navigation "
+[33ma5ae28c[m Merge pull request #44 from HectoPG/main
+[33mc3ee60f[m Merge pull request #43 from HectoPG/feature/credit-card-carousel-and-ui-improvements
