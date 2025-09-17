@@ -5,6 +5,7 @@ import remarkGfm from 'remark-gfm'
 import remarkFrontmatter from 'remark-frontmatter'
 import rehypePrism from 'rehype-prism-plus'
 import rehypeMdxCodeProps from 'rehype-mdx-code-props'
+// @ts-ignore
 import mdxFrontmatterPlugin from './plugins/vite-mdx-frontmatter.js'
 
 // https://vite.dev/config/
