@@ -1,7 +1,7 @@
 ---
 title: 결제 취소
 description: 신용카드, 계좌이체, 휴대폰결제 등 결제 취소 API
-category: 취소 API
+category: 결제 관리 API
 path: /spay/APICancel.do
 method: POST
 testUrl: https://tbgw.settlebank.co.kr/spay/APICancel.do
@@ -23,7 +23,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICancel.do
 
 ## 📋 요청 파라미터
 
-<ParameterCard
+<ApiParameterCard
   name="mchtId"
   type="string(10)"
   required={true}
@@ -31,7 +31,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICancel.do
   example="nxca_jt_bi"
 />
 
-<ParameterCard
+<ApiParameterCard
   name="orgTrdNo"
   type="string(50)"
   required={true}
@@ -39,7 +39,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICancel.do
   example="STFP_PGCAnxca_jt_il0211129135810M1494620"
 />
 
-<ParameterCard
+<ApiParameterCard
   name="orgMchtTrdNo"
   type="string(100)"
   required={true}
@@ -47,7 +47,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICancel.do
   example="ORDER20231215143022"
 />
 
-<ParameterCard
+<ApiParameterCard
   name="orgTrdDt"
   type="string(8)"
   required={true}
@@ -55,7 +55,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICancel.do
   example="20231215"
 />
 
-<ParameterCard
+<ApiParameterCard
   name="canAmt"
   type="string(12)"
   required={true}
@@ -64,7 +64,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICancel.do
   note="💰 부분취소 가능, 원거래금액 이하로만 설정 가능"
 />
 
-<ParameterCard
+<ApiParameterCard
   name="pktHash"
   type="string(64)"
   required={true}
@@ -101,27 +101,67 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICancel.do
 }
 ```
 
-## 📤 응답 예시
+## 📤 응답 파라미터
 
 ### 성공 응답
 
-```json
-{
-  "resultCode": "0000",
-  "resultMsg": "정상적으로 처리되었습니다.",
-  "canTrdNo": "STFP_CANCEL_nxca_jt_il0211129135810M1494621"
-}
-```
+<DocParameterCard
+  name="resultCode"
+  type="string"
+  required={true}
+  description="결과코드"
+  example="0000"
+  values={[
+    "0000: 성공",
+    "기타: 실패코드"
+  ]}
+/>
+
+<DocParameterCard
+  name="resultMsg"
+  type="string"
+  required={true}
+  description="결과메시지"
+  example="정상적으로 처리되었습니다."
+/>
+
+<DocParameterCard
+  name="canTrdNo"
+  type="string"
+  required={true}
+  description="취소 거래번호"
+  example="STFP_CANCEL_nxca_jt_il0211129135810M1494621"
+/>
 
 ### 실패 응답
 
-```json
-{
-  "resultCode": "1002",
-  "resultMsg": "취소금액이 원거래금액을 초과합니다.",
-  "canTrdNo": null
-}
-```
+<DocParameterCard
+  name="resultCode"
+  type="string"
+  required={true}
+  description="결과코드"
+  example="1002"
+  values={[
+    "1002: 취소금액이 원거래금액을 초과",
+    "기타: 각종 오류코드"
+  ]}
+/>
+
+<DocParameterCard
+  name="resultMsg"
+  type="string"
+  required={true}
+  description="결과메시지"
+  example="취소금액이 원거래금액을 초과합니다."
+/>
+
+<DocParameterCard
+  name="canTrdNo"
+  type="string"
+  required={false}
+  description="취소 거래번호 (실패시 null)"
+  example="null"
+/>
 
 ## 🔧 구현 예시
 

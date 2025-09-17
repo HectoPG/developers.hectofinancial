@@ -185,7 +185,7 @@ payWithSimplePayment('naverpay', 15000, '멤버십 구독');
 
 #### 📋 요청 파라미터
 
-<ParameterCard
+<DocParameterCard
   name="mchtId"
   type="string(10)"
   required={true}
@@ -198,7 +198,7 @@ payWithSimplePayment('naverpay', 15000, '멤버십 구독');
   note="간편결제 서비스별로 다른 상점ID가 필요할 수 있습니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="method"
   type="string(20)"
   required={true}
@@ -207,7 +207,7 @@ payWithSimplePayment('naverpay', 15000, '멤버십 구독');
   note="간편결제의 경우 항상 'corp' 고정값을 사용합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="corpPayCode"
   type="string(3)"
   required={true}
@@ -221,7 +221,7 @@ payWithSimplePayment('naverpay', 15000, '멤버십 구독');
   note="💡 사용하고자 하는 간편결제 서비스의 코드를 정확히 입력해야 합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="trdDt"
   type="string(8)"
   required={true}
@@ -229,7 +229,7 @@ payWithSimplePayment('naverpay', 15000, '멤버십 구독');
   example="20231215"
 />
 
-<ParameterCard
+<DocParameterCard
   name="trdTm"
   type="string(6)"
   required={true}
@@ -237,7 +237,7 @@ payWithSimplePayment('naverpay', 15000, '멤버십 구독');
   example="143022"
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtTrdNo"
   type="string(100)"
   required={true}
@@ -246,7 +246,7 @@ payWithSimplePayment('naverpay', 15000, '멤버십 구독');
   note="⚠️ 한글은 사용할 수 없으며, 영문, 숫자, 일부 특수문자만 사용 가능합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtName"
   type="string(100)"
   required={true}
@@ -254,7 +254,7 @@ payWithSimplePayment('naverpay', 15000, '멤버십 구독');
   example="헥토파이낸셜"
 />
 
-<ParameterCard
+<DocParameterCard
   name="pmtPrdtNm"
   type="string(128)"
   required={true}
@@ -262,7 +262,7 @@ payWithSimplePayment('naverpay', 15000, '멤버십 구독');
   example="테스트상품"
 />
 
-<ParameterCard
+<DocParameterCard
   name="trdAmt"
   type="number(12)"
   required={true}
@@ -271,7 +271,7 @@ payWithSimplePayment('naverpay', 15000, '멤버십 구독');
   note="⚠️ 이 필드는 AES 암호화가 필요합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="taxTypeCd"
   type="string(1)"
   required={false}
@@ -284,7 +284,7 @@ payWithSimplePayment('naverpay', 15000, '멤버십 구독');
   note="💡 공백일 경우 상점 설정에 따릅니다. 과세 유형별로 결제 수단이 상이할 수 있습니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="taxAmt"
   type="number(12)"
   required={false}
@@ -293,7 +293,7 @@ payWithSimplePayment('naverpay', 15000, '멤버십 구독');
   note="⚠️ 이 필드는 AES 암호화가 필요합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="vatAmt"
   type="number(12)"
   required={false}
@@ -302,7 +302,7 @@ payWithSimplePayment('naverpay', 15000, '멤버십 구독');
   note="⚠️ 이 필드는 AES 암호화가 필요합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="taxFreeAmt"
   type="number(12)"
   required={false}
@@ -311,7 +311,7 @@ payWithSimplePayment('naverpay', 15000, '멤버십 구독');
   note="⚠️ 이 필드는 AES 암호화가 필요합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="notiUrl"
   type="string(250)"
   required={true}
@@ -320,7 +320,7 @@ payWithSimplePayment('naverpay', 15000, '멤버십 구독');
   note="💡 실제 결제 처리는 반드시 이 URL에서 처리하세요."
 />
 
-<ParameterCard
+<DocParameterCard
   name="nextUrl"
   type="string(250)"
   required={true}
@@ -328,7 +328,7 @@ payWithSimplePayment('naverpay', 15000, '멤버십 구독');
   example="https://yoursite.com/payment/simple/success"
 />
 
-<ParameterCard
+<DocParameterCard
   name="cancUrl"
   type="string(250)"
   required={true}
@@ -336,7 +336,7 @@ payWithSimplePayment('naverpay', 15000, '멤버십 구독');
   example="https://yoursite.com/payment/cancel"
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtParam"
   type="string(4000)"
   required={false}
@@ -344,7 +344,7 @@ payWithSimplePayment('naverpay', 15000, '멤버십 구독');
   example="serviceType=payco&userId=12345&eventCode=WINTER2023"
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtCustId"
   type="string(50)"
   required={false}
@@ -353,7 +353,7 @@ payWithSimplePayment('naverpay', 15000, '멤버십 구독');
   note="⚠️ 이 필드는 AES 암호화가 필요합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="appScheme"
   type="string(100)"
   required={false}
@@ -362,7 +362,7 @@ payWithSimplePayment('naverpay', 15000, '멤버십 구독');
   note="💡 자체앱을 구축하는 경우에만 사용합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="pktHash"
   type="string(200)"
   required={true}

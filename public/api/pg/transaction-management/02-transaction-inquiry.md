@@ -1,13 +1,3 @@
----
-title: 거래 상태 조회
-description: 실시간 거래 상태 조회 API
-category: 거래 관리 API
-path: /spay/APITrdStatInq.do
-method: POST
-testUrl: https://tbgw.settlebank.co.kr/spay/APITrdStatInq.do
-prodUrl: https://gw.settlebank.co.kr/spay/APITrdStatInq.do
----
-
 # 거래 상태 조회
 
 실시간 거래 상태 조회 API입니다. 특정 거래의 현재 상태와 상세 정보를 조회할 수 있습니다.
@@ -23,68 +13,19 @@ prodUrl: https://gw.settlebank.co.kr/spay/APITrdStatInq.do
 
 ## 📋 요청 파라미터
 
-<ParameterCard
-  name="mchtId"
-  type="string(10)"
-  required={true}
-  description="헥토파이낸셜에서 부여하는 고유 상점아이디입니다."
-  example="nxca_jt_bi"
-/>
 
-<ParameterCard
-  name="mchtTrdNo"
-  type="string(100)"
-  required={true}
-  description="상점에서 생성한 고유 주문번호입니다."
-  example="ORDER20231215143022"
-/>
 
-<ParameterCard
-  name="trdDt"
-  type="string(8)"
-  required={true}
-  description="거래 요청 일자입니다. yyyyMMdd 형식으로 입력합니다."
-  example="20231215"
-/>
 
-<ParameterCard
-  name="trdTm"
-  type="string(6)"
-  required={true}
-  description="거래 요청 시간입니다. HHMMSS 형식으로 입력합니다."
-  example="143022"
-/>
 
-<ParameterCard
-  name="method"
-  type="string(2)"
-  required={true}
-  description="결제수단 코드입니다."
-  example="CA"
-  values={[
-    "CA: 신용카드",
-    "BT: 계좌이체",
-    "MP: 휴대폰결제",
-    "VB: 가상계좌"
-  ]}
-/>
 
-<ParameterCard
-  name="trdAmt"
-  type="string(12)"
-  required={true}
-  description="거래금액입니다."
-  example="1000"
-/>
 
-<ParameterCard
-  name="pktHash"
-  type="string(64)"
-  required={true}
-  description="SHA256 방식으로 생성한 해쉬값입니다."
-  example="f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
-  note="🔒 거래일자 + 거래시간 + 상점아이디 + 상점주문번호 + 결제수단 + 거래금액 + 해쉬키 순서로 조합"
-/>
+
+
+
+
+
+
+
 
 ## 💻 요청 예시
 
@@ -116,37 +57,43 @@ prodUrl: https://gw.settlebank.co.kr/spay/APITrdStatInq.do
 }
 ```
 
-## 📤 응답 예시
+## 📤 응답 파라미터
 
 ### 성공 응답
 
-```json
-{
-  "resultCode": "0000",
-  "resultMsg": "정상적으로 처리되었습니다.",
-  "trdStat": "0021",
-  "trdNo": "STFP_PGCAnxca_jt_il0211129135810M1494620",
-  "mchtTrdNo": "ORDER20231215143022",
-  "trdAmt": "1000",
-  "payDt": "20231215",
-  "payTm": "143025"
-}
-```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### 거래 없음 응답
 
-```json
-{
-  "resultCode": "1004",
-  "resultMsg": "해당 거래를 찾을 수 없습니다.",
-  "trdStat": null,
-  "trdNo": null,
-  "mchtTrdNo": null,
-  "trdAmt": null,
-  "payDt": null,
-  "payTm": null
-}
-```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## 📊 거래 상태 코드
 
@@ -213,24 +160,7 @@ if (result.resultCode === "0000") {
 
 // 주기적 거래 상태 확인 함수
 async function checkTransactionStatus(mchtTrdNo, maxAttempts = 10) {
-  for (let i = 0; i < maxAttempts; i++) {
-    const result = await callTransactionInquiryAPI({
-      ...inquiryParams,
-      mchtTrdNo: mchtTrdNo
-    });
-    
-    if (result.resultCode === "0000") {
-      if (result.trdStat === "0021") {
-        console.log('✅ 결제 완료 확인됨');
-        return true;
-      } else if (result.trdStat === "0031") {
-        console.log('❌ 결제 실패');
-        return false;
-      }
-    }
-    
-    // 5초 대기 후 재시도
-    await new Promise(resolve => setTimeout(resolve, 5000));
+  for (let i = 0; i  setTimeout(resolve, 5000));
   }
   
   console.log('⏰ 조회 시간 초과');

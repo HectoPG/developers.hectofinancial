@@ -44,6 +44,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
     "nxca_ks_gu: 구인증 신용카드",
     "nxca_jt_bi: 비인증 신용카드"
   ]}
+  inputType="text"
+  defaultValue="nxca_jt_bi"
+  placeholder="상점아이디를 입력하세요"
+  section="params"
 />
 
 <ParameterCard
@@ -53,6 +57,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   description="전문의 버전입니다."
   example="0A19"
   note="고정값으로 사용합니다."
+  inputType="text"
+  defaultValue="0A19"
+  fixed={true}
+  section="params"
 />
 
 <ParameterCard
@@ -62,6 +70,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   description="결제수단 코드입니다."
   example="CA"
   note="신용카드 결제의 경우 'CA' 고정값을 사용합니다."
+  inputType="text"
+  defaultValue="CA"
+  fixed={true}
+  section="params"
 />
 
 <ParameterCard
@@ -71,6 +83,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   description="업무구분 코드입니다."
   example="B0"
   note="일반 결제의 경우 'B0' 고정값을 사용합니다."
+  inputType="text"
+  defaultValue="B0"
+  fixed={true}
+  section="params"
 />
 
 <ParameterCard
@@ -80,6 +96,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   description="암호화 구분 코드입니다."
   example="23"
   note="AES 암호화 사용 시 '23' 고정값을 사용합니다."
+  inputType="text"
+  defaultValue="23"
+  fixed={true}
+  section="params"
 />
 
 <ParameterCard
@@ -89,6 +109,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   description="상점에서 생성하는 고유한 거래번호입니다."
   example="ORDER20231215143022"
   note="⚠️ 한글은 사용할 수 없으며, 영문, 숫자, 일부 특수문자만 사용 가능합니다."
+  inputType="text"
+  defaultValue="ORDER20231215143022"
+  placeholder="상점주문번호를 입력하세요"
+  section="params"
 />
 
 <ParameterCard
@@ -97,6 +121,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   required={true}
   description="거래 요청 일자입니다. yyyyMMdd 형식으로 전달합니다."
   example="20231215"
+  inputType="text"
+  defaultValue="20231215"
+  placeholder="거래일자를 입력하세요"
+  section="params"
 />
 
 <ParameterCard
@@ -105,6 +133,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   required={true}
   description="거래 요청 시간입니다. HH24MISS 형식으로 전달합니다."
   example="143022"
+  inputType="text"
+  defaultValue="143022"
+  placeholder="거래시간을 입력하세요"
+  section="params"
 />
 
 <ParameterCard
@@ -113,10 +145,14 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   required={false}
   description="모바일 여부입니다."
   example="N"
+  inputType="text"
+  defaultValue="N"
+  placeholder="모바일 여부를 입력하세요"
   values={[
     "Y: 모바일웹/앱",
     "N: PC 또는 그 외"
   ]}
+  section="params"
 />
 
 <ParameterCard
@@ -125,6 +161,9 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   required={false}
   description="OS 구분입니다."
   example="W"
+  inputType="text"
+  defaultValue="W"
+  placeholder="OS 타입을 입력하세요"
   values={[
     "A: Android",
     "I: iOS", 
@@ -133,6 +172,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
     "E: 기타",
     "공백: 확인불가"
   ]}
+  section="params"
 />
 
 ### data 객체
@@ -143,7 +183,12 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   required={true}
   description="SHA256 방식으로 생성한 해쉬값입니다."
   example="f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
+  inputType="text"
+  defaultValue="f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
+  placeholder="SHA256 해쉬값을 입력하세요"
+  fixed={true}
   note="🔒 거래일자 + 거래시간 + 상점아이디 + 상점주문번호 + 거래금액(평문) + 해쉬키 순서로 조합"
+  section="data"
 />
 
 <ParameterCard
@@ -152,6 +197,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   required={true}
   description="결제상품명입니다."
   example="테스트상품"
+  inputType="text"
+  defaultValue="테스트상품"
+  placeholder="결제상품명을 입력하세요"
+  section="data"
 />
 
 <ParameterCard
@@ -160,6 +209,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   required={true}
   description="상점 고객명입니다."
   example="홍길동"
+  inputType="text"
+  defaultValue="홍길동"
+  placeholder="상점 고객명을 입력하세요"
+  section="data"
 />
 
 <ParameterCard
@@ -168,6 +221,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   required={true}
   description="상점 고객아이디입니다."
   example="HongGilDong"
+  inputType="text"
+  defaultValue="HongGilDong"
+  placeholder="고객 아이디를 입력하세요"
+  section="data"
 />
 
 <ParameterCard
@@ -176,6 +233,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   required={false}
   description="상점 고객 이메일주소입니다."
   example="HongGilDong@example.com"
+  inputType="email"
+  defaultValue="HongGilDong@example.com"
+  placeholder="이메일 주소를 입력하세요"
+  section="data"
 />
 
 <ParameterCard
@@ -185,6 +246,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   description="카드번호입니다. AES 암호화하여 전달합니다."
   example="1111222233334444"
   note="🔒 AES 암호화 필수"
+  inputType="text"
+  defaultValue="1111222233334444"
+  placeholder="카드번호를 입력하세요"
+  section="data"
 />
 
 <ParameterCard
@@ -194,6 +259,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   description="유효기간(월)입니다. AES 암호화하여 전달합니다."
   example="12"
   note="🔒 AES 암호화 필수"
+  inputType="text"
+  defaultValue="12"
+  placeholder="월을 입력하세요 (01-12)"
+  section="data"
 />
 
 <ParameterCard
@@ -203,6 +272,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   description="유효기간(년)입니다. AES 암호화하여 전달합니다."
   example="24"
   note="🔒 AES 암호화 필수"
+  inputType="text"
+  defaultValue="24"
+  placeholder="년도를 입력하세요 (YY)"
+  section="data"
 />
 
 <ParameterCard
@@ -212,6 +285,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   description="식별번호입니다. 생년월일 6자리 또는 사업자 번호 10자리, AES 암호화하여 전달합니다. 구인증만 사용합니다."
   example="991231"
   note="🔒 AES 암호화 필수, 구인증에서만 사용"
+  inputType="text"
+  defaultValue="991231"
+  placeholder="주민등록번호 앞 6자리를 입력하세요"
+  section="data"
 />
 
 <ParameterCard
@@ -221,6 +298,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   description="카드비밀번호 앞 2자리입니다. AES 암호화하여 전달합니다. 구인증만 사용합니다."
   example="00"
   note="🔒 AES 암호화 필수, 구인증에서만 사용"
+  inputType="password"
+  defaultValue="00"
+  placeholder="카드 비밀번호 앞 2자리를 입력하세요"
+  section="data"
 />
 
 <ParameterCard
@@ -229,10 +310,14 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   required={true}
   description="할부개월수입니다."
   example="00"
+  inputType="text"
+  defaultValue="00"
+  placeholder="할부개월수를 입력하세요"
   values={[
     "00: 일시불",
     "02~12: 2개월~12개월 할부"
   ]}
+  section="data"
 />
 
 <ParameterCard
@@ -241,10 +326,14 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   required={true}
   description="통화구분입니다."
   example="KRW"
+  inputType="text"
+  defaultValue="KRW"
+  fixed={true}
   values={[
     "KRW: 국내결제",
     "USD: 해외결제"
   ]}
+  section="data"
 />
 
 <ParameterCard
@@ -253,12 +342,16 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   required={false}
   description="세금유형입니다."
   example="N"
+  inputType="text"
+  defaultValue="N"
+  placeholder="과세구분코드를 입력하세요"
   values={[
     "N: 과세",
     "Y: 면세", 
     "G: 복합과세",
     "공백: 상점 설정에 따름"
   ]}
+  section="data"
 />
 
 <ParameterCard
@@ -268,6 +361,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   description="거래금액입니다. AES 암호화하여 전달합니다."
   example="1000"
   note="🔒 AES 암호화 필수, 해외결제시 정수표기"
+  inputType="number"
+  defaultValue="1000"
+  placeholder="거래금액을 입력하세요"
+  section="data"
 />
 
 <ParameterCard
@@ -277,6 +374,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   description="거래금액 중 과세금액입니다. 복합과세일 경우 필수, AES 암호화하여 전달합니다."
   example="909"
   note="🔒 AES 암호화 필수, 복합과세일 경우 필수"
+  inputType="number"
+  defaultValue="909"
+  placeholder="부가세 금액을 입력하세요"
+  section="data"
 />
 
 <ParameterCard
@@ -286,6 +387,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   description="거래금액 중 부가세금액입니다. 복합과세일 경우 필수, AES 암호화하여 전달합니다."
   example="91"
   note="🔒 AES 암호화 필수, 복합과세일 경우 필수"
+  inputType="number"
+  defaultValue="91"
+  placeholder="VAT 금액을 입력하세요"
+  section="data"
 />
 
 <ParameterCard
@@ -295,6 +400,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   description="거래금액 중 비과세금액입니다. 복합과세일 경우 필수, AES 암호화하여 전달합니다."
   example="0"
   note="🔒 AES 암호화 필수, 복합과세일 경우 필수"
+  inputType="number"
+  defaultValue="0"
+  placeholder="면세 금액을 입력하세요"
+  section="data"
 />
 
 <ParameterCard
@@ -304,6 +413,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   description="신용카드 봉사료입니다. AES 암호화하여 전달합니다."
   example="10"
   note="🔒 AES 암호화 필수"
+  inputType="number"
+  defaultValue="10"
+  placeholder="봉사료 금액을 입력하세요"
+  section="data"
 />
 
 <ParameterCard
@@ -312,6 +425,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   required={false}
   description="결제완료후, 헥토파이낸셜에서 상점으로 전달하는 노티를 수신하는Callback URL입니다."
   example="https://example.com/notiUrl"
+  inputType="url"
+  defaultValue="https://example.com/notiUrl"
+  placeholder="통보 URL을 입력하세요"
+  section="data"
 />
 
 <ParameterCard
@@ -320,6 +437,10 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   required={false}
   description="기타 주문 정보를 입력하는 상점 예약 필드입니다."
   example="name=HongGilDong&age=25"
+  inputType="text"
+  defaultValue="name=HongGilDong&age=25"
+  placeholder="임의 파라미터를 입력하세요"
+  section="data"
 />
 
 ## 💻 요청 예시

@@ -57,7 +57,7 @@
 
 ### 📋 요청 파라미터
 
-<ParameterCard
+<DocParameterCard
   name="mchtId"
   type="string(12)"
   required={true}
@@ -65,7 +65,7 @@
   example="nx_mid_il"
 />
 
-<ParameterCard
+<DocParameterCard
   name="ver"
   type="string(4)"
   required={true}
@@ -74,7 +74,7 @@
   note="고정값으로 사용합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtTrdNo"
   type="string(100)"
   required={true}
@@ -82,7 +82,7 @@
   example="ORDER20231215143022"
 />
 
-<ParameterCard
+<DocParameterCard
   name="trdDt"
   type="string(8)"
   required={true}
@@ -90,7 +90,7 @@
   example="20231215"
 />
 
-<ParameterCard
+<DocParameterCard
   name="trdTm"
   type="string(6)"
   required={true}
@@ -98,7 +98,7 @@
   example="143022"
 />
 
-<ParameterCard
+<DocParameterCard
   name="method"
   type="string(2)"
   required={true}
@@ -119,7 +119,7 @@
   ]}
 />
 
-<ParameterCard
+<DocParameterCard
   name="trdAmt"
   type="number(12)"
   required={true}
@@ -128,7 +128,7 @@
   note="1,000원은 1000으로 입력합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="orgTrdDt"
   type="string(8)"
   required={true}
@@ -136,7 +136,7 @@
   example="20231215"
 />
 
-<ParameterCard
+<DocParameterCard
   name="orgMchtTrdNo"
   type="string(100)"
   required={true}
@@ -144,7 +144,7 @@
   example="ORDER20231215143022"
 />
 
-<ParameterCard
+<DocParameterCard
   name="orgTrdNo"
   type="string(40)"
   required={false}
@@ -152,7 +152,7 @@
   example="STFP_PGCAnxca_jt_il0231215143022M1494620"
 />
 
-<ParameterCard
+<DocParameterCard
   name="pktHash"
   type="string(200)"
   required={true}
@@ -299,7 +299,7 @@ inquireTransactionStatus(inquiryParams)
 
 ### 📋 요청 파라미터
 
-<ParameterCard
+<DocParameterCard
   name="mchtId"
   type="string(10)"
   required={true}
@@ -307,7 +307,7 @@ inquireTransactionStatus(inquiryParams)
   example="nxca_jt_il"
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtTy"
   type="string(1)"
   required={true}
@@ -316,7 +316,7 @@ inquireTransactionStatus(inquiryParams)
   note="고정값으로 'M'을 사용합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="method"
   type="string(2)"
   required={true}
@@ -330,7 +330,7 @@ inquireTransactionStatus(inquiryParams)
   ]}
 />
 
-<ParameterCard
+<DocParameterCard
   name="pdTy"
   type="string(1)"
   required={true}
@@ -339,7 +339,7 @@ inquireTransactionStatus(inquiryParams)
   note="고정값으로 'D'를 사용합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="trdDtSt"
   type="string(8)"
   required={true}
@@ -347,7 +347,7 @@ inquireTransactionStatus(inquiryParams)
   example="20231215"
 />
 
-<ParameterCard
+<DocParameterCard
   name="pktHash"
   type="string(200)"
   required={true}
@@ -499,7 +499,7 @@ ST92|해쉬 값 불일치.|0|
 
 ### 📋 요청 파라미터
 
-<ParameterCard
+<DocParameterCard
   name="mchtId"
   type="string(10)"
   required={true}
@@ -507,7 +507,7 @@ ST92|해쉬 값 불일치.|0|
   example="nxca_jt_il"
 />
 
-<ParameterCard
+<DocParameterCard
   name="method"
   type="string(2)"
   required={true}
@@ -515,7 +515,7 @@ ST92|해쉬 값 불일치.|0|
   example="CA"
 />
 
-<ParameterCard
+<DocParameterCard
   name="crtrDt"
   type="string(8)"
   required={true}
@@ -523,7 +523,7 @@ ST92|해쉬 값 불일치.|0|
   example="20231218"
 />
 
-<ParameterCard
+<DocParameterCard
   name="pktHash"
   type="string(32)"
   required={true}
