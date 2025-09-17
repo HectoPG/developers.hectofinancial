@@ -10,45 +10,52 @@ interface ApiDocument {
   title: string;
   path: string;
   category: string;
+  subcategory: string;
 }
 
 const ApiDocsPage: React.FC = () => {
   const [selectedApi, setSelectedApi] = useState<ApiDocument | null>(null);
   const [expandedServices, setExpandedServices] = useState<Set<string>>(new Set(['PG 결제']));
+  const [expandedSubcategories, setExpandedSubcategories] = useState<Set<string>>(new Set(['PG 결제-신용카드']));
   const [ApiComponent, setApiComponent] = useState<React.ComponentType | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // API 문서 목록 (정적 정의)
+  // API 문서 목록 (정적 정의) - 3단계 구조
   const apiDocuments: ApiDocument[] = [
     {
       id: 'card-payment',
       title: '신용카드 결제',
       path: '/docs/api/pg/01-card-payment',
-      category: 'PG 결제'
+      category: 'PG 결제',
+      subcategory: '신용카드'
     },
     {
       id: 'card-auth',
       title: '신용카드 빌키 발급',
       path: '/docs/api/pg/02-card-auth',
-      category: 'PG 결제'
+      category: 'PG 결제',
+      subcategory: '신용카드'
     },
     {
       id: 'payment-cancel',
       title: '결제 취소',
       path: '/docs/api/pg/03-payment-cancel',
-      category: 'PG 결제'
+      category: 'PG 결제',
+      subcategory: '거래관리'
     },
     {
       id: 'virtual-account',
       title: '가상계좌 채번',
       path: '/docs/api/pg/04-virtual-account',
-      category: 'PG 결제'
+      category: 'PG 결제',
+      subcategory: '가상계좌'
     },
     {
       id: 'transaction-inquiry',
       title: '거래 상태 조회',
       path: '/docs/api/pg/05-transaction-inquiry',
-      category: 'PG 결제'
+      category: 'PG 결제',
+      subcategory: '거래관리'
     }
   ];
 
@@ -95,13 +102,25 @@ const ApiDocsPage: React.FC = () => {
     setExpandedServices(newExpanded);
   };
 
+  const toggleSubcategory = (subcategoryKey: string) => {
+    const newExpanded = new Set(expandedSubcategories);
+    if (newExpanded.has(subcategoryKey)) {
+      newExpanded.delete(subcategoryKey);
+    } else {
+      newExpanded.add(subcategoryKey);
+    }
+    setExpandedSubcategories(newExpanded);
+  };
+
   const leftSidebar = (closeMobileSidebar: () => void) => (
     <ApiSidebar
       apiDocuments={apiDocuments}
       selectedApi={selectedApi}
       expandedServices={expandedServices}
+      expandedSubcategories={expandedSubcategories}
       onApiSelect={setSelectedApi}
       onToggleService={toggleService}
+      onToggleSubcategory={toggleSubcategory}
       onMobileClose={closeMobileSidebar}
     />
   );
