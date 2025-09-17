@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Play, Copy, Check } from 'lucide-react';
-import { useApiTest } from '../contexts/ApiTestContext';
 import { type ApiDocument } from '../config/apiDocumentation';
 
 interface ApiInfo {
@@ -20,12 +19,9 @@ interface ApiTestPanelProps {
 }
 
 const ApiTestPanel: React.FC<ApiTestPanelProps> = ({ selectedApi }) => {
-  const { getParameterValuesBySection } = useApiTest();
   const [apiInfo, setApiInfo] = useState<ApiInfo | null>(null);
   const [selectedEnvironment, setSelectedEnvironment] = useState<'test' | 'prod'>('test');
   const [requestBody, setRequestBody] = useState<string>('');
-  const [response] = useState<string>('');
-  const [loading] = useState(false);
   const [copied, setCopied] = useState(false);
 
   // API 문서에서 자동으로 export된 apiInfo 가져오기
