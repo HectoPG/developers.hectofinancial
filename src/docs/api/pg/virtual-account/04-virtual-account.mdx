@@ -1,7 +1,7 @@
 ---
 title: 가상계좌 채번
 description: 가상계좌 발급 및 채번취소 API
-category: 가상계좌 API
+category: 결제 API
 path: /spay/APIVBank.do
 method: POST
 testUrl: https://tbgw.settlebank.co.kr/spay/APIVBank.do
@@ -23,7 +23,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APIVBank.do
 
 ## 📋 요청 파라미터
 
-<ParameterCard
+<ApiParameterCard
   name="mchtId"
   type="string(10)"
   required={true}
@@ -31,7 +31,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APIVBank.do
   example="nxca_jt_bi"
 />
 
-<ParameterCard
+<ApiParameterCard
   name="mchtTrdNo"
   type="string(100)"
   required={true}
@@ -40,7 +40,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APIVBank.do
   note="⚠️ 한글은 사용할 수 없으며, 영문, 숫자, 일부 특수문자만 사용 가능합니다."
 />
 
-<ParameterCard
+<ApiParameterCard
   name="trdDt"
   type="string(8)"
   required={true}
@@ -48,7 +48,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APIVBank.do
   example="20231215"
 />
 
-<ParameterCard
+<ApiParameterCard
   name="trdTm"
   type="string(6)"
   required={true}
@@ -56,7 +56,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APIVBank.do
   example="143022"
 />
 
-<ParameterCard
+<ApiParameterCard
   name="trdAmt"
   type="string(12)"
   required={true}
@@ -65,7 +65,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APIVBank.do
   note="💰 입금 예정 금액을 설정하며, 이 금액으로 입금 시 자동 승인됩니다."
 />
 
-<ParameterCard
+<ApiParameterCard
   name="pktHash"
   type="string(64)"
   required={true}
@@ -74,7 +74,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APIVBank.do
   note="🔒 거래일자 + 거래시간 + 상점아이디 + 상점주문번호 + 거래금액 + 해쉬키 순서로 조합"
 />
 
-<ParameterCard
+<ApiParameterCard
   name="expDt"
   type="string(8)"
   required={false}
@@ -83,7 +83,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APIVBank.do
   note="⏰ 설정하지 않으면 기본 만료일(7일 후)이 적용됩니다."
 />
 
-<ParameterCard
+<ApiParameterCard
   name="bankCd"
   type="string(3)"
   required={false}
@@ -129,31 +129,99 @@ prodUrl: https://gw.settlebank.co.kr/spay/APIVBank.do
 }
 ```
 
-## 📤 응답 예시
+## 📤 응답 파라미터
 
 ### 성공 응답
 
-```json
-{
-  "resultCode": "0000",
-  "resultMsg": "정상적으로 처리되었습니다.",
-  "vbankNo": "1234567890123456",
-  "vbankNm": "국민은행",
-  "expDt": "20231222"
-}
-```
+<DocParameterCard
+  name="resultCode"
+  type="string"
+  required={true}
+  description="결과코드"
+  example="0000"
+  values={[
+    "0000: 성공",
+    "기타: 실패코드"
+  ]}
+/>
+
+<DocParameterCard
+  name="resultMsg"
+  type="string"
+  required={true}
+  description="결과메시지"
+  example="정상적으로 처리되었습니다."
+/>
+
+<DocParameterCard
+  name="vbankNo"
+  type="string"
+  required={true}
+  description="가상계좌번호"
+  example="1234567890123456"
+/>
+
+<DocParameterCard
+  name="vbankNm"
+  type="string"
+  required={true}
+  description="가상계좌 은행명"
+  example="국민은행"
+/>
+
+<DocParameterCard
+  name="expDt"
+  type="string"
+  required={true}
+  description="가상계좌 만료일 (YYYYMMDD)"
+  example="20231222"
+/>
 
 ### 실패 응답
 
-```json
-{
-  "resultCode": "1003",
-  "resultMsg": "가상계좌 발급에 실패했습니다.",
-  "vbankNo": null,
-  "vbankNm": null,
-  "expDt": null
-}
-```
+<DocParameterCard
+  name="resultCode"
+  type="string"
+  required={true}
+  description="결과코드"
+  example="1003"
+  values={[
+    "1003: 가상계좌 발급 실패",
+    "기타: 각종 오류코드"
+  ]}
+/>
+
+<DocParameterCard
+  name="resultMsg"
+  type="string"
+  required={true}
+  description="결과메시지"
+  example="가상계좌 발급에 실패했습니다."
+/>
+
+<DocParameterCard
+  name="vbankNo"
+  type="string"
+  required={false}
+  description="가상계좌번호 (실패시 null)"
+  example="null"
+/>
+
+<DocParameterCard
+  name="vbankNm"
+  type="string"
+  required={false}
+  description="가상계좌 은행명 (실패시 null)"
+  example="null"
+/>
+
+<DocParameterCard
+  name="expDt"
+  type="string"
+  required={false}
+  description="가상계좌 만료일 (실패시 null)"
+  example="null"
+/>
 
 ## 🔧 구현 예시
 

@@ -1,18 +1,10 @@
 import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
 import clsx from 'clsx';
-
-interface ApiDocument {
-  id: string;
-  title: string;
-  path: string;
-  category: string;
-  subcategory: string;
-}
+import { type ApiDocument, apiDocumentationConfig } from '../config/apiDocumentation';
 
 interface ApiSidebarProps {
-  apiDocuments: ApiDocument[];
-  selectedApi: ApiDocument | null;
   expandedServices: Set<string>;
   expandedSubcategories: Set<string>;
   onApiSelect: (api: ApiDocument) => void;
@@ -22,8 +14,6 @@ interface ApiSidebarProps {
 }
 
 const ApiSidebar: React.FC<ApiSidebarProps> = ({
-  apiDocuments,
-  selectedApi,
   expandedServices,
   expandedSubcategories,
   onApiSelect,
@@ -31,18 +21,23 @@ const ApiSidebar: React.FC<ApiSidebarProps> = ({
   onToggleSubcategory,
   onMobileClose,
 }) => {
-  // API 문서를 카테고리 > 서브카테고리별로 그룹화
-  const apiGroups = apiDocuments.reduce((groups, api) => {
-    const category = api.category;
-    const subcategory = api.subcategory;
-    
-    if (!groups[category]) {
-      groups[category] = {};
-    }
-    if (!groups[category][subcategory]) {
-      groups[category][subcategory] = [];
-    }
-    groups[category][subcategory].push(api);
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // API 선택 시 URL 변경
+  const handleApiSelect = (api: ApiDocument) => {
+    // path에서 자동으로 URL 생성: /docs/api/pg/credit-card/01-card-payment
+    navigate(api.path);
+    onApiSelect(api);
+    onMobileClose?.();
+  };
+  
+  // 정적 설정에서 API 그룹 가져오기
+  const apiGroups = apiDocumentationConfig.reduce((groups, category) => {
+    groups[category.name] = {};
+    category.subcategories.forEach(subcategory => {
+      groups[category.name][subcategory.name] = subcategory.documents;
+    });
     return groups;
   }, {} as Record<string, Record<string, ApiDocument[]>>);
 
@@ -50,6 +45,11 @@ const ApiSidebar: React.FC<ApiSidebarProps> = ({
     <div className="p-4">
       {Object.entries(apiGroups).map(([categoryName, subcategories]) => {
         const isServiceExpanded = expandedServices.has(categoryName);
+        // 현재 URL이 이 카테고리에 속하는지 확인
+        const isServiceActive = location.pathname.startsWith('/docs/api') && 
+          Object.values(subcategories).some(apis => 
+            apis.some(api => location.pathname === api.path)
+          );
         
         return (
           <div key={categoryName} className="mb-4">
@@ -57,8 +57,10 @@ const ApiSidebar: React.FC<ApiSidebarProps> = ({
             <button
               onClick={() => onToggleService(categoryName)}
               className={clsx(
-                'w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none',
-                'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                'w-full flex items-center justify-between px-2 py-1.5 text-sm font-medium rounded-md transition-colors focus:outline-none',
+                isServiceActive || isServiceExpanded
+                  ? 'text-hecto-600' 
+                  : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
               )}
             >
               <div className="flex items-center">
@@ -77,6 +79,8 @@ const ApiSidebar: React.FC<ApiSidebarProps> = ({
                 {Object.entries(subcategories).map(([subcategoryName, apis]) => {
                   const subcategoryKey = `${categoryName}-${subcategoryName}`;
                   const isSubcategoryExpanded = expandedSubcategories.has(subcategoryKey);
+                  // 현재 URL이 이 서브카테고리에 속하는지 확인
+                  const isSubcategoryActive = apis.some(api => location.pathname === api.path);
                   
                   return (
                     <div key={subcategoryKey}>
@@ -84,8 +88,10 @@ const ApiSidebar: React.FC<ApiSidebarProps> = ({
                       <button
                         onClick={() => onToggleSubcategory(subcategoryKey)}
                         className={clsx(
-                          'w-full flex items-center justify-between px-2 py-1.5 text-xs font-medium rounded transition-colors focus:outline-none',
-                          'text-gray-600 hover:bg-gray-100 hover:text-gray-800'
+                          'w-full flex items-center justify-between px-2 py-1.5 text-sm rounded-md transition-colors focus:outline-none',
+                          isSubcategoryActive || isSubcategoryExpanded
+                            ? 'text-hecto-600 font-medium' 
+                            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                         )}
                       >
                         <div className="flex items-center">
@@ -102,28 +108,25 @@ const ApiSidebar: React.FC<ApiSidebarProps> = ({
                       {isSubcategoryExpanded && (
                         <div className="mt-1 ml-4 space-y-1">
                           {/* 3단계: 개별 API */}
-                          {apis.map((api) => (
-                            <button
-                              key={api.id}
-                              onClick={() => {
-                                onApiSelect(api);
-                                onMobileClose?.();
-                              }}
-                              className={clsx(
-                                'w-full text-left p-2 rounded border transition-all focus:outline-none',
-                                selectedApi?.id === api.id
-                                  ? 'bg-hecto-50 border-hecto-200 text-hecto-900'
-                                  : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
-                              )}
+                          {apis.map((api) => {
+                            // 현재 URL이 이 API와 일치하는지 확인
+                            const isApiActive = location.pathname === api.path;
+                            
+                            return (
+                              <button
+                                key={api.id}
+                                onClick={() => handleApiSelect(api)}
+                                className={clsx(
+                                  'w-full text-left px-2 py-1.5 text-sm rounded-md transition-colors focus:outline-none',
+                                  isApiActive
+                                    ? 'text-hecto-600 font-medium'
+                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                )}
                             >
-                              <div className="flex items-center justify-between">
-                                <span className="font-medium text-xs">{api.title}</span>
-                                <span className="bg-green-100 text-green-700 text-xs px-1.5 py-0.5 rounded">
-                                  POST
-                                </span>
-                              </div>
+                              {api.title}
                             </button>
-                          ))}
+                            );
+                          })}
                         </div>
                       )}
                     </div>

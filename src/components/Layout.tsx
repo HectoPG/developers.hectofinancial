@@ -4,9 +4,12 @@ import { Menu, X, FileText, Layers, ChevronDown, BookOpen, Search, ChevronUp } f
 import clsx from 'clsx'
 import TableOfContents from './TableOfContents'
 import ServiceSidebar from './ServiceSidebar'
+import ApiSidebar from './ApiSidebar'
+import ApiTestPanel from './ApiTestPanel'
 import SearchModal from './SearchModal'
 import { getNavigationCategories } from '../config/documentation'
 import { getIcon } from '../utils/icons'
+import { ApiTestProvider } from '../contexts/ApiTestContext'
 
 // 중앙화된 설정에서 네비게이션 생성
 const generateNavigation = () => {
@@ -25,7 +28,7 @@ const generateNavigation = () => {
         icon: getIcon(category.icon)
       }))
     },
-    { name: 'API 문서', href: '/api-docs', icon: BookOpen, description: '인터랙티브 API 문서' },
+    { name: 'API 문서', href: '/docs/api', icon: BookOpen, description: '인터랙티브 API 문서' },
     { name: '블로그', href: '/blog', icon: FileText, description: '기술 블로그 및 소식' },
   ]
 }
@@ -36,7 +39,7 @@ const navigation = generateNavigation()
 interface LayoutProps {
   children: React.ReactNode
   leftSidebar?: React.ReactNode | ((closeMobileSidebar: () => void) => React.ReactNode)
-  rightSidebar?: React.ReactNode
+  rightSidebar?: React.ReactNode | ((closeMobileSidebar: () => void) => React.ReactNode)
   mobileSidebarTitle?: string
 }
 
@@ -50,7 +53,38 @@ export default function Layout({ children, leftSidebar, rightSidebar, mobileSide
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   // 서비스 페이지 또는 API 문서 페이지인지 확인
-  const isDocumentationPage = location.pathname.startsWith('/docs/') || location.pathname.startsWith('/api-docs')
+  const isDocumentationPage = location.pathname.startsWith('/docs/')
+  const isApiPage = location.pathname.startsWith('/docs/api')
+  
+
+  // API 사이드바 렌더링 함수
+  const renderApiSidebar = (isMobile: boolean) => {
+    const apiData = (window as any)?.apiLayoutData;
+    if (!apiData) return <div className="p-4 text-gray-500">API 데이터 로딩 중...</div>;
+
+    return (
+      <ApiSidebar
+        expandedServices={apiData.expandedServices}
+        expandedSubcategories={apiData.expandedSubcategories}
+        onApiSelect={apiData.setSelectedApi}
+        onToggleService={apiData.toggleService}
+        onToggleSubcategory={apiData.toggleSubcategory}
+        onMobileClose={isMobile ? () => setMobileSidebarOpen(false) : undefined}
+      />
+    );
+  };
+
+  // API 테스트 패널 렌더링 함수
+  const renderApiTestPanel = () => {
+    const apiData = (window as any)?.apiLayoutData;
+    
+    // API 데이터가 없어도 테스트 패널을 렌더링 (기본 상태로)
+    return (
+      <ApiTestProvider>
+        <ApiTestPanel selectedApi={apiData?.selectedApi || null} />
+      </ApiTestProvider>
+    );
+  };
 
   // Close dropdown when clicking outside (disabled for hover mode)
   // useEffect(() => {
@@ -117,10 +151,19 @@ export default function Layout({ children, leftSidebar, rightSidebar, mobileSide
               {/* Desktop Navigation */}
               <nav className="hidden md:flex items-center space-x-0" ref={dropdownRef}>
               {navigation.map((item) => {
-                const isActive = location.pathname === item.href || location.pathname.startsWith(item.href + '/')
-                // 서비스 페이지인지 확인 (docs로 시작하는 경로)
-                const isServicePage = location.pathname.startsWith('/docs/')
-                const isApiPage = location.pathname.startsWith('/api-docs')
+                // API 페이지와 서비스 페이지를 구분해서 활성화 처리
+                const isApiPage = location.pathname.startsWith('/docs/api')
+                const isServicePage = location.pathname.startsWith('/docs/') && !isApiPage
+                
+                let isActive = false;
+                if (item.name === 'API 문서') {
+                  isActive = isApiPage;
+                } else if (item.name === '서비스') {
+                  isActive = isServicePage;
+                } else {
+                  isActive = location.pathname === item.href || location.pathname.startsWith(item.href + '/');
+                }
+                
                 const isServiceMenu = item.name === '서비스'
                 const isApiMenu = item.name === 'API 문서'
                 
@@ -273,10 +316,19 @@ export default function Layout({ children, leftSidebar, rightSidebar, mobileSide
                 검색
               </button>
               {navigation.map((item) => {
-                const isActive = location.pathname === item.href || location.pathname.startsWith(item.href + '/')
-                // 서비스 페이지인지 확인 (docs로 시작하는 경로)
-                const isServicePage = location.pathname.startsWith('/docs/')
-                const isApiPage = location.pathname.startsWith('/api-docs')
+                // API 페이지와 서비스 페이지를 구분해서 활성화 처리
+                const isApiPage = location.pathname.startsWith('/docs/api')
+                const isServicePage = location.pathname.startsWith('/docs/') && !isApiPage
+                
+                let isActive = false;
+                if (item.name === 'API 문서') {
+                  isActive = isApiPage;
+                } else if (item.name === '서비스') {
+                  isActive = isServicePage;
+                } else {
+                  isActive = location.pathname === item.href || location.pathname.startsWith(item.href + '/');
+                }
+                
                 const isServiceMenu = item.name === '서비스'
                 const isApiMenu = item.name === 'API 문서'
                 
@@ -401,22 +453,28 @@ export default function Layout({ children, leftSidebar, rightSidebar, mobileSide
               mobileSidebarOpen ? "max-h-[700px] opacity-100" : "max-h-0 opacity-0"
             )}>
               <div className="pb-4 px-4">
-                {typeof leftSidebar === 'function' ? leftSidebar(() => setMobileSidebarOpen(false)) : (leftSidebar || <ServiceSidebar />)}
+                {typeof leftSidebar === 'function' ? leftSidebar(() => setMobileSidebarOpen(false)) : (leftSidebar || (isApiPage ? renderApiSidebar(true) : <ServiceSidebar />))}
               </div>
             </div>
 
             {/* Main Content Area */}
             <div className="flex flex-1 min-h-0">
               {/* Left Sidebar - Desktop */}
-              <div className="hidden lg:block w-56 h-full overflow-y-auto bg-white border-r border-gray-200 z-10 fixed left-0 top-12">
-                {typeof leftSidebar === 'function' ? leftSidebar(() => {}) : (leftSidebar || <ServiceSidebar />)}
+              <div 
+                className="hidden lg:block w-56 overflow-y-auto bg-white border-r border-gray-200 z-10 fixed left-0 top-12"
+                style={{ height: 'calc(100vh - 3rem)' }}
+              >
+                {typeof leftSidebar === 'function' ? leftSidebar(() => {}) : (leftSidebar || (isApiPage ? renderApiSidebar(false) : <ServiceSidebar />))}
               </div>
               
               {/* Content Area - Scrollable */}
-              <div className={clsx(
-                "flex-1 min-w-0 lg:ml-56 overflow-y-auto docs-scrollbar",
-                rightSidebar ? "lg:mr-80" : "lg:mr-48"
-              )}>
+              <div 
+                className={clsx(
+                  "flex-1 min-w-0 lg:ml-56 overflow-y-auto docs-scrollbar",
+                  rightSidebar ? (isApiPage ? "lg:mr-96" : "lg:mr-48") : "lg:mr-48"
+                )}
+                style={isApiPage ? { marginRight: '450px' } : {}}
+              >
                 <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                   {/* Documentation Content */}
                   <div className="w-full overflow-x-hidden">
@@ -426,11 +484,19 @@ export default function Layout({ children, leftSidebar, rightSidebar, mobileSide
               </div>
               
               {/* Right Sidebar - Desktop */}
-              <div className={clsx(
-                "hidden lg:block h-full overflow-y-auto border-l border-gray-200 z-10 fixed right-0 top-12",
-                rightSidebar ? "w-80 bg-gray-50" : "w-48 bg-white"
-              )}>
-                {rightSidebar || <TableOfContents />}
+              <div 
+                className={clsx(
+                  "hidden lg:block overflow-y-auto border-l border-gray-200 z-10 fixed right-0 top-12",
+                  isApiPage ? "bg-gray-50" : "w-48 bg-white"
+                )}
+                style={isApiPage ? { 
+                  width: '450px',
+                  height: 'calc(100vh - 3rem)' // 뷰포트 높이에서 헤더 높이(3rem = 48px) 제거
+                } : {
+                  height: 'calc(100vh - 3rem)'
+                }}
+              >
+                {typeof rightSidebar === 'function' ? rightSidebar(() => {}) : (rightSidebar || (isApiPage ? renderApiTestPanel() : <TableOfContents />))}
               </div>
               
             </div>

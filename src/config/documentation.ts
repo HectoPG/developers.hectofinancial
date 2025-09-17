@@ -167,11 +167,11 @@ export const documentationConfig: CategoryConfig[] = [
   }
 ]
 
-// API 문서 설정
+// API 문서 설정 (별도 파일로 분리됨)
 export const apiDocsConfig: DocumentItem = {
-  id: 'api-docs',
+  id: 'api',
   title: 'API 문서',
-  path: '/api-docs',
+  path: '/docs/api',
   category: 'API',
   description: '인터랙티브 API 문서에서 모든 API를 한눈에 보고 테스트해보세요'
 }

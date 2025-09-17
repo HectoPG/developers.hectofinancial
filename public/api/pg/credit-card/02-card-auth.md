@@ -1,13 +1,3 @@
----
-title: 신용카드 빌키 발급
-description: 신용카드 빌키 발급 API
-category: 결제 API
-path: /spay/APICardAuth.do
-method: POST
-testUrl: https://tbgw.settlebank.co.kr/spay/APICardAuth.do
-prodUrl: https://gw.settlebank.co.kr/spay/APICardAuth.do
----
-
 # 신용카드 빌키 발급
 
 신용카드 빌키(자동결제 키) 발급 API입니다. 빌키를 발급받아 재사용 가능한 결제 수단으로 활용할 수 있습니다.
@@ -23,47 +13,15 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardAuth.do
 
 ## 📋 요청 파라미터
 
-<ParameterCard
-  name="mchtId"
-  type="string(10)"
-  required={true}
-  description="헥토파이낸셜에서 부여하는 고유 상점아이디입니다."
-  example="nxca_jt_bi"
-/>
 
-<ParameterCard
-  name="mchtTrdNo"
-  type="string(100)"
-  required={true}
-  description="상점에서 생성하는 고유 주문번호입니다."
-  example="AUTH20231215143022"
-  note="⚠️ 한글은 사용할 수 없으며, 영문, 숫자, 일부 특수문자만 사용 가능합니다."
-/>
 
-<ParameterCard
-  name="trdDt"
-  type="string(8)"
-  required={true}
-  description="거래 요청 일자입니다. yyyyMMdd 형식으로 전달합니다."
-  example="20231215"
-/>
 
-<ParameterCard
-  name="trdTm"
-  type="string(6)"
-  required={true}
-  description="거래 요청 시간입니다. HH24MISS 형식으로 전달합니다."
-  example="143022"
-/>
 
-<ParameterCard
-  name="pktHash"
-  type="string(64)"
-  required={true}
-  description="SHA256 방식으로 생성한 해쉬값입니다."
-  example="f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
-  note="🔒 거래일자 + 거래시간 + 상점아이디 + 상점주문번호 + 해쉬키 순서로 조합"
-/>
+
+
+
+
+
 
 ## 💻 요청 예시
 

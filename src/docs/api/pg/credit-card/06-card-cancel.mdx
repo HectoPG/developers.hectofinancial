@@ -1,0 +1,546 @@
+---
+title: 신용카드 취소
+description: 신용카드 결제 취소 API
+category: 결제 API
+path: /spay/APICancel.do
+method: POST
+testUrl: https://tbgw.settlebank.co.kr/spay/APICancel.do
+prodUrl: https://gw.settlebank.co.kr/spay/APICancel.do
+contentType: application/json
+---
+
+# 신용카드 취소
+
+신용카드 결제를 취소하는 API입니다.
+
+## 주의 사항
+
+* 전체 취소와 부분 취소를 지원합니다.
+* 취소는 원거래번호를 기준으로 진행됩니다.
+
+## API 정보
+
+- **URL**: `/spay/APICancel.do`
+- **Method**: `POST`
+- **Content-Type**: `application/x-www-form-urlencoded`
+
+## 요청 파라미터
+
+### params 객체
+
+<ApiParameterCard
+  name="mchtId"
+  type="string(12)"
+  required={true}
+  description="헥토파이낸셜에서 부여하는 고유 상점아이디입니다."
+  example="nxca_jt_il"
+  values={[
+    "nxca_jt_il: 인증",
+    "nxca_jt_bi: 비인증",
+    "nxca_ks_gu: 구인증",
+    "nxca_ab_bi: 영문외화 비인증"
+  ]}
+  inputType="text"
+  defaultValue="nxca_jt_il"
+  placeholder="상점아이디를 입력하세요"
+  section="params"
+/>
+
+<ApiParameterCard
+  name="ver"
+  type="string(4)"
+  required={true}
+  description="전문의 버전입니다."
+  example="0A19"
+  note="고정값으로 사용합니다."
+  inputType="text"
+  defaultValue="0A19"
+  fixed={true}
+  section="params"
+/>
+
+<ApiParameterCard
+  name="method"
+  type="string(2)"
+  required={true}
+  description="결제수단입니다."
+  example="CA"
+  note="고정값으로 사용합니다."
+  inputType="text"
+  defaultValue="CA"
+  fixed={true}
+  section="params"
+/>
+
+<ApiParameterCard
+  name="bizType"
+  type="string(2)"
+  required={true}
+  description="업무 구분코드입니다."
+  example="C0"
+  note="고정값으로 사용합니다."
+  inputType="text"
+  defaultValue="C0"
+  fixed={true}
+  section="params"
+/>
+
+<ApiParameterCard
+  name="encCd"
+  type="string(2)"
+  required={true}
+  description="암호화 구분 코드입니다."
+  example="23"
+  note="고정값으로 사용합니다."
+  inputType="text"
+  defaultValue="23"
+  fixed={true}
+  section="params"
+/>
+
+<ApiParameterCard
+  name="mchtTrdNo"
+  type="string(100)"
+  required={true}
+  description="상점에서 생성하는 고유한 주문번호입니다."
+  example="ORDER20211231100000"
+  inputType="text"
+  defaultValue="ORDER20211231100000"
+  placeholder="상점주문번호를 입력하세요"
+  section="params"
+/>
+
+<ApiParameterCard
+  name="trdDt"
+  type="string(8)"
+  required={true}
+  description="현재 전문을 전송하는 일자(YYYYMMDD)입니다."
+  example="20211231"
+  inputType="text"
+  defaultValue="20211231"
+  placeholder="YYYYMMDD 형식으로 입력하세요"
+  section="params"
+/>
+
+<ApiParameterCard
+  name="trdTm"
+  type="string(6)"
+  required={true}
+  description="현재 전문을 전송하는 시간(HHMMSS)입니다."
+  example="100000"
+  inputType="text"
+  defaultValue="100000"
+  placeholder="HHMMSS 형식으로 입력하세요"
+  section="params"
+/>
+
+<ApiParameterCard
+  name="mobileYn"
+  type="string(1)"
+  required={false}
+  description="모바일 여부입니다."
+  example="N"
+  values={[
+    "Y: 모바일웹/앱",
+    "N: PC 또는 그 외"
+  ]}
+  inputType="text"
+  defaultValue="N"
+  placeholder="모바일 여부를 입력하세요"
+  section="params"
+/>
+
+<ApiParameterCard
+  name="osType"
+  type="string(1)"
+  required={false}
+  description="OS 구분입니다."
+  example="W"
+  values={[
+    "A: Android",
+    "I: IOS", 
+    "W: windows",
+    "M: Mac",
+    "E: 기타"
+  ]}
+  inputType="text"
+  defaultValue="W"
+  placeholder="OS 구분을 입력하세요"
+  section="params"
+/>
+
+### data 객체
+
+<ApiParameterCard
+  name="pktHash"
+  type="string(200)"
+  required={true}
+  description="SHA256 방식으로 생성한 해쉬값입니다."
+  example="f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
+  inputType="text"
+  defaultValue="f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
+  placeholder="SHA256 해쉬값을 입력하세요"
+  fixed={true}
+  note="🔒 취소요청일자 + 취소요청시간 + 상점아이디 + 상점주문번호 + 취소금액(평문) + 해쉬키 순서로 조합"
+  section="data"
+/>
+
+<ApiParameterCard
+  name="orgTrdNo"
+  type="string(40)"
+  required={true}
+  description="결제 시, 헥토파이낸셜에서 발급한 거래번호입니다."
+  example="STFP_PGCAnxca_jt_il0211129135810M1494620"
+  inputType="text"
+  defaultValue="STFP_PGCAnxca_jt_il0211129135810M1494620"
+  placeholder="원거래번호를 입력하세요"
+  section="data"
+/>
+
+<ApiParameterCard
+  name="crcCd"
+  type="string(3)"
+  required={true}
+  description="통화 구분 값입니다."
+  example="KRW"
+  values={[
+    "KRW: 국내결제",
+    "USD: 해외결제"
+  ]}
+  inputType="text"
+  defaultValue="KRW"
+  placeholder="통화구분을 입력하세요"
+  section="data"
+/>
+
+<ApiParameterCard
+  name="cnclOrd"
+  type="string(3)"
+  required={true}
+  description="취소회차입니다. 001부터 시작합니다."
+  example="001"
+  inputType="text"
+  defaultValue="001"
+  placeholder="취소회차를 입력하세요"
+  section="data"
+  note="부분취소 2회차의 경우 002"
+/>
+
+<ApiParameterCard
+  name="taxTypeCd"
+  type="string(1)"
+  required={false}
+  description="면세여부입니다."
+  example="N"
+  values={[
+    "Y: 면세",
+    "N: 과세",
+    "G: 복합과세"
+  ]}
+  inputType="text"
+  defaultValue="N"
+  placeholder="면세여부를 입력하세요"
+  section="data"
+/>
+
+<ApiParameterCard
+  name="cnclAmt"
+  type="string(12)"
+  required={true}
+  description="취소금액입니다."
+  example="1000"
+  note="국내결제: 1000, 해외결제: 150 (ex [1.50$] => 정수표기 [150])"
+  inputType="text"
+  defaultValue="1000"
+  placeholder="취소금액을 입력하세요"
+  section="data"
+/>
+
+<ApiParameterCard
+  name="taxAmt"
+  type="string(12)"
+  required={false}
+  description="취소금액 중 과세금액입니다. 복합과세인 경우 필수입니다."
+  example="909"
+  inputType="text"
+  defaultValue="909"
+  placeholder="과세금액을 입력하세요"
+  section="data"
+/>
+
+<ApiParameterCard
+  name="vatAmt"
+  type="string(12)"
+  required={false}
+  description="취소금액 중 부가세금액입니다. 복합과세인 경우 필수입니다."
+  example="91"
+  inputType="text"
+  defaultValue="91"
+  placeholder="부가세금액을 입력하세요"
+  section="data"
+/>
+
+<ApiParameterCard
+  name="taxFreeAmt"
+  type="string(12)"
+  required={false}
+  description="취소금액 중 면세금액입니다. 복합과세인 경우 필수입니다."
+  example="0"
+  inputType="text"
+  defaultValue="0"
+  placeholder="면세금액을 입력하세요"
+  section="data"
+/>
+
+<ApiParameterCard
+  name="svcAmt"
+  type="string(12)"
+  required={false}
+  description="취소금액 중 봉사료입니다."
+  example="0"
+  inputType="text"
+  defaultValue="0"
+  placeholder="봉사료를 입력하세요"
+  section="data"
+/>
+
+<ApiParameterCard
+  name="cnclRsn"
+  type="string(255)"
+  required={false}
+  description="취소사유내용입니다. 필요한 경우, 취소 사유 메세지를 기재합니다."
+  example="상품이 마음에 들지 않아서"
+  inputType="text"
+  defaultValue="상품이 마음에 들지 않아서"
+  placeholder="취소사유를 입력하세요"
+  section="data"
+/>
+
+## 해쉬 생성 방법
+
+해쉬값은 다음 순서로 조합하여 SHA256으로 생성합니다:
+
+```
+취소요청일자 + 취소요청시간 + 상점아이디 + 상점주문번호 + 취소금액(평문) + 해쉬키
+```
+
+## 응답 파라미터
+
+### 성공 응답
+
+#### params 객체
+
+<DocParameterCard
+  name="mchtId"
+  type="string"
+  required={true}
+  description="헥토파이낸셜에서 부여하는 고유 상점아이디"
+  example="nxca_jt_il"
+/>
+
+<DocParameterCard
+  name="ver"
+  type="string"
+  required={true}
+  description="전문의 버전"
+  example="0A19"
+  note="고정값"
+/>
+
+<DocParameterCard
+  name="method"
+  type="string"
+  required={true}
+  description="결제수단"
+  example="CA"
+  note="고정값"
+/>
+
+<DocParameterCard
+  name="bizType"
+  type="string"
+  required={true}
+  description="업무구분코드"
+  example="C0"
+  note="취소용 고정값"
+/>
+
+<DocParameterCard
+  name="encCd"
+  type="string"
+  required={true}
+  description="암호화구분코드"
+  example="23"
+  note="고정값"
+/>
+
+<DocParameterCard
+  name="mchtTrdNo"
+  type="string"
+  required={true}
+  description="상점에서 생성하는 고유 주문번호"
+  example="ORDER20211231100000"
+/>
+
+<DocParameterCard
+  name="trdNo"
+  type="string"
+  required={true}
+  description="헥토파이낸셜에서 부여하는 고유 거래번호"
+  example="STFP_PGCAnxca_jt_il0211129135810M1494620"
+/>
+
+<DocParameterCard
+  name="trdDt"
+  type="string"
+  required={true}
+  description="취소요청일자 (YYYYMMDD)"
+  example="20211231"
+/>
+
+<DocParameterCard
+  name="trdTm"
+  type="string"
+  required={true}
+  description="취소요청시간 (HHMMSS)"
+  example="100000"
+/>
+
+<DocParameterCard
+  name="outStatCd"
+  type="string"
+  required={true}
+  description="거래상태코드"
+  example="0021"
+  values={[
+    "0021: 성공",
+    "0031: 실패"
+  ]}
+/>
+
+<DocParameterCard
+  name="outRsltCd"
+  type="string"
+  required={true}
+  description="결과코드"
+  example="0000"
+  values={[
+    "0000: 성공",
+    "기타: 실패코드"
+  ]}
+/>
+
+<DocParameterCard
+  name="outRsltMsg"
+  type="string"
+  required={true}
+  description="결과메시지"
+  example="정상적으로 처리되었습니다."
+/>
+
+#### data 객체
+
+<DocParameterCard
+  name="pktHash"
+  type="string"
+  required={true}
+  description="해쉬값 (요청시 전송한 값 그대로 반환)"
+  example="f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
+/>
+
+<DocParameterCard
+  name="orgTrdNo"
+  type="string"
+  required={true}
+  description="원거래번호 (취소 대상 거래번호)"
+  example="STFP_PGCAnxca_jt_il0211129135810M1494620"
+/>
+
+<DocParameterCard
+  name="cnclAmt"
+  type="string"
+  required={true}
+  description="취소금액"
+  example="1000"
+/>
+
+<DocParameterCard
+  name="cardCnclAmt"
+  type="string"
+  required={true}
+  description="신용카드 취소금액"
+  example="5000"
+/>
+
+<DocParameterCard
+  name="pntCnclAmt"
+  type="string"
+  required={true}
+  description="포인트 취소금액"
+  example="1000"
+/>
+
+<DocParameterCard
+  name="blcAmt"
+  type="string"
+  required={true}
+  description="취소가능잔액 (남은 취소 가능 금액)"
+  example="0"
+/>
+
+### 실패 응답
+
+#### params 객체
+
+<DocParameterCard
+  name="outStatCd"
+  type="string"
+  required={true}
+  description="거래상태코드"
+  example="0031"
+  values={[
+    "0031: 실패"
+  ]}
+/>
+
+<DocParameterCard
+  name="outRsltCd"
+  type="string"
+  required={true}
+  description="거절코드"
+  example="1001"
+  values={[
+    "1001: 취소 요청 정보 오류",
+    "기타: 각종 오류코드"
+  ]}
+/>
+
+<DocParameterCard
+  name="outRsltMsg"
+  type="string"
+  required={true}
+  description="결과메시지"
+  example="취소 요청 정보 오류"
+/>
+
+#### data 객체
+
+실패 시에는 data 객체가 비어있습니다.
+
+## 노티 전문
+
+취소가 정상적으로 완료되면, 헥토파이낸셜에서 가맹점으로 노티(결과통보) 메세지가 전송됩니다.
+
+### 노티 응답
+
+가맹점에서 헥토파이낸셜로 응답을 전송해야 합니다:
+
+| 응답 | 설명 |
+|------|------|
+| "OK" | 성공시 (대문자) |
+| "FAIL" | 실패시 (대문자, FAIL로 응답시 명확한 실패로 인식합니다. 노티가 재전송 됩니다.) |
+| 그 외 | 비정상 실패로 인식하여, 설정된 횟수만큼 노티 재발송 처리함. |
+
+## 에러 코드
+
+자세한 에러 코드는 [거절 코드 표](/docs/api/pg/credit-card/error-codes)를 참고하세요.

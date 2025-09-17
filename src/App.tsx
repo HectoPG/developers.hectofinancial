@@ -7,7 +7,8 @@ import DocsPage from './pages/DocsPage'
 import BlogPage from './pages/BlogPage'
 import BlogDetailPage from './pages/BlogDetailPage'
 import ApiDocsPage from './pages/ApiDocsPage'
-import ParameterCard from './components/ParameterCard'
+import DocParameterCard from './components/DocParameterCard'
+import ApiParameterCard from './components/ApiParameterCard'
 import ConfigCard from './components/ConfigCard'
 import FeatureGrid from './components/FeatureGrid'
 import NextSteps from './components/NextSteps'
@@ -77,7 +78,8 @@ const mdxComponents = {
   li: (props: any) => <li className="leading-relaxed text-sm" {...props} />,
   blockquote: (props: any) => <blockquote className="border-l-4 border-hecto-400 pl-4 py-3 italic text-gray-600 mb-4 bg-hecto-50 rounded-r-lg text-sm leading-relaxed" {...props} />,
   a: (props: any) => <a className="text-hecto-600 hover:text-hecto-800 underline decoration-2 underline-offset-2 transition-colors focus:outline-none" {...props} />,
-  ParameterCard,
+  DocParameterCard,
+  ApiParameterCard,
   ConfigCard,
   FeatureGrid,
   NextSteps,
@@ -93,13 +95,14 @@ function App() {
       <Router>
         <ScrollToTop />
         <Routes>
-          <Route path="/api-docs" element={<ApiDocsPage />} />
           <Route path="/*" element={
             <Layout>
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/blog" element={<BlogPage />} />
                 <Route path="/blog/:id" element={<BlogDetailPage />} />
+                <Route path="/docs/api" element={<ApiDocsPage />} />
+                <Route path="/docs/api/*" element={<ApiDocsPage />} />
                 <Route path="/docs/:category" element={<DocsPage />} />
                 <Route path="/docs/:category/:page" element={<DocsPage />} />
               </Routes>

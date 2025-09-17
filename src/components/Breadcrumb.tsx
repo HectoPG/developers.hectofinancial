@@ -51,7 +51,7 @@ const Breadcrumb: React.FC = () => {
           }
         }
       }
-    } else if (path === '/api-docs') {
+    } else if (path === '/docs/api' || path.startsWith('/docs/api/')) {
       items.push({ label: 'API 문서' });
     } else if (path.startsWith('/blog')) {
       items.push({ label: '블로그' });

@@ -141,7 +141,7 @@ testDeposit("01012345678", "50000");
 
 #### 📋 요청 파라미터
 
-<ParameterCard
+<DocParameterCard
   name="mchtId"
   type="string(10)"
   required={true}
@@ -150,7 +150,7 @@ testDeposit("01012345678", "50000");
   note="가상계좌 전용 상점ID를 사용해야 합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="method"
   type="string(20)"
   required={true}
@@ -159,7 +159,7 @@ testDeposit("01012345678", "50000");
   note="가상계좌의 경우 항상 'vbank' 고정값을 사용합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="trdDt"
   type="string(8)"
   required={true}
@@ -167,7 +167,7 @@ testDeposit("01012345678", "50000");
   example="20231215"
 />
 
-<ParameterCard
+<DocParameterCard
   name="trdTm"
   type="string(6)"
   required={true}
@@ -175,7 +175,7 @@ testDeposit("01012345678", "50000");
   example="143022"
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtTrdNo"
   type="string(100)"
   required={true}
@@ -184,7 +184,7 @@ testDeposit("01012345678", "50000");
   note="⚠️ 한글은 사용할 수 없으며, 영문, 숫자, 일부 특수문자만 사용 가능합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtName"
   type="string(100)"
   required={true}
@@ -192,7 +192,7 @@ testDeposit("01012345678", "50000");
   example="헥토파이낸셜"
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtEName"
   type="string(100)"
   required={true}
@@ -200,7 +200,7 @@ testDeposit("01012345678", "50000");
   example="Hecto Financial"
 />
 
-<ParameterCard
+<DocParameterCard
   name="pmtPrdtNm"
   type="string(128)"
   required={true}
@@ -208,7 +208,7 @@ testDeposit("01012345678", "50000");
   example="프리미엄 멤버십 1개월"
 />
 
-<ParameterCard
+<DocParameterCard
   name="trdAmt"
   type="number(12)"
   required={true}
@@ -217,7 +217,7 @@ testDeposit("01012345678", "50000");
   note="⚠️ 이 필드는 AES 암호화가 필요합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtCustNm"
   type="string(30)"
   required={false}
@@ -226,7 +226,7 @@ testDeposit("01012345678", "50000");
   note="⚠️ 이 필드는 AES 암호화가 필요합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="custAcntSumry"
   type="string(50)"
   required={false}
@@ -235,7 +235,7 @@ testDeposit("01012345678", "50000");
   note="💡 고객이 입금 내역을 쉽게 확인할 수 있도록 명확하게 작성하세요."
 />
 
-<ParameterCard
+<DocParameterCard
   name="expireDt"
   type="string(14)"
   required={false}
@@ -244,7 +244,7 @@ testDeposit("01012345678", "50000");
   note="💡 빈 값일 경우 거래일 기준 10일 후로 자동 설정됩니다. 최대 365일까지 설정 가능합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="cphoneNo"
   type="string(11)"
   required={false}
@@ -253,7 +253,7 @@ testDeposit("01012345678", "50000");
   note="⚠️ 이 필드는 AES 암호화가 필요합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="notiUrl"
   type="string(250)"
   required={true}
@@ -262,7 +262,7 @@ testDeposit("01012345678", "50000");
   note="💡 실제 입금 처리는 반드시 이 URL에서 처리하세요. 고객이 브라우저를 닫아도 호출됩니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="nextUrl"
   type="string(250)"
   required={true}
@@ -271,7 +271,7 @@ testDeposit("01012345678", "50000");
   note="💡 가상계좌 정보 안내 화면으로 이동시킵니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="cancUrl"
   type="string(250)"
   required={true}
@@ -279,7 +279,7 @@ testDeposit("01012345678", "50000");
   example="https://yoursite.com/payment/cancel"
 />
 
-<ParameterCard
+<DocParameterCard
   name="pktHash"
   type="string(200)"
   required={true}

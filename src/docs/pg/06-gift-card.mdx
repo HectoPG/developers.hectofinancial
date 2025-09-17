@@ -167,7 +167,7 @@ payWithGiftCard('tmoney', 5000, '교통카드 충전');
 
 #### 📋 요청 파라미터
 
-<ParameterCard
+<DocParameterCard
   name="mchtId"
   type="string(10)"
   required={true}
@@ -176,7 +176,7 @@ payWithGiftCard('tmoney', 5000, '교통카드 충전');
   note="상품권 결제가 가능한 상점ID를 사용해야 합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="method"
   type="string(20)"
   required={true}
@@ -192,7 +192,7 @@ payWithGiftCard('tmoney', 5000, '교통카드 충전');
   note="💡 각 상품권마다 사용 가능한 곳이 다르므로, 서비스에 맞는 상품권을 선택하세요."
 />
 
-<ParameterCard
+<DocParameterCard
   name="trdDt"
   type="string(8)"
   required={true}
@@ -200,7 +200,7 @@ payWithGiftCard('tmoney', 5000, '교통카드 충전');
   example="20231215"
 />
 
-<ParameterCard
+<DocParameterCard
   name="trdTm"
   type="string(6)"
   required={true}
@@ -208,7 +208,7 @@ payWithGiftCard('tmoney', 5000, '교통카드 충전');
   example="143022"
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtTrdNo"
   type="string(100)"
   required={true}
@@ -217,7 +217,7 @@ payWithGiftCard('tmoney', 5000, '교통카드 충전');
   note="⚠️ 한글은 사용할 수 없으며, 영문, 숫자, 일부 특수문자만 사용 가능합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtName"
   type="string(100)"
   required={true}
@@ -225,7 +225,7 @@ payWithGiftCard('tmoney', 5000, '교통카드 충전');
   example="헥토파이낸셜"
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtEName"
   type="string(100)"
   required={true}
@@ -233,7 +233,7 @@ payWithGiftCard('tmoney', 5000, '교통카드 충전');
   example="Hecto Financial"
 />
 
-<ParameterCard
+<DocParameterCard
   name="pmtPrdtNm"
   type="string(128)"
   required={true}
@@ -241,7 +241,7 @@ payWithGiftCard('tmoney', 5000, '교통카드 충전');
   example="게임 아이템 패키지"
 />
 
-<ParameterCard
+<DocParameterCard
   name="trdAmt"
   type="number(12)"
   required={true}
@@ -250,7 +250,7 @@ payWithGiftCard('tmoney', 5000, '교통카드 충전');
   note="⚠️ 이 필드는 AES 암호화가 필요합니다. 티머니의 경우 컵 보증금이 포함된 금액을 전달하세요."
 />
 
-<ParameterCard
+<DocParameterCard
   name="taxFreeAmt"
   type="number(12)"
   required={false}
@@ -259,7 +259,7 @@ payWithGiftCard('tmoney', 5000, '교통카드 충전');
   note="⚠️ 이 필드는 AES 암호화가 필요합니다. 티머니 상품권에서만 사용됩니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtCustNm"
   type="string(30)"
   required={false}
@@ -268,7 +268,7 @@ payWithGiftCard('tmoney', 5000, '교통카드 충전');
   note="⚠️ 이 필드는 AES 암호화가 필요합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtCustId"
   type="string(50)"
   required={false}
@@ -277,7 +277,7 @@ payWithGiftCard('tmoney', 5000, '교통카드 충전');
   note="⚠️ 이 필드는 AES 암호화가 필요합니다. 컬쳐캐시 사용 시 반드시 입력하세요."
 />
 
-<ParameterCard
+<DocParameterCard
   name="notiUrl"
   type="string(250)"
   required={true}
@@ -286,7 +286,7 @@ payWithGiftCard('tmoney', 5000, '교통카드 충전');
   note="💡 실제 결제 처리는 반드시 이 URL에서 처리하세요. 고객이 브라우저를 닫아도 호출됩니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="nextUrl"
   type="string(250)"
   required={true}
@@ -294,7 +294,7 @@ payWithGiftCard('tmoney', 5000, '교통카드 충전');
   example="https://yoursite.com/payment/gift/success"
 />
 
-<ParameterCard
+<DocParameterCard
   name="cancUrl"
   type="string(250)"
   required={true}
@@ -302,7 +302,7 @@ payWithGiftCard('tmoney', 5000, '교통카드 충전');
   example="https://yoursite.com/payment/cancel"
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtParam"
   type="string(4000)"
   required={false}
@@ -310,7 +310,7 @@ payWithGiftCard('tmoney', 5000, '교통카드 충전');
   example="giftCardType=teencash&gameId=12345&itemId=SWORD001"
 />
 
-<ParameterCard
+<DocParameterCard
   name="prdtTerm"
   type="string(14)"
   required={false}
@@ -319,7 +319,7 @@ payWithGiftCard('tmoney', 5000, '교통카드 충전');
   note="💡 yyyyMMddHHmmss 형식으로 입력합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="custIp"
   type="string(15)"
   required={false}
@@ -328,7 +328,7 @@ payWithGiftCard('tmoney', 5000, '교통카드 충전');
   note="⚠️ 서버 IP가 아닌 실제 고객(브라우저)의 IP를 전달해야 합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="pktHash"
   type="string(200)"
   required={true}

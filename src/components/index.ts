@@ -5,7 +5,8 @@ export { default as CreditCardCarousel } from './CreditCardCarousel'
 export { default as NextSteps } from './NextSteps'
 export { default as ErrorGuide } from './ErrorGuide'
 export { default as DocumentFooter } from './DocumentFooter'
-export { default as ParameterCard } from './ParameterCard'
+export { default as DocParameterCard } from './DocParameterCard'
+export { default as ApiParameterCard } from './ApiParameterCard'
 export { default as ConfigCard } from './ConfigCard'
 
 // 레이아웃 컴포넌트들

@@ -1,7 +1,7 @@
 ---
 title: 거래 상태 조회
 description: 실시간 거래 상태 조회 API
-category: 거래 관리 API
+category: 결제 관리 API
 path: /spay/APITrdStatInq.do
 method: POST
 testUrl: https://tbgw.settlebank.co.kr/spay/APITrdStatInq.do
@@ -23,7 +23,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APITrdStatInq.do
 
 ## 📋 요청 파라미터
 
-<ParameterCard
+<ApiParameterCard
   name="mchtId"
   type="string(10)"
   required={true}
@@ -31,7 +31,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APITrdStatInq.do
   example="nxca_jt_bi"
 />
 
-<ParameterCard
+<ApiParameterCard
   name="mchtTrdNo"
   type="string(100)"
   required={true}
@@ -39,7 +39,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APITrdStatInq.do
   example="ORDER20231215143022"
 />
 
-<ParameterCard
+<ApiParameterCard
   name="trdDt"
   type="string(8)"
   required={true}
@@ -47,7 +47,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APITrdStatInq.do
   example="20231215"
 />
 
-<ParameterCard
+<ApiParameterCard
   name="trdTm"
   type="string(6)"
   required={true}
@@ -55,7 +55,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APITrdStatInq.do
   example="143022"
 />
 
-<ParameterCard
+<ApiParameterCard
   name="method"
   type="string(2)"
   required={true}
@@ -69,7 +69,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APITrdStatInq.do
   ]}
 />
 
-<ParameterCard
+<ApiParameterCard
   name="trdAmt"
   type="string(12)"
   required={true}
@@ -77,7 +77,7 @@ prodUrl: https://gw.settlebank.co.kr/spay/APITrdStatInq.do
   example="1000"
 />
 
-<ParameterCard
+<ApiParameterCard
   name="pktHash"
   type="string(64)"
   required={true}
@@ -116,37 +116,152 @@ prodUrl: https://gw.settlebank.co.kr/spay/APITrdStatInq.do
 }
 ```
 
-## 📤 응답 예시
+## 📤 응답 파라미터
 
 ### 성공 응답
 
-```json
-{
-  "resultCode": "0000",
-  "resultMsg": "정상적으로 처리되었습니다.",
-  "trdStat": "0021",
-  "trdNo": "STFP_PGCAnxca_jt_il0211129135810M1494620",
-  "mchtTrdNo": "ORDER20231215143022",
-  "trdAmt": "1000",
-  "payDt": "20231215",
-  "payTm": "143025"
-}
-```
+<DocParameterCard
+  name="resultCode"
+  type="string"
+  required={true}
+  description="결과코드"
+  example="0000"
+  values={[
+    "0000: 성공",
+    "기타: 실패코드"
+  ]}
+/>
+
+<DocParameterCard
+  name="resultMsg"
+  type="string"
+  required={true}
+  description="결과메시지"
+  example="정상적으로 처리되었습니다."
+/>
+
+<DocParameterCard
+  name="trdStat"
+  type="string"
+  required={true}
+  description="거래상태코드"
+  example="0021"
+  values={[
+    "0021: 성공",
+    "0031: 실패",
+    "기타: 각종 상태코드"
+  ]}
+/>
+
+<DocParameterCard
+  name="trdNo"
+  type="string"
+  required={true}
+  description="헥토파이낸셜 거래번호"
+  example="STFP_PGCAnxca_jt_il0211129135810M1494620"
+/>
+
+<DocParameterCard
+  name="mchtTrdNo"
+  type="string"
+  required={true}
+  description="상점주문번호"
+  example="ORDER20231215143022"
+/>
+
+<DocParameterCard
+  name="trdAmt"
+  type="string"
+  required={true}
+  description="거래금액"
+  example="1000"
+/>
+
+<DocParameterCard
+  name="payDt"
+  type="string"
+  required={true}
+  description="결제일자 (YYYYMMDD)"
+  example="20231215"
+/>
+
+<DocParameterCard
+  name="payTm"
+  type="string"
+  required={true}
+  description="결제시간 (HHMMSS)"
+  example="143025"
+/>
 
 ### 거래 없음 응답
 
-```json
-{
-  "resultCode": "1004",
-  "resultMsg": "해당 거래를 찾을 수 없습니다.",
-  "trdStat": null,
-  "trdNo": null,
-  "mchtTrdNo": null,
-  "trdAmt": null,
-  "payDt": null,
-  "payTm": null
-}
-```
+<DocParameterCard
+  name="resultCode"
+  type="string"
+  required={true}
+  description="결과코드"
+  example="1004"
+  values={[
+    "1004: 해당 거래를 찾을 수 없음",
+    "기타: 각종 오류코드"
+  ]}
+/>
+
+<DocParameterCard
+  name="resultMsg"
+  type="string"
+  required={true}
+  description="결과메시지"
+  example="해당 거래를 찾을 수 없습니다."
+/>
+
+<DocParameterCard
+  name="trdStat"
+  type="string"
+  required={false}
+  description="거래상태코드 (거래 없음시 null)"
+  example="null"
+/>
+
+<DocParameterCard
+  name="trdNo"
+  type="string"
+  required={false}
+  description="헥토파이낸셜 거래번호 (거래 없음시 null)"
+  example="null"
+/>
+
+<DocParameterCard
+  name="mchtTrdNo"
+  type="string"
+  required={false}
+  description="상점주문번호 (거래 없음시 null)"
+  example="null"
+/>
+
+<DocParameterCard
+  name="trdAmt"
+  type="string"
+  required={false}
+  description="거래금액 (거래 없음시 null)"
+  example="null"
+/>
+
+<DocParameterCard
+  name="payDt"
+  type="string"
+  required={false}
+  description="결제일자 (거래 없음시 null)"
+  example="null"
+/>
+
+<DocParameterCard
+  name="payTm"
+  type="string"
+  required={false}
+  description="결제시간 (거래 없음시 null)"
+  example="null"
+/>
 
 ## 📊 거래 상태 코드
 

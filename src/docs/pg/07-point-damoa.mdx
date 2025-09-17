@@ -148,7 +148,7 @@ SETTLE_PG.pay({
 
 #### 📋 요청 파라미터
 
-<ParameterCard
+<DocParameterCard
   name="mchtId"
   type="string(10)"
   required={true}
@@ -157,7 +157,7 @@ SETTLE_PG.pay({
   note="포인트 다모아 결제 전용 상점ID를 사용해야 합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="method"
   type="string(20)"
   required={true}
@@ -166,7 +166,7 @@ SETTLE_PG.pay({
   note="포인트 다모아의 경우 항상 'point' 고정값을 사용합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="trdDt"
   type="string(8)"
   required={true}
@@ -174,7 +174,7 @@ SETTLE_PG.pay({
   example="20231215"
 />
 
-<ParameterCard
+<DocParameterCard
   name="trdTm"
   type="string(6)"
   required={true}
@@ -182,7 +182,7 @@ SETTLE_PG.pay({
   example="143022"
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtTrdNo"
   type="string(100)"
   required={true}
@@ -191,7 +191,7 @@ SETTLE_PG.pay({
   note="⚠️ 한글은 사용할 수 없으며, 영문, 숫자, 일부 특수문자만 사용 가능합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtName"
   type="string(100)"
   required={true}
@@ -199,7 +199,7 @@ SETTLE_PG.pay({
   example="헥토파이낸셜"
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtEName"
   type="string(100)"
   required={true}
@@ -207,7 +207,7 @@ SETTLE_PG.pay({
   example="Hecto Financial"
 />
 
-<ParameterCard
+<DocParameterCard
   name="pmtPrdtNm"
   type="string(128)"
   required={true}
@@ -215,7 +215,7 @@ SETTLE_PG.pay({
   example="프리미엄 서비스 이용권"
 />
 
-<ParameterCard
+<DocParameterCard
   name="trdAmt"
   type="number(12)"
   required={true}
@@ -224,7 +224,7 @@ SETTLE_PG.pay({
   note="⚠️ 이 필드는 AES 암호화가 필요합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtCustNm"
   type="string(30)"
   required={false}
@@ -233,7 +233,7 @@ SETTLE_PG.pay({
   note="⚠️ 이 필드는 AES 암호화가 필요합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="clipCustNm"
   type="string(30)"
   required={false}
@@ -242,7 +242,7 @@ SETTLE_PG.pay({
   note="⚠️ 이 필드는 AES 암호화가 필요합니다. 포인트 다모아 서비스 이용 시 필수입니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="clipCustCi"
   type="string(88)"
   required={false}
@@ -251,7 +251,7 @@ SETTLE_PG.pay({
   note="⚠️ 이 필드는 AES 암호화가 필요합니다. 포인트 다모아 서비스의 핵심 인증 정보입니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="clipCustPhoneNo"
   type="string(11)"
   required={false}
@@ -260,7 +260,7 @@ SETTLE_PG.pay({
   note="⚠️ 이 필드는 AES 암호화가 필요합니다. 하이픈 없이 숫자만 입력합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="skipCd"
   type="string(1)"
   required={false}
@@ -272,7 +272,7 @@ SETTLE_PG.pay({
   note="💡 고객이 이미 약관에 동의한 경우 Y로 설정하여 결제 과정을 단축할 수 있습니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="certNotiUrl"
   type="string(250)"
   required={false}
@@ -281,7 +281,7 @@ SETTLE_PG.pay({
   note="💡 본인 인증 완료 후 별도 처리가 필요한 경우에만 사용합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="notiUrl"
   type="string(250)"
   required={true}
@@ -290,7 +290,7 @@ SETTLE_PG.pay({
   note="💡 실제 결제 처리는 반드시 이 URL에서 처리하세요."
 />
 
-<ParameterCard
+<DocParameterCard
   name="nextUrl"
   type="string(250)"
   required={true}
@@ -298,7 +298,7 @@ SETTLE_PG.pay({
   example="https://yoursite.com/payment/point/success"
 />
 
-<ParameterCard
+<DocParameterCard
   name="cancUrl"
   type="string(250)"
   required={true}
@@ -306,7 +306,7 @@ SETTLE_PG.pay({
   example="https://yoursite.com/payment/cancel"
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtParam"
   type="string(4000)"
   required={false}
@@ -314,7 +314,7 @@ SETTLE_PG.pay({
   example="pointType=integrated&userId=12345&serviceType=premium"
 />
 
-<ParameterCard
+<DocParameterCard
   name="email"
   type="string(60)"
   required={false}
@@ -323,7 +323,7 @@ SETTLE_PG.pay({
   note="⚠️ 이 필드는 AES 암호화가 필요합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="mchtCustId"
   type="string(50)"
   required={false}
@@ -332,7 +332,7 @@ SETTLE_PG.pay({
   note="⚠️ 이 필드는 AES 암호화가 필요합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="prdtTerm"
   type="string(14)"
   required={false}
@@ -341,7 +341,7 @@ SETTLE_PG.pay({
   note="💡 yyyyMMddHHmmss 형식으로 입력합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="custIp"
   type="string(15)"
   required={false}
@@ -350,7 +350,7 @@ SETTLE_PG.pay({
   note="⚠️ 서버 IP가 아닌 실제 고객(브라우저)의 IP를 전달해야 합니다."
 />
 
-<ParameterCard
+<DocParameterCard
   name="pktHash"
   type="string(200)"
   required={true}
