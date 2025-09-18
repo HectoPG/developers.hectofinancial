@@ -42,7 +42,7 @@ const ApiResponsePanel: React.FC<ApiResponsePanelProps> = ({ apiInfo, onApiCall 
         }`}
       >
         <Play className="w-4 h-4 mr-2" />
-        {isLoading ? 'API 호출 중...' : 'API 호출'}
+{isLoading ? 'API 호출 중...' : (apiInfo?.isPaymentForm ? '결제창 호출' : 'API 호출')}
       </button>
 
       {/* 응답 결과 */}

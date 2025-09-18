@@ -1,13 +1,12 @@
 import React, { useState, useEffect, Suspense } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Play, FileText } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
+import { FileText } from 'lucide-react';
 import { getAllApiDocuments, getApiDocumentByPath, type ApiDocument } from '../config/apiDocumentation';
 import { useApiDoc } from '../contexts/ApiDocContext';
 
 
 const ApiDocsPage: React.FC = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const { setApiInfo } = useApiDoc();
 
   // 상태 관리
