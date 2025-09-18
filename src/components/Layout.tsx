@@ -242,6 +242,7 @@ export default function Layout({ children, leftSidebar, rightSidebar, mobileSide
                       // Regular menu item
                       <Link
                         to={item.href}
+                        reloadDocument
                         className={clsx(
                           isActive
                             ? 'text-hecto-600' 
@@ -367,6 +368,7 @@ export default function Layout({ children, leftSidebar, rightSidebar, mobileSide
                                 <Link
                                   key={child.name}
                                   to={servicePath}
+                                  reloadDocument
                                   className={clsx(
                                     location.pathname === child.href || location.pathname.startsWith(child.href + '/')
                                       ? 'bg-gray-50 text-hecto-600' 
@@ -389,6 +391,7 @@ export default function Layout({ children, leftSidebar, rightSidebar, mobileSide
                       // Regular mobile menu item
                       <Link
                         to={item.href}
+                        reloadDocument
                         className={clsx(
                           isActive
                             ? 'bg-hecto-100 text-hecto-900' 

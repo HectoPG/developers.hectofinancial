@@ -9,6 +9,19 @@ const ApiDocsPage: React.FC = () => {
   const location = useLocation();
   const { setApiInfo } = useApiDoc();
 
+  // /docs/api로 접속할 때마다 새로고침처럼 동작 (무한 루프 방지)
+  useEffect(() => {
+    if (location.pathname === '/docs/api' && !sessionStorage.getItem('apiPageReloaded')) {
+      // 새로고침 플래그 설정
+      sessionStorage.setItem('apiPageReloaded', 'true');
+      // 페이지를 완전히 새로고침
+      window.location.reload();
+    } else if (location.pathname !== '/docs/api') {
+      // 다른 페이지로 이동하면 플래그 제거
+      sessionStorage.removeItem('apiPageReloaded');
+    }
+  }, [location.pathname]);
+
   // 상태 관리
   const [apiDocuments, setApiDocuments] = useState<ApiDocument[]>([]);
   const [selectedApi, setSelectedApi] = useState<ApiDocument | null>(null);

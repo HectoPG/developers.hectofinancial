@@ -22,6 +22,24 @@ export default defineConfig({
     },
     react()
   ],
+  server: {
+    proxy: {
+      // 테스트 환경 API 프록시
+      '/api/test': {
+        target: 'https://tbgw.settlebank.co.kr',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/test/, ''),
+        secure: true,
+      },
+      // 운영 환경 API 프록시
+      '/api/prod': {
+        target: 'https://gw.settlebank.co.kr',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/prod/, ''),
+        secure: true,
+      }
+    }
+  },
   build: {
     rollupOptions: {
       output: {

@@ -138,6 +138,7 @@ const ApiRequestForm: React.FC<ApiRequestFormProps> = ({ apiInfo, currentApiPath
   };
 
   const getCurrentUrl = () => {
+    // 화면에는 실제 URL 표시
     if (apiInfo && apiInfo.testUrl && apiInfo.prodUrl) {
       return selectedEnvironment === 'test' ? apiInfo.testUrl : apiInfo.prodUrl;
     }
