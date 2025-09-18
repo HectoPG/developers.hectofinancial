@@ -1,3 +1,14 @@
+
+  title: "신용카드 취소",
+  description: "신용카드 결제 취소 API",
+  category: "결제 API",
+  path: "/spay/APICancel.do",
+  method: "POST",
+  testUrl: "https://tbgw.settlebank.co.kr/spay/APICancel.do",
+  prodUrl: "https://gw.settlebank.co.kr/spay/APICancel.do",
+  contentType: "application/json"
+};
+
 # 신용카드 취소
 
 신용카드 결제를 취소하는 API입니다.
@@ -9,13 +20,11 @@
 
 ## API 정보
 
-- **URL**: `/spay/APICancel.do`
 - **Method**: `POST`
-- **Content-Type**: `application/x-www-form-urlencoded`
+- **Content-Type**: `application/json`
 
 ## 요청 파라미터
 
-### params 객체
 
 
 
@@ -37,7 +46,8 @@
 
 
 
-### data 객체
+
+
 
 
 
@@ -78,7 +88,7 @@
 
 ### 성공 응답
 
-#### params 객체
+ 객체
 
 
 
@@ -120,7 +130,7 @@
 
 ### 실패 응답
 
-#### params 객체
+ 객체
 
 
 

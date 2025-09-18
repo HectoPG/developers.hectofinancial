@@ -13,18 +13,9 @@ const ApiResponsePanel: React.FC<ApiResponsePanelProps> = ({ apiInfo, onApiCall 
     apiResponse,
     apiError,
     isLoading,
-    requestBody,
-    selectedEnvironment
+    requestBody
   } = useApiDoc();
 
-  const getCurrentUrl = () => {
-    if (apiInfo && apiInfo.testUrl && apiInfo.prodUrl) {
-      return selectedEnvironment === 'test' ? apiInfo.testUrl : apiInfo.prodUrl;
-    }
-    return selectedEnvironment === 'test'
-      ? 'https://tbgw.settlebank.co.kr/api/endpoint'
-      : 'https://gw.settlebank.co.kr/api/endpoint';
-  };
 
   const handleApiCall = async () => {
     if (!apiInfo || !requestBody.trim()) {

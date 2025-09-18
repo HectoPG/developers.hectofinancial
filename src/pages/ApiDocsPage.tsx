@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Play, FileText } from 'lucide-react';
-import { getAllApiDocuments, getApiDocumentByPath, getApiDocumentationConfig, type ApiDocument } from '../config/apiDocumentation';
+import { getAllApiDocuments, getApiDocumentByPath, type ApiDocument } from '../config/apiDocumentation';
 import { useApiDoc } from '../contexts/ApiDocContext';
 
 

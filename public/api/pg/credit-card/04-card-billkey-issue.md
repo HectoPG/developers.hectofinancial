@@ -1,3 +1,14 @@
+
+  title: "신용카드 빌키 발급",
+  description: "신용카드 빌키 발급 API",
+  category: "결제 API",
+  path: "/spay/APICardAuth.do",
+  method: "POST",
+  testUrl: "https://tbgw.settlebank.co.kr/spay/APICardAuth.do",
+  prodUrl: "https://gw.settlebank.co.kr/spay/APICardAuth.do",
+  contentType: "application/json"
+};
+
 # 신용카드 빌키 발급
 
 결제 하지 않고 빌키만 발급받는 API입니다.
@@ -9,13 +20,12 @@
 
 ## API 정보
 
-- **URL**: `/spay/APICardActionPay.do`
 - **Method**: `POST`
-- **Content-Type**: `application/x-www-form-urlencoded`
+- **Path**: `/spay/APICardAuth.do`
+- **Content-Type**: `application/json`
 
 ## 요청 파라미터
 
-### params 객체
 
 
 
@@ -37,7 +47,8 @@
 
 
 
-### data 객체
+
+
 
 
 
@@ -69,7 +80,7 @@
 
 ### 성공 응답
 
-#### params 객체
+ 객체
 
 
 
@@ -91,7 +102,7 @@
 
 
 
-#### data 객체
+#
 
 
 

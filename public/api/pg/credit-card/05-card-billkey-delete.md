@@ -1,3 +1,14 @@
+
+  title: "신용카드 빌키 삭제",
+  description: "신용카드 빌키 삭제 API",
+  category: "결제 API",
+  path: "/spay/APICardActionDelkey.do",
+  method: "POST",
+  testUrl: "https://tbgw.settlebank.co.kr/spay/APICardActionDelkey.do",
+  prodUrl: "https://gw.settlebank.co.kr/spay/APICardActionDelkey.do",
+  contentType: "application/json"
+};
+
 # 신용카드 빌키 삭제
 
 1회차 응답으로 발급받은 빌키를 삭제하는 API입니다.
@@ -9,13 +20,12 @@
 
 ## API 정보
 
-- **URL**: `/spay/APICardActionPay.do`
 - **Method**: `POST`
-- **Content-Type**: `application/x-www-form-urlencoded`
+- **Path**: `/spay/APICardActionDelkey.do`
+- **Content-Type**: `application/json`
 
 ## 요청 파라미터
 
-### params 객체
 
 
 
@@ -37,7 +47,8 @@
 
 
 
-### data 객체
+
+
 
 
 
@@ -57,7 +68,7 @@
 
 ### 성공 응답
 
-#### params 객체
+ 객체
 
 
 
@@ -83,7 +94,7 @@
 
 
 
-#### data 객체
+#
 
 
 
@@ -91,7 +102,7 @@
 
 ### 실패 응답
 
-#### params 객체
+ 객체
 
 
 
@@ -99,7 +110,7 @@
 
 
 
-#### data 객체
+#
 
 실패 시에는 data 객체가 비어있습니다.
 

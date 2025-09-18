@@ -126,8 +126,8 @@ const ApiSidebar: React.FC<ApiSidebarProps> = ({ onMobileClose }) => {
         const isServiceExpanded = expandedServices.has(category.id);
         // 현재 URL이 이 카테고리에 속하는지 확인
         const isServiceActive = location.pathname.startsWith('/docs/api') &&
-          category.subcategories.some(sub =>
-            sub.documents.some(api => location.pathname === api.path)
+          category.subcategories.some((sub: any) =>
+            sub.documents.some((api: any) => location.pathname === api.path)
           );
 
         return (
@@ -154,11 +154,11 @@ const ApiSidebar: React.FC<ApiSidebarProps> = ({ onMobileClose }) => {
 
             {isServiceExpanded && (
               <div className="mt-1 ml-4 space-y-2">
-                {category.subcategories.map((subcategory) => {
+                {category.subcategories.map((subcategory: any) => {
                   const subcategoryKey = `${category.id}-${subcategory.id}`;
                   const isSubcategoryExpanded = expandedSubcategories.has(subcategoryKey);
                   // 현재 URL이 이 서브카테고리에 속하는지 확인
-                  const isSubcategoryActive = subcategory.documents.some(api => location.pathname === api.path);
+                  const isSubcategoryActive = subcategory.documents.some((api: any) => location.pathname === api.path);
 
                   return (
                     <div key={subcategoryKey}>
@@ -185,7 +185,7 @@ const ApiSidebar: React.FC<ApiSidebarProps> = ({ onMobileClose }) => {
                       {isSubcategoryExpanded && (
                         <div className="mt-1 ml-4 space-y-1">
                           {/* 3단계: 개별 API */}
-                          {subcategory.documents.map((api) => {
+                          {subcategory.documents.map((api: any) => {
                             // 현재 URL이 이 API와 일치하는지 확인
                             const isApiActive = location.pathname === api.path;
 
