@@ -85,7 +85,9 @@ const ApiParameterCard: React.FC<ApiParameterCardProps> = ({
         {/* 파라미터 이름, 타입, 필수 - 한 줄에 */}
         <div className="lg:col-span-1">
           <div className="flex items-center gap-1 flex-nowrap">
-            <span className="text-gray-400 text-xs mr-1">└</span>
+            {section && (
+              <span className="text-gray-400 text-xs mr-1">└</span>
+            )}
             <code className="text-xs font-mono font-semibold text-gray-900 bg-gray-100 px-1.5 py-0.5 rounded">
               {name}
             </code>
