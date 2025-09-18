@@ -1,3 +1,14 @@
+
+  title: "신용카드 결제 (Non-UI)",
+  description: "신용카드 Non-UI 결제 API",
+  category: "결제 API",
+  path: "/spay/APICardActionPay.do",
+  method: "POST",
+  testUrl: "https://tbgw.settlebank.co.kr/spay/APICardActionPay.do",
+  prodUrl: "https://gw.settlebank.co.kr/spay/APICardActionPay.do",
+  contentType: "application/json"
+};
+
 # 신용카드 결제 (Non-UI)
 
 신용카드 Non-UI 결제는 서버에서 직접 카드 정보를 전송하여 결제를 진행하는 방식입니다.
@@ -10,13 +21,12 @@
 
 ## API 정보
 
-- **URL**: `/spay/APICardActionPay.do`
 - **Method**: `POST`
-- **Content-Type**: `application/x-www-form-urlencoded`
+- **Path**: `/spay/APICardActionPay.do`
+- **Content-Type**: `application/json`
 
 ## 요청 파라미터
 
-### params 객체
 
 
 
@@ -38,7 +48,8 @@
 
 
 
-### data 객체
+
+
 
 
 
@@ -97,7 +108,7 @@
 
 ### 성공 응답
 
-#### params 객체
+ 객체
 
 
 
@@ -127,7 +138,7 @@
 
 
 
-#### data 객체
+
 
 
 
@@ -151,7 +162,7 @@
 
 ### 실패 응답
 
-#### params 객체
+ 객체
 
 
 
@@ -159,7 +170,7 @@
 
 
 
-#### data 객체
+#
 
 실패 시에는 data 객체가 비어있습니다.
 

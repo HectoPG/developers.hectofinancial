@@ -1,6 +1,7 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import clsx from 'clsx';
-import { useApiTest } from '../contexts/ApiTestContext';
+import { useApiDoc } from '../contexts/ApiDocContext';
 
 interface ApiParameterCardProps {
   name: string;
@@ -39,32 +40,21 @@ const ApiParameterCard: React.FC<ApiParameterCardProps> = ({
   // 섹션 구분
   section
 }) => {
-  // Context가 없을 때를 대비한 fallback
+  const location = useLocation();
+
+  // ApiDocContext 사용 (optional)
   let updateParameter: ((name: string, value: string, type: string, required: boolean, section?: 'params' | 'data') => void) | null = null;
   let hasContext = false;
-  
+
   try {
-    const context = useApiTest();
+    const context = useApiDoc();
     updateParameter = context.updateParameter;
     hasContext = true;
-    
   } catch (error) {
-    // Context가 없으면 전역 상태 사용
-    updateParameter = (name: string, value: string, type: string, required: boolean, section?: 'params' | 'data') => {
-      // 전역 상태에 저장
-      if (typeof window !== 'undefined') {
-        if (!(window as any).globalApiParameters) {
-          (window as any).globalApiParameters = {};
-        }
-        (window as any).globalApiParameters[name] = { name, value, type, required, section };
-        
-        // 커스텀 이벤트 발생시켜 ApiTestPanel에 알림
-        window.dispatchEvent(new CustomEvent('apiParameterChanged', {
-          detail: { name, value, type, required, section }
-        }));
-      }
+    // Context가 없는 경우 (MDX에서 사용될 때) 아무것도 하지 않음
+    updateParameter = () => {
     };
-    hasContext = true; // 전역 상태를 사용할 수 있으므로 true로 설정
+    hasContext = false;
   }
 
   const [inputValue, setInputValue] = React.useState(defaultValue || example || '');
@@ -72,42 +62,21 @@ const ApiParameterCard: React.FC<ApiParameterCardProps> = ({
   // 초기값을 Context에 등록
   React.useEffect(() => {
     const initialValue = defaultValue || example || '';
-    
+
+    // inputValue도 초기값으로 재설정
+    setInputValue(initialValue);
+
     if (initialValue && updateParameter && hasContext) {
-      updateParameter(name, initialValue, type, required, section || undefined);
-      
-      // 초기값도 전역 상태에 등록
-      if (typeof window !== 'undefined') {
-        if (!(window as any).globalApiParameters) {
-          (window as any).globalApiParameters = {};
-        }
-        (window as any).globalApiParameters[name] = { name, value: initialValue, type, required, section };
-        
-        // 초기값 등록 시에도 이벤트 발생
-        window.dispatchEvent(new CustomEvent('apiParameterChanged', {
-          detail: { name, value: initialValue, type, required, section }
-        }));
-      }
+      updateParameter(name, initialValue, type, required, section);
     }
-  }, [name, defaultValue, example, type, required, updateParameter, hasContext, section]);
+  }, [name, defaultValue, example, type, required, updateParameter, section, location.pathname, hasContext]);
+
 
   const handleInputChange = (value: string) => {
     setInputValue(value);
-    updateParameter?.(name, value, type, required, section || undefined);
-    
-    // Context를 사용하더라도 전역 상태도 업데이트
-    if (typeof window !== 'undefined') {
-      if (!(window as any).globalApiParameters) {
-        (window as any).globalApiParameters = {};
-      }
-      (window as any).globalApiParameters[name] = { name, value, type, required, section };
-      
-      // 커스텀 이벤트 발생시켜 ApiTestPanel에 알림
-      window.dispatchEvent(new CustomEvent('apiParameterChanged', {
-        detail: { name, value, type, required, section }
-      }));
+    if (hasContext) {
+      updateParameter?.(name, value, type, required, section);
     }
-    
     onChange?.(name, value);
   };
   return (
@@ -116,6 +85,9 @@ const ApiParameterCard: React.FC<ApiParameterCardProps> = ({
         {/* 파라미터 이름, 타입, 필수 - 한 줄에 */}
         <div className="lg:col-span-1">
           <div className="flex items-center gap-1 flex-nowrap">
+            {section && (
+              <span className="text-gray-400 text-xs mr-1">└</span>
+            )}
             <code className="text-xs font-mono font-semibold text-gray-900 bg-gray-100 px-1.5 py-0.5 rounded">
               {name}
             </code>

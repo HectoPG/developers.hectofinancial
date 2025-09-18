@@ -1,13 +1,13 @@
----
-title: 신용카드 결제 (Non-UI)
-description: 신용카드 Non-UI 결제 API
-category: 결제 API
-path: /spay/APICardActionPay.do
-method: POST
-testUrl: https://tbgw.settlebank.co.kr/spay/APICardActionPay.do
-prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
-contentType: application/json
----
+export const apiInfo = {
+  title: "신용카드 결제 (Non-UI)",
+  description: "신용카드 Non-UI 결제 API",
+  category: "결제 API",
+  path: "/spay/APICardActionPay.do",
+  method: "POST",
+  testUrl: "https://tbgw.settlebank.co.kr/spay/APICardActionPay.do",
+  prodUrl: "https://gw.settlebank.co.kr/spay/APICardActionPay.do",
+  contentType: "application/json"
+};
 
 # 신용카드 결제 (Non-UI)
 
@@ -21,13 +21,13 @@ contentType: application/json
 
 ## API 정보
 
-- **URL**: `/spay/APICardActionPay.do`
 - **Method**: `POST`
-- **Content-Type**: `application/x-www-form-urlencoded`
+- **Path**: `/spay/APICardActionPay.do`
+- **Content-Type**: `application/json`
 
 ## 요청 파라미터
 
-### params 객체
+<ApiObjectHeader name="params" type="object" description="API 요청의 기본 헤더 정보를 담는 객체입니다. 거래 식별 및 인증에 필요한 메타데이터를 포함합니다." />
 
 <ApiParameterCard
   name="mchtId"
@@ -168,7 +168,7 @@ contentType: application/json
   section="params"
 />
 
-### data 객체
+<ApiObjectHeader name="data" type="object" description="결제 처리에 필요한 비즈니스 데이터를 담는 객체입니다. 고객 정보, 결제금액, 카드 정보 등 결제 요청의 핵심 정보를 포함합니다." />
 
 <ApiParameterCard
   name="pktHash"
@@ -434,7 +434,7 @@ contentType: application/json
 
 ### 성공 응답
 
-#### params 객체
+<ApiObjectHeader name="params" type="object" description="API 요청의 기본 헤더 정보를 담는 객체입니다. 거래 식별 및 인증에 필요한 메타데이터를 포함합니다." /> 객체
 
 <DocParameterCard
   name="mchtId"
@@ -560,7 +560,7 @@ contentType: application/json
   example="1000"
 />
 
-#### data 객체
+<ApiObjectHeader name="data" type="object" description="결제 처리에 필요한 비즈니스 데이터를 담는 객체입니다. 고객 정보, 결제금액, 카드 정보 등 결제 요청의 핵심 정보를 포함합니다." />
 
 <DocParameterCard
   name="billKey"
@@ -655,7 +655,7 @@ contentType: application/json
 
 ### 실패 응답
 
-#### params 객체
+<ApiObjectHeader name="params" type="object" description="API 요청의 기본 헤더 정보를 담는 객체입니다. 거래 식별 및 인증에 필요한 메타데이터를 포함합니다." /> 객체
 
 <DocParameterCard
   name="outStatCd"
@@ -688,7 +688,7 @@ contentType: application/json
   example="결제 요청 정보 누락"
 />
 
-#### data 객체
+#<ApiObjectHeader name="data" type="object" description="결제 처리에 필요한 비즈니스 데이터를 담는 객체입니다. 고객 정보, 결제금액, 카드 정보 등 결제 요청의 핵심 정보를 포함합니다." />
 
 실패 시에는 data 객체가 비어있습니다.
 

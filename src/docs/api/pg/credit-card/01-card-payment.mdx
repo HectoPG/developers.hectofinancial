@@ -1,185 +1,379 @@
----
-title: 신용카드 결제 (Non-UI)
-description: 신용카드 결제 및 빌키 결제 API
-category: 결제 API
-path: /spay/APICardActionPay.do
-method: POST
-testUrl: https://tbgw.settlebank.co.kr/spay/APICardActionPay.do
-prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
----
+export const apiInfo = {
+  title: "신용카드 결제 (UI)",
+  description: "신용카드 UI 결제 API",
+  category: "결제 API",
+  path: "/card/main.do",
+  method: "POST",
+  testUrl: "https://tbnpg.settlebank.co.kr/card/main.do",
+  prodUrl: "https://npg.settlebank.co.kr/card/main.do",
+  contentType: "application/x-www-form-urlencoded"
+};
 
-# 신용카드 결제 (Non-UI)
+# 신용카드 결제 (UI)
 
-신용카드 결제 및 빌키 결제 API입니다.
+신용카드 UI 결제는 고객이 결제 화면에서 직접 카드 정보를 입력하여 결제를 진행하는 방식입니다.
 
-**결제 방식:**
-- 구인증: 카드번호, 유효기간(yyMM), 식별번호, 카드비밀번호로 결제 요청
-- 비인증: 카드번호, 유효기간(yyMM)으로 결제 요청
-- 빌키(자동결제 키) 발급: 상점 아이디 설정에 따라 빌키를 응답 값으로 내려 드리고 있으며, 빌키를 따로 저장 하였다가 결제가 필요할 경우 빌키 결제로 요청 주시길 바랍니다.
+## 주의 사항
 
-**해시 생성 방법:**
-- **요청 해시**: pktHash = SHA256(거래일자 + 거래시간 + 상점아이디 + 상점주문번호 + 거래금액(평문) + 해쉬키)
-- **응답 해시**: pktHash = SHA256(거래상태코드 + 요청일자 + 요청시간 + 상점아이디 + 상점주문번호 + 거래금액 + 해쉬키)
+* 상점아이디 속성에 따라 화면이 분기됩니다.
+  * 상점아이디가 일반 인증 결제로 설정되어 있는 경우 카드사 인증창이 나타납니다.
+  * 상점아이디가 비인증 또는 구인증으로 설정되어 있는 경우 카드정보 입력창이 나타납니다.
+* 신용카드 빌키(billKey)를 내려받고자 하는 경우, 빌키서비스를 별도 신청하셔야 합니다
+* 빌키를 발급받은 경우, 해당 빌키로 2회차 결제 API 요청하시면 됩니다.
+* ※ 매출전표의 발행금액은 가맹점에서 전송하는 파라미터를 기준으로 표기되니 주의하시기 바랍니다.
 
-## 📡 API 정보
+## API 정보
 
-| 항목 | 값 |
-|------|-----|
-| **HTTP Method** | `POST` |
-| **경로** | `/spay/APICardActionPay.do` |
-| **테스트 URL** | `https://tbgw.settlebank.co.kr/spay/APICardActionPay.do` |
-| **운영 URL** | `https://gw.settlebank.co.kr/spay/APICardActionPay.do` |
+- **Method**: `POST`
+- **Path**: `/card/main.do`
+- **Content-Type**: `application/x-www-form-urlencoded`
 
-## 📋 요청 파라미터
+## 요청 파라미터
 
-### params 객체
-
-<ParameterCard
+<ApiParameterCard
   name="mchtId"
   type="string(10)"
   required={true}
   description="헥토파이낸셜에서 부여하는 고유 상점아이디입니다."
-  example="nxca_jt_bi"
+  example="nxca_jt_il"
   values={[
-    "nxca_ks_gu: 구인증 신용카드",
-    "nxca_jt_bi: 비인증 신용카드"
+    "nxca_jt_il: 인증",
+    "nxca_jt_bi: 비인증", 
+    "nxca_jt_gu: 구인증",
+    "nxca_ab_bi: 영문외화 비인증",
+    "nxca_ab_il: 영문외화 인증"
   ]}
   inputType="text"
-  defaultValue="nxca_jt_bi"
+  defaultValue="nxca_jt_il"
   placeholder="상점아이디를 입력하세요"
-  section="params"
 />
 
-<ParameterCard
-  name="ver"
-  type="string(4)"
+<ApiParameterCard
+  name="method"
+  type="string(20)"
   required={true}
-  description="전문의 버전입니다."
-  example="0A19"
+  description="PG 서비스에 해당하는 결제 구분 코드입니다."
+  example="card"
   note="고정값으로 사용합니다."
   inputType="text"
-  defaultValue="0A19"
+  defaultValue="card"
   fixed={true}
-  section="params"
 />
 
-<ParameterCard
-  name="method"
-  type="string(2)"
-  required={true}
-  description="결제수단 코드입니다."
-  example="CA"
-  note="신용카드 결제의 경우 'CA' 고정값을 사용합니다."
-  inputType="text"
-  defaultValue="CA"
-  fixed={true}
-  section="params"
-/>
-
-<ParameterCard
-  name="bizType"
-  type="string(2)"
-  required={true}
-  description="업무구분 코드입니다."
-  example="B0"
-  note="일반 결제의 경우 'B0' 고정값을 사용합니다."
-  inputType="text"
-  defaultValue="B0"
-  fixed={true}
-  section="params"
-/>
-
-<ParameterCard
-  name="encCd"
-  type="string(2)"
-  required={true}
-  description="암호화 구분 코드입니다."
-  example="23"
-  note="AES 암호화 사용 시 '23' 고정값을 사용합니다."
-  inputType="text"
-  defaultValue="23"
-  fixed={true}
-  section="params"
-/>
-
-<ParameterCard
-  name="mchtTrdNo"
-  type="string(100)"
-  required={true}
-  description="상점에서 생성하는 고유한 거래번호입니다."
-  example="ORDER20231215143022"
-  note="⚠️ 한글은 사용할 수 없으며, 영문, 숫자, 일부 특수문자만 사용 가능합니다."
-  inputType="text"
-  defaultValue="ORDER20231215143022"
-  placeholder="상점주문번호를 입력하세요"
-  section="params"
-/>
-
-<ParameterCard
+<ApiParameterCard
   name="trdDt"
   type="string(8)"
   required={true}
-  description="거래 요청 일자입니다. yyyyMMdd 형식으로 전달합니다."
+  description="요청일자 (yyyyMMdd 형식)입니다."
   example="20231215"
   inputType="text"
   defaultValue="20231215"
-  placeholder="거래일자를 입력하세요"
-  section="params"
+  placeholder="YYYYMMDD 형식으로 입력하세요"
 />
 
-<ParameterCard
+<ApiParameterCard
   name="trdTm"
   type="string(6)"
   required={true}
-  description="거래 요청 시간입니다. HH24MISS 형식으로 전달합니다."
+  description="요청시간 (HH24MISS 형식)입니다."
   example="143022"
   inputType="text"
   defaultValue="143022"
-  placeholder="거래시간을 입력하세요"
-  section="params"
+  placeholder="HHMMSS 형식으로 입력하세요"
 />
 
-<ParameterCard
-  name="mobileYn"
+<ApiParameterCard
+  name="mchtTrdNo"
+  type="string(100)"
+  required={true}
+  description="상점에서 생성하는 고유 주문번호입니다. 한글은 제외해야 합니다."
+  example="ORDER20231215143022"
+  inputType="text"
+  defaultValue="ORDER20231215143022"
+  placeholder="상점주문번호를 입력하세요"
+/>
+
+<ApiParameterCard
+  name="mchtName"
+  type="string(100)"
+  required={true}
+  description="상점한글명입니다."
+  example="헥토파이낸셜"
+  inputType="text"
+  defaultValue="헥토파이낸셜"
+  placeholder="상점한글명을 입력하세요"
+/>
+
+<ApiParameterCard
+  name="mchtEName"
+  type="string(100)"
+  required={true}
+  description="상점영문명입니다."
+  example="Hecto Financial"
+  inputType="text"
+  defaultValue="Hecto Financial"
+  placeholder="상점영문명을 입력하세요"
+/>
+
+<ApiParameterCard
+  name="pmtPrdtNm"
+  type="string(128)"
+  required={true}
+  description="결제상품명입니다."
+  example="테스트상품"
+  inputType="text"
+  defaultValue="테스트상품"
+  placeholder="상품명을 입력하세요"
+/>
+
+<ApiParameterCard
+  name="trdAmt"
+  type="string(12)"
+  required={true}
+  description="거래금액입니다. USD(달러) 사용시 100을 곱하여 전달합니다."
+  example="1000"
+  note="KRW: 1000, USD: 100 (ex) $ 1.00 → 100 (USD)"
+  inputType="text"
+  defaultValue="1000"
+  placeholder="거래금액을 입력하세요"
+/>
+
+<ApiParameterCard
+  name="notiUrl"
+  type="string(250)"
+  required={true}
+  description="결제 후 결과 전달되는 페이지의 URL(Server To Server 연동 URL)입니다."
+  example="https://example.com/notiUrl"
+  inputType="url"
+  defaultValue="https://example.com/notiUrl"
+  placeholder="결과처리 URL을 입력하세요"
+/>
+
+<ApiParameterCard
+  name="nextUrl"
+  type="string(250)"
+  required={true}
+  description="결제 후 결과 전달 및 이동페이지 URL입니다."
+  example="https://example.com/nextUrl"
+  inputType="url"
+  defaultValue="https://example.com/nextUrl"
+  placeholder="결과화면 URL을 입력하세요"
+/>
+
+<ApiParameterCard
+  name="cancUrl"
+  type="string(250)"
+  required={true}
+  description="고객 강제 종료시 결과 전달 및 이동페이지 URL입니다."
+  example="https://example.com/cancUrl"
+  inputType="url"
+  defaultValue="https://example.com/cancUrl"
+  placeholder="결제취소 URL을 입력하세요"
+/>
+
+
+<ApiParameterCard
+  name="mchtCustNm"
+  type="string(30)"
+  required={false}
+  description="고객명입니다."
+  example="홍길동"
+  inputType="text"
+  defaultValue="홍길동"
+  placeholder="고객명을 입력하세요"
+/>
+
+<ApiParameterCard
+  name="mchtCustId"
+  type="string(50)"
+  required={false}
+  description="상점에서 보내주는 고유 고객아이디 혹은 유니크키입니다."
+  example="HongGilDong"
+  inputType="text"
+  defaultValue="HongGilDong"
+  placeholder="고객아이디를 입력하세요"
+/>
+
+<ApiParameterCard
+  name="email"
+  type="string(60)"
+  required={false}
+  description="이메일 주소입니다."
+  example="HongGilDong@example.com"
+  inputType="email"
+  defaultValue="HongGilDong@example.com"
+  placeholder="이메일 주소를 입력하세요"
+/>
+
+<ApiParameterCard
+  name="mchtParam"
+  type="string(4000)"
+  required={false}
+  description="기타 주문 정보를 입력하는 상점 예약 필드입니다."
+  example="name=HongGilDong&age=25"
+  inputType="text"
+  defaultValue="name=HongGilDong&age=25"
+  placeholder="상점예약필드를 입력하세요"
+/>
+
+<ApiParameterCard
+  name="prdtTerm"
+  type="string(14)"
+  required={false}
+  description="상품제공기간 (yyyyMMddHHmmss 형식)입니다. 값이 없으면 일반결제로 표기됩니다."
+  example="20221231235959"
+  inputType="text"
+  defaultValue="20221231235959"
+  placeholder="YYYYMMDDHHMMSS 형식으로 입력하세요"
+/>
+
+<ApiParameterCard
+  name="taxTypeCd"
   type="string(1)"
   required={false}
-  description="모바일 여부입니다."
+  description="면세여부입니다."
   example="N"
+  values={[
+    "N: 과세",
+    "Y: 면세", 
+    "G: 복합과세"
+  ]}
   inputType="text"
   defaultValue="N"
-  placeholder="모바일 여부를 입력하세요"
-  values={[
-    "Y: 모바일웹/앱",
-    "N: PC 또는 그 외"
-  ]}
-  section="params"
+  placeholder="면세여부를 입력하세요"
 />
 
-<ParameterCard
-  name="osType"
+<ApiParameterCard
+  name="taxAmt"
+  type="string(12)"
+  required={false}
+  description="과세금액입니다. 복합과세일 경우 필수입니다."
+  example="909"
+  inputType="text"
+  defaultValue="909"
+  placeholder="과세금액을 입력하세요"
+/>
+
+<ApiParameterCard
+  name="vatAmt"
+  type="string(12)"
+  required={false}
+  description="부가세금액입니다. 복합과세일 경우 필수입니다."
+  example="91"
+  inputType="text"
+  defaultValue="91"
+  placeholder="부가세금액을 입력하세요"
+/>
+
+<ApiParameterCard
+  name="taxFreeAmt"
+  type="string(12)"
+  required={false}
+  description="면세금액입니다. 복합과세일 경우 필수입니다."
+  example="0"
+  inputType="text"
+  defaultValue="0"
+  placeholder="면세금액을 입력하세요"
+/>
+
+<ApiParameterCard
+  name="svcAmt"
+  type="string(12)"
+  required={false}
+  description="신용카드 봉사료입니다."
+  example="10"
+  inputType="text"
+  defaultValue="10"
+  placeholder="봉사료를 입력하세요"
+/>
+
+<ApiParameterCard
+  name="instmtMon"
+  type="string(2)"
+  required={false}
+  description="할부개월수입니다."
+  example="00"
+  values={[
+    "00: 일시불",
+    "02: 2개월",
+    "03: 3개월",
+    "04: 4개월",
+    "05: 5개월",
+    "06: 6개월",
+    "07: 7개월",
+    "08: 8개월",
+    "09: 9개월",
+    "10: 10개월",
+    "11: 11개월",
+    "12: 12개월"
+  ]}
+  inputType="text"
+  defaultValue="00"
+  placeholder="할부개월수를 입력하세요"
+/>
+
+<ApiParameterCard
+  name="cardType"
   type="string(1)"
   required={false}
-  description="OS 구분입니다."
-  example="W"
-  inputType="text"
-  defaultValue="W"
-  placeholder="OS 타입을 입력하세요"
+  description="카드결제타입입니다."
+  example="3"
   values={[
-    "A: Android",
-    "I: iOS", 
-    "W: Windows",
-    "M: Mac",
-    "E: 기타",
-    "공백: 확인불가"
+    "3: 앱카드 전용가능 카드사[신한/삼성/현대/KB/농협/롯데]",
+    "6: 현대카드 PayShot(카드사와 직접 제휴계약 진행 후 사용가능)"
   ]}
-  section="params"
+  inputType="text"
+  defaultValue="3"
+  placeholder="카드결제타입을 입력하세요"
 />
 
-### data 객체
+<ApiParameterCard
+  name="chainUserId"
+  type="string(100)"
+  required={false}
+  description="현대카드 PayShot ID입니다. 카드사와 직접 제휴계약 진행 후 사용 가능합니다."
+  example=""
+  inputType="text"
+  defaultValue=""
+  placeholder="PayShot ID를 입력하세요"
+/>
 
-<ParameterCard
+<ApiParameterCard
+  name="cardGb"
+  type="string(4)"
+  required={false}
+  description="특정카드사 코드입니다. 하나의 특정 카드사만 노출됩니다."
+  example="NHC"
+  inputType="text"
+  defaultValue="NHC"
+  placeholder="카드사 코드를 입력하세요"
+/>
+
+<ApiParameterCard
+  name="appScheme"
+  type="string(100)"
+  required={false}
+  description="앱스키마입니다. (AppScheme://~)형식으로 사용되며, 자체앱을 구축하는 경우 사용합니다."
+  example="PAYAPPNAME://"
+  inputType="text"
+  defaultValue="PAYAPPNAME://"
+  placeholder="앱스키마를 입력하세요"
+/>
+
+<ApiParameterCard
+  name="custIp"
+  type="string(15)"
+  required={false}
+  description="고객 IP주소입니다. 상점 서버의 IP가 아닌, 고객 기기의 IP주소입니다."
+  example="127.0.0.1"
+  inputType="text"
+  defaultValue="127.0.0.1"
+  placeholder="고객 IP주소를 입력하세요"
+/>
+
+<ApiParameterCard
   name="pktHash"
-  type="string(64)"
+  type="string(200)"
   required={true}
   description="SHA256 방식으로 생성한 해쉬값입니다."
   example="f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
@@ -187,498 +381,214 @@ prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
   defaultValue="f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
   placeholder="SHA256 해쉬값을 입력하세요"
   fixed={true}
-  note="🔒 거래일자 + 거래시간 + 상점아이디 + 상점주문번호 + 거래금액(평문) + 해쉬키 순서로 조합"
-  section="data"
+  note="🔒 상점아이디 + 결제수단 + 상점주문번호 + 요청일자 + 요청시간 + 거래금액(평문) + 해쉬키 순서로 조합"
 />
 
-<ParameterCard
-  name="pmtprdNm"
-  type="string(128)"
-  required={true}
-  description="결제상품명입니다."
-  example="테스트상품"
-  inputType="text"
-  defaultValue="테스트상품"
-  placeholder="결제상품명을 입력하세요"
-  section="data"
-/>
+## 해쉬 생성 방법
 
-<ParameterCard
-  name="mchtCustNm"
-  type="string(50)"
-  required={true}
-  description="상점 고객명입니다."
-  example="홍길동"
-  inputType="text"
-  defaultValue="홍길동"
-  placeholder="상점 고객명을 입력하세요"
-  section="data"
-/>
+해쉬값은 다음 순서로 조합하여 SHA256으로 생성합니다:
 
-<ParameterCard
-  name="mchtCustId"
-  type="string(50)"
-  required={true}
-  description="상점 고객아이디입니다."
-  example="HongGilDong"
-  inputType="text"
-  defaultValue="HongGilDong"
-  placeholder="고객 아이디를 입력하세요"
-  section="data"
-/>
-
-<ParameterCard
-  name="email"
-  type="string(100)"
-  required={false}
-  description="상점 고객 이메일주소입니다."
-  example="HongGilDong@example.com"
-  inputType="email"
-  defaultValue="HongGilDong@example.com"
-  placeholder="이메일 주소를 입력하세요"
-  section="data"
-/>
-
-<ParameterCard
-  name="cardNo"
-  type="string(16)"
-  required={true}
-  description="카드번호입니다. AES 암호화하여 전달합니다."
-  example="1111222233334444"
-  note="🔒 AES 암호화 필수"
-  inputType="text"
-  defaultValue="1111222233334444"
-  placeholder="카드번호를 입력하세요"
-  section="data"
-/>
-
-<ParameterCard
-  name="vldDtMon"
-  type="string(2)"
-  required={true}
-  description="유효기간(월)입니다. AES 암호화하여 전달합니다."
-  example="12"
-  note="🔒 AES 암호화 필수"
-  inputType="text"
-  defaultValue="12"
-  placeholder="월을 입력하세요 (01-12)"
-  section="data"
-/>
-
-<ParameterCard
-  name="vldDtYear"
-  type="string(2)"
-  required={true}
-  description="유효기간(년)입니다. AES 암호화하여 전달합니다."
-  example="24"
-  note="🔒 AES 암호화 필수"
-  inputType="text"
-  defaultValue="24"
-  placeholder="년도를 입력하세요 (YY)"
-  section="data"
-/>
-
-<ParameterCard
-  name="idntNo"
-  type="string(10)"
-  required={false}
-  description="식별번호입니다. 생년월일 6자리 또는 사업자 번호 10자리, AES 암호화하여 전달합니다. 구인증만 사용합니다."
-  example="991231"
-  note="🔒 AES 암호화 필수, 구인증에서만 사용"
-  inputType="text"
-  defaultValue="991231"
-  placeholder="주민등록번호 앞 6자리를 입력하세요"
-  section="data"
-/>
-
-<ParameterCard
-  name="cardPwd"
-  type="string(2)"
-  required={false}
-  description="카드비밀번호 앞 2자리입니다. AES 암호화하여 전달합니다. 구인증만 사용합니다."
-  example="00"
-  note="🔒 AES 암호화 필수, 구인증에서만 사용"
-  inputType="password"
-  defaultValue="00"
-  placeholder="카드 비밀번호 앞 2자리를 입력하세요"
-  section="data"
-/>
-
-<ParameterCard
-  name="instmtMon"
-  type="string(2)"
-  required={true}
-  description="할부개월수입니다."
-  example="00"
-  inputType="text"
-  defaultValue="00"
-  placeholder="할부개월수를 입력하세요"
-  values={[
-    "00: 일시불",
-    "02~12: 2개월~12개월 할부"
-  ]}
-  section="data"
-/>
-
-<ParameterCard
-  name="crcCd"
-  type="string(3)"
-  required={true}
-  description="통화구분입니다."
-  example="KRW"
-  inputType="text"
-  defaultValue="KRW"
-  fixed={true}
-  values={[
-    "KRW: 국내결제",
-    "USD: 해외결제"
-  ]}
-  section="data"
-/>
-
-<ParameterCard
-  name="taxTypeCd"
-  type="string(1)"
-  required={false}
-  description="세금유형입니다."
-  example="N"
-  inputType="text"
-  defaultValue="N"
-  placeholder="과세구분코드를 입력하세요"
-  values={[
-    "N: 과세",
-    "Y: 면세", 
-    "G: 복합과세",
-    "공백: 상점 설정에 따름"
-  ]}
-  section="data"
-/>
-
-<ParameterCard
-  name="trdAmt"
-  type="string(12)"
-  required={true}
-  description="거래금액입니다. AES 암호화하여 전달합니다."
-  example="1000"
-  note="🔒 AES 암호화 필수, 해외결제시 정수표기"
-  inputType="number"
-  defaultValue="1000"
-  placeholder="거래금액을 입력하세요"
-  section="data"
-/>
-
-<ParameterCard
-  name="taxAmt"
-  type="string(12)"
-  required={false}
-  description="거래금액 중 과세금액입니다. 복합과세일 경우 필수, AES 암호화하여 전달합니다."
-  example="909"
-  note="🔒 AES 암호화 필수, 복합과세일 경우 필수"
-  inputType="number"
-  defaultValue="909"
-  placeholder="부가세 금액을 입력하세요"
-  section="data"
-/>
-
-<ParameterCard
-  name="vatAmt"
-  type="string(12)"
-  required={false}
-  description="거래금액 중 부가세금액입니다. 복합과세일 경우 필수, AES 암호화하여 전달합니다."
-  example="91"
-  note="🔒 AES 암호화 필수, 복합과세일 경우 필수"
-  inputType="number"
-  defaultValue="91"
-  placeholder="VAT 금액을 입력하세요"
-  section="data"
-/>
-
-<ParameterCard
-  name="taxFreeAmt"
-  type="string(12)"
-  required={false}
-  description="거래금액 중 비과세금액입니다. 복합과세일 경우 필수, AES 암호화하여 전달합니다."
-  example="0"
-  note="🔒 AES 암호화 필수, 복합과세일 경우 필수"
-  inputType="number"
-  defaultValue="0"
-  placeholder="면세 금액을 입력하세요"
-  section="data"
-/>
-
-<ParameterCard
-  name="svcAmt"
-  type="string(12)"
-  required={false}
-  description="신용카드 봉사료입니다. AES 암호화하여 전달합니다."
-  example="10"
-  note="🔒 AES 암호화 필수"
-  inputType="number"
-  defaultValue="10"
-  placeholder="봉사료 금액을 입력하세요"
-  section="data"
-/>
-
-<ParameterCard
-  name="notiUrl"
-  type="string(200)"
-  required={false}
-  description="결제완료후, 헥토파이낸셜에서 상점으로 전달하는 노티를 수신하는Callback URL입니다."
-  example="https://example.com/notiUrl"
-  inputType="url"
-  defaultValue="https://example.com/notiUrl"
-  placeholder="통보 URL을 입력하세요"
-  section="data"
-/>
-
-<ParameterCard
-  name="mchtParam"
-  type="string(500)"
-  required={false}
-  description="기타 주문 정보를 입력하는 상점 예약 필드입니다."
-  example="name=HongGilDong&age=25"
-  inputType="text"
-  defaultValue="name=HongGilDong&age=25"
-  placeholder="임의 파라미터를 입력하세요"
-  section="data"
-/>
-
-## 💻 요청 예시
-
-### 비인증 신용카드 결제
-
-```json
-{
-  "params": {
-    "mchtId": "nxca_jt_bi",
-    "ver": "0A19",
-    "method": "CA",
-    "bizType": "B0",
-    "encCd": "23",
-    "mchtTrdNo": "ORDER20231215143022",
-    "trdDt": "20231215",
-    "trdTm": "143022",
-    "mobileYn": "N",
-    "osType": "W"
-  },
-  "data": {
-    "pktHash": "f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c",
-    "pmtprdNm": "테스트상품",
-    "mchtCustNm": "홍길동",
-    "mchtCustId": "HongGilDong",
-    "email": "HongGilDong@example.com",
-    "cardNo": "1111222233334444",
-    "vldDtMon": "12",
-    "vldDtYear": "24",
-    "instmtMon": "00",
-    "crcCd": "KRW",
-    "taxTypeCd": "N",
-    "trdAmt": "1000",
-    "notiUrl": "https://example.com/notiUrl",
-    "mchtParam": "name=HongGilDong&age=25"
-  }
-}
+```
+상점아이디 + 결제수단 + 상점주문번호 + 요청일자 + 요청시간 + 거래금액(평문) + 해쉬키
 ```
 
-### 구인증 신용카드 결제
-
-```json
-{
-  "params": {
-    "mchtId": "nxca_ks_gu",
-    "ver": "0A19",
-    "method": "CA",
-    "bizType": "B0",
-    "encCd": "23",
-    "mchtTrdNo": "ORDER20231215143022",
-    "trdDt": "20231215",
-    "trdTm": "143022",
-    "mobileYn": "N",
-    "osType": "W"
-  },
-  "data": {
-    "pktHash": "f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c",
-    "pmtprdNm": "테스트상품",
-    "mchtCustNm": "홍길동",
-    "mchtCustId": "HongGilDong",
-    "email": "HongGilDong@example.com",
-    "cardNo": "1111222233334444",
-    "vldDtMon": "12",
-    "vldDtYear": "24",
-    "idntNo": "991231",
-    "cardPwd": "00",
-    "instmtMon": "00",
-    "crcCd": "KRW",
-    "taxTypeCd": "N",
-    "trdAmt": "1000",
-    "notiUrl": "https://example.com/notiUrl",
-    "mchtParam": "name=HongGilDong&age=25"
-  }
-}
-```
-
-## 📤 응답 예시
+## 응답 파라미터
 
 ### 성공 응답
 
-```json
-{
-  "params": {
-    "mchtId": "nxca_jt_bi",
-    "ver": "0A19",
-    "method": "CA",
-    "bizType": "B0",
-    "encCd": "23",
-    "mchtTrdNo": "ORDER20231215143022",
-    "trdNo": "STFP_PGCAnxca_jt_il0211129135810M1494620",
-    "trdDt": "20231215",
-    "trdTm": "143022",
-    "outStatCd": "0021",
-    "outRsltCd": "0000",
-    "outRsltMsg": "정상적으로 처리되었습니다."
-  },
-  "data": {
-    "pktHash": "f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c",
-    "trdAmt": "1000",
-    "billKey": "SBILL_0123456789",
-    "cardNo": "111122xxxxxx4444",
-    "vldDtMon": "12",
-    "vldDtYear": "24",
-    "issrId": "NHC",
-    "cardNm": "NH 농협",
-    "cardKind": "NH 체크카드",
-    "ninstmtTypeCd": "N",
-    "instmtMon": "00",
-    "apprNo": "30001234"
-  }
-}
-```
+<DocParameterCard
+  name="mchtId"
+  type="string"
+  required={true}
+  description="헥토파이낸셜에서 부여하는 고유 상점아이디"
+  example="nxca_jt_il"
+/>
+
+<DocParameterCard
+  name="outStatCd"
+  type="string"
+  required={true}
+  description="거래상태코드"
+  example="0021"
+  values={[
+    "0021: 성공",
+    "0031: 실패"
+  ]}
+/>
+
+<DocParameterCard
+  name="outRsltCd"
+  type="string"
+  required={true}
+  description="결과코드"
+  example="0000"
+  values={[
+    "0000: 성공",
+    "기타: 실패코드"
+  ]}
+/>
+
+<DocParameterCard
+  name="outRsltMsg"
+  type="string"
+  required={true}
+  description="결과메시지"
+  example="정상처리"
+/>
+
+<DocParameterCard
+  name="method"
+  type="string"
+  required={true}
+  description="결제수단"
+  example="card"
+/>
+
+<DocParameterCard
+  name="mchtTrdNo"
+  type="string"
+  required={true}
+  description="상점에서 생성하는 고유 주문번호"
+  example="ORDER20211231100000"
+/>
+
+<DocParameterCard
+  name="trdNo"
+  type="string"
+  required={true}
+  description="헥토파이낸셜에서 부여하는 고유 거래번호"
+  example="STFP_PGCAnxca_jt_il0211129135810M1494620"
+/>
+
+<DocParameterCard
+  name="trdAmt"
+  type="string"
+  required={true}
+  description="거래금액"
+  example="1000"
+/>
+
+<DocParameterCard
+  name="mchtParam"
+  type="string"
+  required={false}
+  description="상점예약필드 (요청시 전송한 값 그대로 반환)"
+  example="name=HongGilDong&age=25"
+/>
+
+<DocParameterCard
+  name="authDt"
+  type="string"
+  required={true}
+  description="승인일시 (YYYYMMDDHHMMSS)"
+  example="20211231100000"
+/>
+
+<DocParameterCard
+  name="authNo"
+  type="string"
+  required={true}
+  description="승인번호"
+  example="30001234"
+/>
+
+<DocParameterCard
+  name="intMon"
+  type="string"
+  required={true}
+  description="할부개월수"
+  example="00"
+  values={[
+    "00: 일시불",
+    "02: 2개월",
+    "03: 3개월",
+    "기타: 해당 개월수"
+  ]}
+/>
+
+<DocParameterCard
+  name="fnNm"
+  type="string"
+  required={true}
+  description="카드사명"
+  example="우리카드"
+/>
+
+<DocParameterCard
+  name="fnCd"
+  type="string"
+  required={true}
+  description="카드사코드"
+  example="LTC"
+/>
+
+#
+<DocParameterCard
+  name="billKey"
+  type="string"
+  required={false}
+  description="빌키 (자동결제키, 빌키 서비스 이용시에만 발급)"
+  example="SBILL_0123456789"
+  note="빌키 서비스 별도 신청 필요"
+/>
 
 ### 실패 응답
 
-```json
-{
-  "params": {
-    "mchtId": "nxca_jt_bi",
-    "ver": "0A19",
-    "method": "CA",
-    "bizType": "B0",
-    "encCd": "23",
-    "mchtTrdNo": "ORDER20231215143022",
-    "trdDt": "20231215",
-    "trdTm": "143022",
-    "outStatCd": "0031",
-    "outRsltCd": "1001",
-    "outRsltMsg": "카드번호가 올바르지 않습니다."
-  },
-  "data": {
-    "pktHash": "f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
-  }
-}
-```
+<DocParameterCard
+  name="outStatCd"
+  type="string"
+  required={true}
+  description="거래상태코드"
+  example="0031"
+  values={[
+    "0031: 실패"
+  ]}
+/>
 
-## 🔧 구현 예시
+<DocParameterCard
+  name="outRsltCd"
+  type="string"
+  required={true}
+  description="거절코드"
+  example="1001"
+  values={[
+    "1001: 결제 요청 정보 누락",
+    "기타: 각종 오류코드"
+  ]}
+/>
 
-### JavaScript
+<DocParameterCard
+  name="outRsltMsg"
+  type="string"
+  required={true}
+  description="결과메시지"
+  example="결제 요청 정보 누락 (상품명)"
+/>
 
-```javascript
-// 신용카드 결제 API 호출
-async function callCardPaymentAPI(params) {
-  const response = await fetch('https://tbgw.settlebank.co.kr/spay/APICardActionPay.do', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(params)
-  });
-  
-  return await response.json();
-}
+## 노티 전문
 
-// 사용 예시
-const paymentParams = {
-  params: {
-    mchtId: "nxca_jt_bi",
-    ver: "0A19",
-    method: "CA",
-    bizType: "B0",
-    encCd: "23",
-    mchtTrdNo: "ORDER" + Date.now(),
-    trdDt: new Date().toISOString().slice(0, 10).replace(/-/g, ''),
-    trdTm: new Date().toTimeString().slice(0, 8).replace(/:/g, ''),
-    mobileYn: "N",
-    osType: "W"
-  },
-  data: {
-    pktHash: "생성된해시값",
-    pmtprdNm: "테스트상품",
-    mchtCustNm: "홍길동",
-    mchtCustId: "HongGilDong",
-    cardNo: "암호화된카드번호",
-    vldDtMon: "12",
-    vldDtYear: "24",
-    instmtMon: "00",
-    crcCd: "KRW",
-    trdAmt: "1000"
-  }
-};
+거래가 정상적으로 완료되면, 헥토파이낸셜에서 가맹점으로 노티(결과통보) 메세지가 전송됩니다.
 
-const result = await callCardPaymentAPI(paymentParams);
-console.log('결제 결과:', result);
-```
+### 노티 응답
 
-### Python
+가맹점에서 헥토파이낸셜로 응답을 전송해야 합니다:
 
-```python
-import requests
-import json
-from datetime import datetime
+| 응답 | 설명 |
+|------|------|
+| "OK" | 성공시 (대문자) |
+| "FAIL" | 실패시 (대문자, FAIL로 응답시 명확한 실패로 인식합니다. 노티가 재전송 됩니다.) |
+| 그 외 | 비정상 실패로 인식하여, 설정된 횟수만큼 노티 재발송 처리함. |
 
-# 신용카드 결제 API 호출
-def call_card_payment_api(params):
-    url = 'https://tbgw.settlebank.co.kr/spay/APICardActionPay.do'
-    response = requests.post(url, json=params)
-    return response.json()
+## WebView 설정
 
-# 사용 예시
-current_time = datetime.now()
-payment_params = {
-    "params": {
-        "mchtId": "nxca_jt_bi",
-        "ver": "0A19",
-        "method": "CA",
-        "bizType": "B0",
-        "encCd": "23",
-        "mchtTrdNo": f"ORDER{int(current_time.timestamp())}",
-        "trdDt": current_time.strftime("%Y%m%d"),
-        "trdTm": current_time.strftime("%H%M%S"),
-        "mobileYn": "N",
-        "osType": "W"
-    },
-    "data": {
-        "pktHash": "생성된해시값",
-        "pmtprdNm": "테스트상품",
-        "mchtCustNm": "홍길동",
-        "mchtCustId": "HongGilDong",
-        "cardNo": "암호화된카드번호",
-        "vldDtMon": "12",
-        "vldDtYear": "24",
-        "instmtMon": "00",
-        "crcCd": "KRW",
-        "trdAmt": "1000"
-    }
-}
+### 안드로이드
 
-result = call_card_payment_api(payment_params)
-print('결제 결과:', result)
-```
+WebViewClient 클래스의 shouldOverrideUrlLoading 메소드를 재정의하여 외부 앱 호출을 처리합니다.
 
-## ⚠️ 주의사항
+### iOS
 
-- 모든 요청은 HTTPS를 통해 전송되어야 합니다.
-- 요청 본문은 JSON 형식으로 전송해야 합니다.
-- 해시값 생성이 필요한 경우 정확한 순서로 생성해야 합니다.
-- 카드번호, 유효기간, 식별번호, 카드비밀번호, 거래금액 등은 AES 암호화하여 전달해야 합니다.
-- 빌키 서비스를 이용하는 상점의 경우 응답에서 빌키를 받을 수 있습니다.
-- 구인증과 비인증은 서로 다른 상점아이디를 사용해야 합니다.
+URL Scheme 설정을 위해 plist 파일에 `LSApplicationQueriesSchemes key`에 App Schema를 등록해야 합니다.
 
+## 에러 코드
+
+자세한 에러 코드는 [거절 코드 표](/docs/api/pg/credit-card/error-codes)를 참고하세요.

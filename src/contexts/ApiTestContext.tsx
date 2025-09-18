@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
+import { type ApiInfo } from '../types/api';
 
 interface ParameterValue {
   name: string;
@@ -9,11 +10,31 @@ interface ParameterValue {
 }
 
 interface ApiTestContextType {
+  // 파라미터 관리
   parameterValues: Record<string, ParameterValue>;
   updateParameter: (name: string, value: string, type: string, required: boolean, section?: 'params' | 'data') => void;
   getParameterValues: () => Record<string, string>;
   getParameterValuesBySection: () => { params: Record<string, string>; data: Record<string, string> };
   clearParameters: () => void;
+
+  // API 정보
+  apiInfo: ApiInfo | null;
+  setApiInfo: (info: ApiInfo | null) => void;
+
+  // 요청/응답 관리
+  requestBody: string;
+  setRequestBody: (body: string) => void;
+  apiResponse: any;
+  setApiResponse: (response: any) => void;
+  apiError: Error | null;
+  setApiError: (error: Error | null) => void;
+  isLoading: boolean;
+  setIsLoading: (loading: boolean) => void;
+
+  // 환경 설정
+  selectedEnvironment: 'test' | 'prod';
+  setSelectedEnvironment: (env: 'test' | 'prod') => void;
+
   // 실시간 업데이트를 위한 콜백
   onParameterChange?: (values: { params: Record<string, string>; data: Record<string, string> }) => void;
   setOnParameterChange: (callback: (values: { params: Record<string, string>; data: Record<string, string> }) => void) => void;
@@ -26,8 +47,21 @@ interface ApiTestProviderProps {
 }
 
 export const ApiTestProvider: React.FC<ApiTestProviderProps> = ({ children }) => {
+  // 파라미터 관리
   const [parameterValues, setParameterValues] = useState<Record<string, ParameterValue>>({});
   const [onParameterChange, setOnParameterChange] = useState<((values: { params: Record<string, string>; data: Record<string, string> }) => void) | undefined>();
+
+  // API 정보
+  const [apiInfo, setApiInfo] = useState<ApiInfo | null>(null);
+
+  // 요청/응답 관리
+  const [requestBody, setRequestBody] = useState<string>('');
+  const [apiResponse, setApiResponse] = useState<any>(null);
+  const [apiError, setApiError] = useState<Error | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // 환경 설정
+  const [selectedEnvironment, setSelectedEnvironment] = useState<'test' | 'prod'>('test');
 
   const updateParameter = useCallback((name: string, value: string, type: string, required: boolean, section?: 'params' | 'data') => {
     setParameterValues(prev => ({
@@ -95,11 +129,32 @@ export const ApiTestProvider: React.FC<ApiTestProviderProps> = ({ children }) =>
 
   return (
     <ApiTestContext.Provider value={{
+      // 파라미터 관리
       parameterValues,
       updateParameter,
       getParameterValues,
       getParameterValuesBySection,
       clearParameters,
+
+      // API 정보
+      apiInfo,
+      setApiInfo,
+
+      // 요청/응답 관리
+      requestBody,
+      setRequestBody,
+      apiResponse,
+      setApiResponse,
+      apiError,
+      setApiError,
+      isLoading,
+      setIsLoading,
+
+      // 환경 설정
+      selectedEnvironment,
+      setSelectedEnvironment,
+
+      // 실시간 업데이트
       onParameterChange,
       setOnParameterChange
     }}>

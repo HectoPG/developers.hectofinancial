@@ -1,13 +1,13 @@
----
-title: 신용카드 취소
-description: 신용카드 결제 취소 API
-category: 결제 API
-path: /spay/APICancel.do
-method: POST
-testUrl: https://tbgw.settlebank.co.kr/spay/APICancel.do
-prodUrl: https://gw.settlebank.co.kr/spay/APICancel.do
-contentType: application/json
----
+export const apiInfo = {
+  title: "신용카드 취소",
+  description: "신용카드 결제 취소 API",
+  category: "결제 API",
+  path: "/spay/APICancel.do",
+  method: "POST",
+  testUrl: "https://tbgw.settlebank.co.kr/spay/APICancel.do",
+  prodUrl: "https://gw.settlebank.co.kr/spay/APICancel.do",
+  contentType: "application/json"
+};
 
 # 신용카드 취소
 
@@ -20,13 +20,12 @@ contentType: application/json
 
 ## API 정보
 
-- **URL**: `/spay/APICancel.do`
 - **Method**: `POST`
-- **Content-Type**: `application/x-www-form-urlencoded`
+- **Content-Type**: `application/json`
 
 ## 요청 파라미터
 
-### params 객체
+<ApiObjectHeader name="params" type="object" description="API 요청의 기본 헤더 정보를 담는 객체입니다. 거래 식별 및 인증에 필요한 메타데이터를 포함합니다." />
 
 <ApiParameterCard
   name="mchtId"
@@ -169,7 +168,7 @@ contentType: application/json
   section="params"
 />
 
-### data 객체
+<ApiObjectHeader name="data" type="object" description="취소 처리에 필요한 비즈니스 데이터를 담는 객체입니다. 원거래 정보, 취소금액, 보안 해시값 등 취소 요청의 핵심 정보를 포함합니다." />
 
 <ApiParameterCard
   name="pktHash"
@@ -328,7 +327,7 @@ contentType: application/json
 
 ### 성공 응답
 
-#### params 객체
+<ApiObjectHeader name="params" type="object" description="API 요청의 기본 헤더 정보를 담는 객체입니다. 거래 식별 및 인증에 필요한 메타데이터를 포함합니다." /> 객체
 
 <DocParameterCard
   name="mchtId"
@@ -490,7 +489,7 @@ contentType: application/json
 
 ### 실패 응답
 
-#### params 객체
+<ApiObjectHeader name="params" type="object" description="API 요청의 기본 헤더 정보를 담는 객체입니다. 거래 식별 및 인증에 필요한 메타데이터를 포함합니다." /> 객체
 
 <DocParameterCard
   name="outStatCd"

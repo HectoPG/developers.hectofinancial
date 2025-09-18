@@ -1,29 +1,34 @@
-# 신용카드 결제 (Non-UI)
 
-신용카드 결제 및 빌키 결제 API입니다.
+  title: "신용카드 결제 (UI)",
+  description: "신용카드 UI 결제 API",
+  category: "결제 API",
+  path: "/card/main.do",
+  method: "POST",
+  testUrl: "https://tbnpg.settlebank.co.kr/card/main.do",
+  prodUrl: "https://npg.settlebank.co.kr/card/main.do",
+  contentType: "application/x-www-form-urlencoded"
+};
 
-**결제 방식:**
-- 구인증: 카드번호, 유효기간(yyMM), 식별번호, 카드비밀번호로 결제 요청
-- 비인증: 카드번호, 유효기간(yyMM)으로 결제 요청
-- 빌키(자동결제 키) 발급: 상점 아이디 설정에 따라 빌키를 응답 값으로 내려 드리고 있으며, 빌키를 따로 저장 하였다가 결제가 필요할 경우 빌키 결제로 요청 주시길 바랍니다.
+# 신용카드 결제 (UI)
 
-**해시 생성 방법:**
-- **요청 해시**: pktHash = SHA256(거래일자 + 거래시간 + 상점아이디 + 상점주문번호 + 거래금액(평문) + 해쉬키)
-- **응답 해시**: pktHash = SHA256(거래상태코드 + 요청일자 + 요청시간 + 상점아이디 + 상점주문번호 + 거래금액 + 해쉬키)
+신용카드 UI 결제는 고객이 결제 화면에서 직접 카드 정보를 입력하여 결제를 진행하는 방식입니다.
 
-## 📡 API 정보
+## 주의 사항
 
-| 항목 | 값 |
-|------|-----|
-| **HTTP Method** | `POST` |
-| **경로** | `/spay/APICardActionPay.do` |
-| **테스트 URL** | `https://tbgw.settlebank.co.kr/spay/APICardActionPay.do` |
-| **운영 URL** | `https://gw.settlebank.co.kr/spay/APICardActionPay.do` |
+* 상점아이디 속성에 따라 화면이 분기됩니다.
+  * 상점아이디가 일반 인증 결제로 설정되어 있는 경우 카드사 인증창이 나타납니다.
+  * 상점아이디가 비인증 또는 구인증으로 설정되어 있는 경우 카드정보 입력창이 나타납니다.
+* 신용카드 빌키(billKey)를 내려받고자 하는 경우, 빌키서비스를 별도 신청하셔야 합니다
+* 빌키를 발급받은 경우, 해당 빌키로 2회차 결제 API 요청하시면 됩니다.
+* ※ 매출전표의 발행금액은 가맹점에서 전송하는 파라미터를 기준으로 표기되니 주의하시기 바랍니다.
 
-## 📋 요청 파라미터
+## API 정보
 
-### params 객체
+- **Method**: `POST`
+- **Path**: `/card/main.do`
+- **Content-Type**: `application/x-www-form-urlencoded`
 
+## 요청 파라미터
 
 
 
@@ -44,7 +49,6 @@
 
 
 
-### data 객체
 
 
 
@@ -85,243 +89,81 @@
 
 
 
+## 해쉬 생성 방법
 
-## 💻 요청 예시
+해쉬값은 다음 순서로 조합하여 SHA256으로 생성합니다:
 
-### 비인증 신용카드 결제
-
-```json
-{
-  "params": {
-    "mchtId": "nxca_jt_bi",
-    "ver": "0A19",
-    "method": "CA",
-    "bizType": "B0",
-    "encCd": "23",
-    "mchtTrdNo": "ORDER20231215143022",
-    "trdDt": "20231215",
-    "trdTm": "143022",
-    "mobileYn": "N",
-    "osType": "W"
-  },
-  "data": {
-    "pktHash": "f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c",
-    "pmtprdNm": "테스트상품",
-    "mchtCustNm": "홍길동",
-    "mchtCustId": "HongGilDong",
-    "email": "HongGilDong@example.com",
-    "cardNo": "1111222233334444",
-    "vldDtMon": "12",
-    "vldDtYear": "24",
-    "instmtMon": "00",
-    "crcCd": "KRW",
-    "taxTypeCd": "N",
-    "trdAmt": "1000",
-    "notiUrl": "https://example.com/notiUrl",
-    "mchtParam": "name=HongGilDong&age=25"
-  }
-}
+```
+상점아이디 + 결제수단 + 상점주문번호 + 요청일자 + 요청시간 + 거래금액(평문) + 해쉬키
 ```
 
-### 구인증 신용카드 결제
-
-```json
-{
-  "params": {
-    "mchtId": "nxca_ks_gu",
-    "ver": "0A19",
-    "method": "CA",
-    "bizType": "B0",
-    "encCd": "23",
-    "mchtTrdNo": "ORDER20231215143022",
-    "trdDt": "20231215",
-    "trdTm": "143022",
-    "mobileYn": "N",
-    "osType": "W"
-  },
-  "data": {
-    "pktHash": "f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c",
-    "pmtprdNm": "테스트상품",
-    "mchtCustNm": "홍길동",
-    "mchtCustId": "HongGilDong",
-    "email": "HongGilDong@example.com",
-    "cardNo": "1111222233334444",
-    "vldDtMon": "12",
-    "vldDtYear": "24",
-    "idntNo": "991231",
-    "cardPwd": "00",
-    "instmtMon": "00",
-    "crcCd": "KRW",
-    "taxTypeCd": "N",
-    "trdAmt": "1000",
-    "notiUrl": "https://example.com/notiUrl",
-    "mchtParam": "name=HongGilDong&age=25"
-  }
-}
-```
-
-## 📤 응답 예시
+## 응답 파라미터
 
 ### 성공 응답
 
-```json
-{
-  "params": {
-    "mchtId": "nxca_jt_bi",
-    "ver": "0A19",
-    "method": "CA",
-    "bizType": "B0",
-    "encCd": "23",
-    "mchtTrdNo": "ORDER20231215143022",
-    "trdNo": "STFP_PGCAnxca_jt_il0211129135810M1494620",
-    "trdDt": "20231215",
-    "trdTm": "143022",
-    "outStatCd": "0021",
-    "outRsltCd": "0000",
-    "outRsltMsg": "정상적으로 처리되었습니다."
-  },
-  "data": {
-    "pktHash": "f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c",
-    "trdAmt": "1000",
-    "billKey": "SBILL_0123456789",
-    "cardNo": "111122xxxxxx4444",
-    "vldDtMon": "12",
-    "vldDtYear": "24",
-    "issrId": "NHC",
-    "cardNm": "NH 농협",
-    "cardKind": "NH 체크카드",
-    "ninstmtTypeCd": "N",
-    "instmtMon": "00",
-    "apprNo": "30001234"
-  }
-}
-```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#
+
 
 ### 실패 응답
 
-```json
-{
-  "params": {
-    "mchtId": "nxca_jt_bi",
-    "ver": "0A19",
-    "method": "CA",
-    "bizType": "B0",
-    "encCd": "23",
-    "mchtTrdNo": "ORDER20231215143022",
-    "trdDt": "20231215",
-    "trdTm": "143022",
-    "outStatCd": "0031",
-    "outRsltCd": "1001",
-    "outRsltMsg": "카드번호가 올바르지 않습니다."
-  },
-  "data": {
-    "pktHash": "f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
-  }
-}
-```
 
-## 🔧 구현 예시
 
-### JavaScript
 
-```javascript
-// 신용카드 결제 API 호출
-async function callCardPaymentAPI(params) {
-  const response = await fetch('https://tbgw.settlebank.co.kr/spay/APICardActionPay.do', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(params)
-  });
-  
-  return await response.json();
-}
 
-// 사용 예시
-const paymentParams = {
-  params: {
-    mchtId: "nxca_jt_bi",
-    ver: "0A19",
-    method: "CA",
-    bizType: "B0",
-    encCd: "23",
-    mchtTrdNo: "ORDER" + Date.now(),
-    trdDt: new Date().toISOString().slice(0, 10).replace(/-/g, ''),
-    trdTm: new Date().toTimeString().slice(0, 8).replace(/:/g, ''),
-    mobileYn: "N",
-    osType: "W"
-  },
-  data: {
-    pktHash: "생성된해시값",
-    pmtprdNm: "테스트상품",
-    mchtCustNm: "홍길동",
-    mchtCustId: "HongGilDong",
-    cardNo: "암호화된카드번호",
-    vldDtMon: "12",
-    vldDtYear: "24",
-    instmtMon: "00",
-    crcCd: "KRW",
-    trdAmt: "1000"
-  }
-};
 
-const result = await callCardPaymentAPI(paymentParams);
-console.log('결제 결과:', result);
-```
 
-### Python
+## 노티 전문
 
-```python
-import requests
-import json
-from datetime import datetime
+거래가 정상적으로 완료되면, 헥토파이낸셜에서 가맹점으로 노티(결과통보) 메세지가 전송됩니다.
 
-# 신용카드 결제 API 호출
-def call_card_payment_api(params):
-    url = 'https://tbgw.settlebank.co.kr/spay/APICardActionPay.do'
-    response = requests.post(url, json=params)
-    return response.json()
+### 노티 응답
 
-# 사용 예시
-current_time = datetime.now()
-payment_params = {
-    "params": {
-        "mchtId": "nxca_jt_bi",
-        "ver": "0A19",
-        "method": "CA",
-        "bizType": "B0",
-        "encCd": "23",
-        "mchtTrdNo": f"ORDER{int(current_time.timestamp())}",
-        "trdDt": current_time.strftime("%Y%m%d"),
-        "trdTm": current_time.strftime("%H%M%S"),
-        "mobileYn": "N",
-        "osType": "W"
-    },
-    "data": {
-        "pktHash": "생성된해시값",
-        "pmtprdNm": "테스트상품",
-        "mchtCustNm": "홍길동",
-        "mchtCustId": "HongGilDong",
-        "cardNo": "암호화된카드번호",
-        "vldDtMon": "12",
-        "vldDtYear": "24",
-        "instmtMon": "00",
-        "crcCd": "KRW",
-        "trdAmt": "1000"
-    }
-}
+가맹점에서 헥토파이낸셜로 응답을 전송해야 합니다:
 
-result = call_card_payment_api(payment_params)
-print('결제 결과:', result)
-```
+| 응답 | 설명 |
+|------|------|
+| "OK" | 성공시 (대문자) |
+| "FAIL" | 실패시 (대문자, FAIL로 응답시 명확한 실패로 인식합니다. 노티가 재전송 됩니다.) |
+| 그 외 | 비정상 실패로 인식하여, 설정된 횟수만큼 노티 재발송 처리함. |
 
-## ⚠️ 주의사항
+## WebView 설정
 
-- 모든 요청은 HTTPS를 통해 전송되어야 합니다.
-- 요청 본문은 JSON 형식으로 전송해야 합니다.
-- 해시값 생성이 필요한 경우 정확한 순서로 생성해야 합니다.
-- 카드번호, 유효기간, 식별번호, 카드비밀번호, 거래금액 등은 AES 암호화하여 전달해야 합니다.
-- 빌키 서비스를 이용하는 상점의 경우 응답에서 빌키를 받을 수 있습니다.
-- 구인증과 비인증은 서로 다른 상점아이디를 사용해야 합니다.
+### 안드로이드
 
+WebViewClient 클래스의 shouldOverrideUrlLoading 메소드를 재정의하여 외부 앱 호출을 처리합니다.
+
+### iOS
+
+URL Scheme 설정을 위해 plist 파일에 `LSApplicationQueriesSchemes key`에 App Schema를 등록해야 합니다.
+
+## 에러 코드
+
+자세한 에러 코드는 [거절 코드 표](/docs/api/pg/credit-card/error-codes)를 참고하세요.

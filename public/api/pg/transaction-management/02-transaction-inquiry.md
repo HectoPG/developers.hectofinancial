@@ -2,16 +2,15 @@
 
 실시간 거래 상태 조회 API입니다. 특정 거래의 현재 상태와 상세 정보를 조회할 수 있습니다.
 
-## 📡 API 정보
+## API 정보
 
-| 항목 | 값 |
-|------|-----|
-| **HTTP Method** | `POST` |
-| **경로** | `/spay/APITrdStatInq.do` |
-| **테스트 URL** | `https://tbgw.settlebank.co.kr/spay/APITrdStatInq.do` |
-| **운영 URL** | `https://gw.settlebank.co.kr/spay/APITrdStatInq.do` |
+- **Method**: `POST`
+- **Path**: `/spay/APITrdStatInq.do`
+- **Content-Type**: `application/json`
 
-## 📋 요청 파라미터
+## 요청 파라미터
+
+
 
 
 
