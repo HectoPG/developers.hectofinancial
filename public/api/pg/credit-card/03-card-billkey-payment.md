@@ -1,3 +1,14 @@
+
+  title: "신용카드 빌키 결제",
+  description: "신용카드 빌키를 이용한 결제 API",
+  category: "결제 API",
+  path: "/spay/APIBillkeyPay.do",
+  method: "POST",
+  testUrl: "https://tbgw.settlebank.co.kr/spay/APIBillkeyPay.do",
+  prodUrl: "https://gw.settlebank.co.kr/spay/APIBillkeyPay.do",
+  contentType: "application/json"
+};
+
 # 신용카드 빌키 결제
 
 신용카드 결제 API 또는 빌키 발급 API를 통해 전달받은 빌키로 결제를 하는 API입니다.
@@ -9,13 +20,12 @@
 
 ## API 정보
 
-- **URL**: `/spay/APICardActionPay.do`
 - **Method**: `POST`
-- **Content-Type**: `application/x-www-form-urlencoded`
+- **Path**: `/spay/APIBillkeyPay.do`
+- **Content-Type**: `application/json`
 
 ## 요청 파라미터
 
-### params 객체
 
 
 
@@ -37,7 +47,8 @@
 
 
 
-### data 객체
+
+
 
 
 
@@ -86,7 +97,7 @@
 
 ### 성공 응답
 
-#### params 객체
+ 객체
 
 
 
@@ -136,13 +147,13 @@
 
 
 
-#### data 객체
+
 
 빌키 결제는 추가적인 data 객체가 없습니다.
 
 ### 실패 응답
 
-#### params 객체
+ 객체
 
 
 
@@ -150,7 +161,7 @@
 
 
 
-#### data 객체
+#
 
 실패 시에는 data 객체가 비어있습니다.
 

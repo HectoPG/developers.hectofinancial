@@ -9,6 +9,9 @@ import BlogDetailPage from './pages/BlogDetailPage'
 import ApiDocsPage from './pages/ApiDocsPage'
 import DocParameterCard from './components/DocParameterCard'
 import ApiParameterCard from './components/ApiParameterCard'
+import EncryptedParameterCard from './components/EncryptedParameterCard'
+import HectoEncryptedParameterCard from './components/HectoEncryptedParameterCard'
+import ApiObjectHeader from './components/ApiObjectHeader'
 import ConfigCard from './components/ConfigCard'
 import FeatureGrid from './components/FeatureGrid'
 import NextSteps from './components/NextSteps'
@@ -22,6 +25,7 @@ import Tag from './components/Tag'
 import ServiceGrid from './components/ServiceGrid'
 import ResponsiveImage from './components/ResponsiveImage'
 import QA from './components/QA'
+import { ApiDocProvider } from './contexts/ApiDocContext'
 import { Link as LinkIcon } from 'lucide-react'
 
 const generateId = (text: string) => {
@@ -80,10 +84,13 @@ const mdxComponents = {
   ul: (props: any) => <ul className="list-disc list-inside mb-4 text-gray-700 space-y-1 text-sm" {...props} />,
   ol: (props: any) => <ol className="list-decimal list-inside mb-4 text-gray-700 space-y-1 text-sm" {...props} />,
   li: (props: any) => <li className="leading-relaxed text-sm" {...props} />,
-  blockquote: (props: any) => <blockquote className="border-l-4 border-hecto-400 pl-4 py-3 italic text-gray-600 mb-4 bg-hecto-50 rounded-r-lg text-sm leading-relaxed" {...props} />,
+  blockquote: (props: any) => <blockquote className="pl-4 py-3 italic text-gray-600 mb-4 bg-hecto-50 rounded-lg text-sm leading-relaxed" {...props} />,
   a: (props: any) => <a className="text-hecto-600 hover:text-hecto-800 underline decoration-2 underline-offset-2 transition-colors focus:outline-none" {...props} />,
   DocParameterCard,
   ApiParameterCard,
+  EncryptedParameterCard,
+  HectoEncryptedParameterCard,
+  ApiObjectHeader,
   ConfigCard,
   FeatureGrid,
   NextSteps,
@@ -99,27 +106,29 @@ const mdxComponents = {
 
 function App() {
   return (
-    <MDXProvider components={mdxComponents}>
-      <Router>
-        <ScrollToTop />
-        <Routes>
-          <Route path="/*" element={
-            <Layout>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/blog" element={<BlogPage />} />
-                <Route path="/blog/:id" element={<BlogDetailPage />} />
-                <Route path="/docs/api" element={<ApiDocsPage />} />
-                <Route path="/docs/api/*" element={<ApiDocsPage />} />
-                <Route path="/docs/:category" element={<DocsPage />} />
-                <Route path="/docs/:category/:page" element={<DocsPage />} />
-              </Routes>
-            </Layout>
-          } />
-        </Routes>
-        <Analytics />
-      </Router>
-    </MDXProvider>
+    <ApiDocProvider>
+      <MDXProvider components={mdxComponents}>
+        <Router>
+          <ScrollToTop />
+          <Routes>
+            <Route path="/*" element={
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/blog" element={<BlogPage />} />
+                  <Route path="/blog/:id" element={<BlogDetailPage />} />
+                  <Route path="/docs/api" element={<ApiDocsPage />} />
+                  <Route path="/docs/api/*" element={<ApiDocsPage />} />
+                  <Route path="/docs/:category" element={<DocsPage />} />
+                  <Route path="/docs/:category/:page" element={<DocsPage />} />
+                </Routes>
+              </Layout>
+            } />
+          </Routes>
+          <Analytics />
+        </Router>
+      </MDXProvider>
+    </ApiDocProvider>
   )
 }
 

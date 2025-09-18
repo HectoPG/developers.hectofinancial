@@ -2,16 +2,15 @@
 
 신용카드, 계좌이체, 휴대폰결제 등 모든 결제 수단의 취소를 처리하는 API입니다.
 
-## 📡 API 정보
+## API 정보
 
-| 항목 | 값 |
-|------|-----|
-| **HTTP Method** | `POST` |
-| **경로** | `/spay/APICancel.do` |
-| **테스트 URL** | `https://tbgw.settlebank.co.kr/spay/APICancel.do` |
-| **운영 URL** | `https://gw.settlebank.co.kr/spay/APICancel.do` |
+- **Method**: `POST`
+- **Path**: `/spay/APICancel.do`
+- **Content-Type**: `application/json`
 
-## 📋 요청 파라미터
+## 요청 파라미터
+
+
 
 
 

@@ -2,16 +2,15 @@
 
 가상계좌 발급 및 채번취소 API입니다. 고객에게 고유한 가상계좌번호를 발급하여 입금을 받을 수 있습니다.
 
-## 📡 API 정보
+## API 정보
 
-| 항목 | 값 |
-|------|-----|
-| **HTTP Method** | `POST` |
-| **경로** | `/spay/APIVBank.do` |
-| **테스트 URL** | `https://tbgw.settlebank.co.kr/spay/APIVBank.do` |
-| **운영 URL** | `https://gw.settlebank.co.kr/spay/APIVBank.do` |
+- **Method**: `POST`
+- **Path**: `/spay/APIVBank.do`
+- **Content-Type**: `application/json`
 
-## 📋 요청 파라미터
+## 요청 파라미터
+
+
 
 
 

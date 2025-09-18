@@ -1,13 +1,13 @@
----
-title: 신용카드 결제 (Non-UI)
-description: 신용카드 Non-UI 결제 API
-category: 결제 API
-path: /spay/APICardActionPay.do
-method: POST
-testUrl: https://tbgw.settlebank.co.kr/spay/APICardActionPay.do
-prodUrl: https://gw.settlebank.co.kr/spay/APICardActionPay.do
-contentType: application/json
----
+export const apiInfo = {
+  title: "신용카드 결제 (Non-UI)",
+  description: "신용카드 Non-UI 결제 API",
+  category: "결제 API",
+  path: "/spay/APICardActionPay.do",
+  method: "POST",
+  testUrl: "https://tbgw.settlebank.co.kr/spay/APICardActionPay.do",
+  prodUrl: "https://gw.settlebank.co.kr/spay/APICardActionPay.do",
+  contentType: "application/json"
+};
 
 # 신용카드 결제 (Non-UI)
 
@@ -21,13 +21,13 @@ contentType: application/json
 
 ## API 정보
 
-- **URL**: `/spay/APICardActionPay.do`
 - **Method**: `POST`
-- **Content-Type**: `application/x-www-form-urlencoded`
+- **Path**: `/spay/APICardActionPay.do`
+- **Content-Type**: `application/json`
 
 ## 요청 파라미터
 
-### params 객체
+<ApiObjectHeader name="params" type="object" description="API 요청의 기본 헤더 정보를 담는 객체입니다. 거래 식별 및 인증에 필요한 메타데이터를 포함합니다." />
 
 <ApiParameterCard
   name="mchtId"
@@ -168,9 +168,9 @@ contentType: application/json
   section="params"
 />
 
-### data 객체
+<ApiObjectHeader name="data" type="object" description="결제 처리에 필요한 비즈니스 데이터를 담는 객체입니다. 고객 정보, 결제금액, 카드 정보 등 결제 요청의 핵심 정보를 포함합니다." />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="pktHash"
   type="string(200)"
   required={true}
@@ -179,9 +179,9 @@ contentType: application/json
   inputType="text"
   defaultValue="f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
   placeholder="SHA256 해쉬값을 입력하세요"
-  fixed={true}
   note="🔒 거래일자 + 거래시간 + 상점아이디 + 상점주문번호 + 거래금액(평문) + 해쉬키 순서로 조합"
   section="data"
+  isHashField={true}
 />
 
 <ApiParameterCard
@@ -196,7 +196,7 @@ contentType: application/json
   section="data"
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="mchtCustNm"
   type="string(30)"
   required={true}
@@ -206,9 +206,10 @@ contentType: application/json
   defaultValue="홍길동"
   placeholder="고객명을 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="mchtCustId"
   type="string(50)"
   required={true}
@@ -218,9 +219,10 @@ contentType: application/json
   defaultValue="HongGilDong"
   placeholder="고객아이디를 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="email"
   type="string(60)"
   required={false}
@@ -230,9 +232,10 @@ contentType: application/json
   defaultValue="HongGilDong@example.com"
   placeholder="이메일 주소를 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="cardNo"
   type="string(16)"
   required={true}
@@ -242,9 +245,10 @@ contentType: application/json
   defaultValue="1111222233334444"
   placeholder="카드번호를 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="vldDtMon"
   type="string(2)"
   required={true}
@@ -254,9 +258,10 @@ contentType: application/json
   defaultValue="12"
   placeholder="유효기간 월을 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="vldDtYear"
   type="string(2)"
   required={true}
@@ -266,6 +271,7 @@ contentType: application/json
   defaultValue="24"
   placeholder="유효기간 년을 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
 <ApiParameterCard
@@ -337,7 +343,7 @@ contentType: application/json
   section="data"
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="trdAmt"
   type="string(12)"
   required={true}
@@ -348,9 +354,10 @@ contentType: application/json
   defaultValue="1000"
   placeholder="거래금액을 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="taxAmt"
   type="string(12)"
   required={false}
@@ -360,9 +367,10 @@ contentType: application/json
   defaultValue="909"
   placeholder="과세금액을 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="vatAmt"
   type="string(12)"
   required={false}
@@ -372,9 +380,10 @@ contentType: application/json
   defaultValue="91"
   placeholder="부가세금액을 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="taxFreeAmt"
   type="string(12)"
   required={false}
@@ -384,9 +393,10 @@ contentType: application/json
   defaultValue="0"
   placeholder="비과세금액을 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="svcAmt"
   type="string(12)"
   required={false}
@@ -396,6 +406,7 @@ contentType: application/json
   defaultValue="10"
   placeholder="봉사료를 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
 <ApiParameterCard
@@ -434,7 +445,7 @@ contentType: application/json
 
 ### 성공 응답
 
-#### params 객체
+<ApiObjectHeader name="params" type="object" description="API 요청의 기본 헤더 정보를 담는 객체입니다. 거래 식별 및 인증에 필요한 메타데이터를 포함합니다." /> 객체
 
 <DocParameterCard
   name="mchtId"
@@ -560,7 +571,7 @@ contentType: application/json
   example="1000"
 />
 
-#### data 객체
+<ApiObjectHeader name="data" type="object" description="결제 처리에 필요한 비즈니스 데이터를 담는 객체입니다. 고객 정보, 결제금액, 카드 정보 등 결제 요청의 핵심 정보를 포함합니다." />
 
 <DocParameterCard
   name="billKey"
@@ -655,7 +666,7 @@ contentType: application/json
 
 ### 실패 응답
 
-#### params 객체
+<ApiObjectHeader name="params" type="object" description="API 요청의 기본 헤더 정보를 담는 객체입니다. 거래 식별 및 인증에 필요한 메타데이터를 포함합니다." /> 객체
 
 <DocParameterCard
   name="outStatCd"
@@ -688,7 +699,7 @@ contentType: application/json
   example="결제 요청 정보 누락"
 />
 
-#### data 객체
+#<ApiObjectHeader name="data" type="object" description="결제 처리에 필요한 비즈니스 데이터를 담는 객체입니다. 고객 정보, 결제금액, 카드 정보 등 결제 요청의 핵심 정보를 포함합니다." />
 
 실패 시에는 data 객체가 비어있습니다.
 
