@@ -22,6 +22,46 @@ export default defineConfig({
     },
     react()
   ],
+  server: {
+    proxy: {
+      // 테스트 환경 API 프록시
+      '/api/test': {
+        target: 'https://tbgw.settlebank.co.kr',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/test/, ''),
+        secure: true,
+        configure: (proxy, _options) => {
+          proxy.on('error', (err, _req, _res) => {
+            console.log('proxy error', err);
+          });
+          proxy.on('proxyReq', (proxyReq, req, _res) => {
+            console.log('Sending Request to the Target:', req.method, req.url);
+          });
+          proxy.on('proxyRes', (proxyRes, req, _res) => {
+            console.log('Received Response from the Target:', proxyRes.statusCode, req.url);
+          });
+        },
+      },
+      // 운영 환경 API 프록시
+      '/api/prod': {
+        target: 'https://gw.settlebank.co.kr',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/prod/, ''),
+        secure: true,
+        configure: (proxy, _options) => {
+          proxy.on('error', (err, _req, _res) => {
+            console.log('proxy error', err);
+          });
+          proxy.on('proxyReq', (proxyReq, req, _res) => {
+            console.log('Sending Request to the Target:', req.method, req.url);
+          });
+          proxy.on('proxyRes', (proxyRes, req, _res) => {
+            console.log('Received Response from the Target:', proxyRes.statusCode, req.url);
+          });
+        },
+      }
+    }
+  },
   build: {
     rollupOptions: {
       output: {

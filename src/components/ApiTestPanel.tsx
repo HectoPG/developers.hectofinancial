@@ -133,8 +133,12 @@ const ApiTestPanel: React.FC<ApiTestPanelProps> = () => {
     setApiError(null);
 
     try {
-      const url = selectedEnvironment === 'test' ? apiInfo.testUrl : apiInfo.prodUrl;
-      const response = await fetch(url, {
+      // 프록시를 사용하여 CORS 문제 해결
+      const proxyUrl = selectedEnvironment === 'test' 
+        ? `/api/test${apiInfo.path}` 
+        : `/api/prod${apiInfo.path}`;
+      
+      const response = await fetch(proxyUrl, {
         method: apiInfo.method,
         headers: {
           'Content-Type': apiInfo.contentType || 'application/json',
@@ -143,7 +147,15 @@ const ApiTestPanel: React.FC<ApiTestPanelProps> = () => {
       });
 
       const result = await response.json();
-      setApiResponse(result);
+      
+      // HTTP 상태 코드를 응답 결과에 포함
+      const responseWithStatus = {
+        status: response.status,
+        statusText: response.statusText,
+        data: result
+      };
+      
+      setApiResponse(responseWithStatus);
     } catch (error) {
       setApiError(error as Error);
     } finally {

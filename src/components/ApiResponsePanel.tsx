@@ -60,11 +60,25 @@ const ApiResponsePanel: React.FC<ApiResponsePanelProps> = ({ apiInfo, onApiCall 
             </div>
           ) : apiResponse ? (
             <div className="text-sm">
-              <div className="font-medium mb-2 text-green-400">성공:</div>
+              {/* HTTP 상태 코드 표시 */}
+              {apiResponse.status && (
+                <div className="mb-2">
+                  <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${
+                    apiResponse.status >= 200 && apiResponse.status < 300
+                      ? 'bg-green-100 text-green-800'
+                      : apiResponse.status >= 400
+                      ? 'bg-red-100 text-red-800'
+                      : 'bg-yellow-100 text-yellow-800'
+                  }`}>
+                    {apiResponse.status} {apiResponse.statusText || ''}
+                  </span>
+                </div>
+              )}
+              <div className="font-medium mb-2 text-green-400">응답 데이터:</div>
               <pre className="whitespace-pre-wrap">
                 {typeof apiResponse === 'string'
                   ? apiResponse
-                  : JSON.stringify(apiResponse, null, 2)
+                  : JSON.stringify(apiResponse.data || apiResponse, null, 2)
                 }
               </pre>
             </div>
