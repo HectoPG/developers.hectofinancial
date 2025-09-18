@@ -82,6 +82,7 @@
   defaultValue="1000"
   placeholder="거래금액을 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
 

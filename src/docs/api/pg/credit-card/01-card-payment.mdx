@@ -6,7 +6,8 @@ export const apiInfo = {
   method: "POST",
   testUrl: "https://tbnpg.settlebank.co.kr/card/main.do",
   prodUrl: "https://npg.settlebank.co.kr/card/main.do",
-  contentType: "application/x-www-form-urlencoded"
+  contentType: "application/x-www-form-urlencoded",
+  isPaymentForm: true // Form submit 방식으로 팝업 호출
 };
 
 # 신용카드 결제 (UI)
@@ -126,7 +127,7 @@ export const apiInfo = {
   placeholder="상품명을 입력하세요"
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="trdAmt"
   type="string(12)"
   required={true}
@@ -136,6 +137,7 @@ export const apiInfo = {
   inputType="text"
   defaultValue="1000"
   placeholder="거래금액을 입력하세요"
+  isEncrypted={true}
 />
 
 <ApiParameterCard
@@ -172,7 +174,7 @@ export const apiInfo = {
 />
 
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="mchtCustNm"
   type="string(30)"
   required={false}
@@ -181,9 +183,10 @@ export const apiInfo = {
   inputType="text"
   defaultValue="홍길동"
   placeholder="고객명을 입력하세요"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="mchtCustId"
   type="string(50)"
   required={false}
@@ -192,9 +195,10 @@ export const apiInfo = {
   inputType="text"
   defaultValue="HongGilDong"
   placeholder="고객아이디를 입력하세요"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="email"
   type="string(60)"
   required={false}
@@ -203,6 +207,7 @@ export const apiInfo = {
   inputType="email"
   defaultValue="HongGilDong@example.com"
   placeholder="이메일 주소를 입력하세요"
+  isEncrypted={true}
 />
 
 <ApiParameterCard
@@ -243,29 +248,31 @@ export const apiInfo = {
   placeholder="면세여부를 입력하세요"
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="taxAmt"
   type="string(12)"
   required={false}
   description="과세금액입니다. 복합과세일 경우 필수입니다."
-  example="909"
+  example="0"
   inputType="text"
-  defaultValue="909"
+  defaultValue="0"
   placeholder="과세금액을 입력하세요"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="vatAmt"
   type="string(12)"
   required={false}
   description="부가세금액입니다. 복합과세일 경우 필수입니다."
-  example="91"
+  example="0"
   inputType="text"
-  defaultValue="91"
+  defaultValue="0"
   placeholder="부가세금액을 입력하세요"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="taxFreeAmt"
   type="string(12)"
   required={false}
@@ -274,17 +281,19 @@ export const apiInfo = {
   inputType="text"
   defaultValue="0"
   placeholder="면세금액을 입력하세요"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="svcAmt"
   type="string(12)"
   required={false}
   description="신용카드 봉사료입니다."
-  example="10"
+  example="0"
   inputType="text"
-  defaultValue="10"
+  defaultValue="0"
   placeholder="봉사료를 입력하세요"
+  isEncrypted={true}
 />
 
 <ApiParameterCard
@@ -371,17 +380,15 @@ export const apiInfo = {
   placeholder="고객 IP주소를 입력하세요"
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="pktHash"
   type="string(200)"
   required={true}
   description="SHA256 방식으로 생성한 해쉬값입니다."
-  example="f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
   inputType="text"
-  defaultValue="f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
-  placeholder="SHA256 해쉬값을 입력하세요"
-  fixed={true}
+  placeholder="SHA256 해쉬값이 자동으로 생성됩니다"
   note="🔒 상점아이디 + 결제수단 + 상점주문번호 + 요청일자 + 요청시간 + 거래금액(평문) + 해쉬키 순서로 조합"
+  isHashField={true}
 />
 
 ## 해쉬 생성 방법

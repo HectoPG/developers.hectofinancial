@@ -16,6 +16,7 @@ export interface ApiInfo {
   testUrl: string;
   prodUrl: string;
   contentType?: string;
+  isPaymentForm?: boolean; // Form submit 방식으로 팝업 호출 여부
 }
 
 export interface ParameterValue {

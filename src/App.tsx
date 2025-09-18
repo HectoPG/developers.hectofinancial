@@ -9,6 +9,8 @@ import BlogDetailPage from './pages/BlogDetailPage'
 import ApiDocsPage from './pages/ApiDocsPage'
 import DocParameterCard from './components/DocParameterCard'
 import ApiParameterCard from './components/ApiParameterCard'
+import EncryptedParameterCard from './components/EncryptedParameterCard'
+import HectoEncryptedParameterCard from './components/HectoEncryptedParameterCard'
 import ApiObjectHeader from './components/ApiObjectHeader'
 import ConfigCard from './components/ConfigCard'
 import FeatureGrid from './components/FeatureGrid'
@@ -86,6 +88,8 @@ const mdxComponents = {
   a: (props: any) => <a className="text-hecto-600 hover:text-hecto-800 underline decoration-2 underline-offset-2 transition-colors focus:outline-none" {...props} />,
   DocParameterCard,
   ApiParameterCard,
+  EncryptedParameterCard,
+  HectoEncryptedParameterCard,
   ApiObjectHeader,
   ConfigCard,
   FeatureGrid,

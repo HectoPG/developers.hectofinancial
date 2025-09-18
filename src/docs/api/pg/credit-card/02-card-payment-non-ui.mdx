@@ -170,7 +170,7 @@ export const apiInfo = {
 
 <ApiObjectHeader name="data" type="object" description="결제 처리에 필요한 비즈니스 데이터를 담는 객체입니다. 고객 정보, 결제금액, 카드 정보 등 결제 요청의 핵심 정보를 포함합니다." />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="pktHash"
   type="string(200)"
   required={true}
@@ -179,9 +179,9 @@ export const apiInfo = {
   inputType="text"
   defaultValue="f395b6725a9a18f2563ce34f8bc76698051d27c05e5ba815f463f00429061c0c"
   placeholder="SHA256 해쉬값을 입력하세요"
-  fixed={true}
   note="🔒 거래일자 + 거래시간 + 상점아이디 + 상점주문번호 + 거래금액(평문) + 해쉬키 순서로 조합"
   section="data"
+  isHashField={true}
 />
 
 <ApiParameterCard
@@ -196,7 +196,7 @@ export const apiInfo = {
   section="data"
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="mchtCustNm"
   type="string(30)"
   required={true}
@@ -206,9 +206,10 @@ export const apiInfo = {
   defaultValue="홍길동"
   placeholder="고객명을 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="mchtCustId"
   type="string(50)"
   required={true}
@@ -218,9 +219,10 @@ export const apiInfo = {
   defaultValue="HongGilDong"
   placeholder="고객아이디를 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="email"
   type="string(60)"
   required={false}
@@ -230,9 +232,10 @@ export const apiInfo = {
   defaultValue="HongGilDong@example.com"
   placeholder="이메일 주소를 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="cardNo"
   type="string(16)"
   required={true}
@@ -242,9 +245,10 @@ export const apiInfo = {
   defaultValue="1111222233334444"
   placeholder="카드번호를 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="vldDtMon"
   type="string(2)"
   required={true}
@@ -254,9 +258,10 @@ export const apiInfo = {
   defaultValue="12"
   placeholder="유효기간 월을 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="vldDtYear"
   type="string(2)"
   required={true}
@@ -266,6 +271,7 @@ export const apiInfo = {
   defaultValue="24"
   placeholder="유효기간 년을 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
 <ApiParameterCard
@@ -337,7 +343,7 @@ export const apiInfo = {
   section="data"
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="trdAmt"
   type="string(12)"
   required={true}
@@ -348,9 +354,10 @@ export const apiInfo = {
   defaultValue="1000"
   placeholder="거래금액을 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="taxAmt"
   type="string(12)"
   required={false}
@@ -360,9 +367,10 @@ export const apiInfo = {
   defaultValue="909"
   placeholder="과세금액을 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="vatAmt"
   type="string(12)"
   required={false}
@@ -372,9 +380,10 @@ export const apiInfo = {
   defaultValue="91"
   placeholder="부가세금액을 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="taxFreeAmt"
   type="string(12)"
   required={false}
@@ -384,9 +393,10 @@ export const apiInfo = {
   defaultValue="0"
   placeholder="비과세금액을 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
-<ApiParameterCard
+<HectoEncryptedParameterCard
   name="svcAmt"
   type="string(12)"
   required={false}
@@ -396,6 +406,7 @@ export const apiInfo = {
   defaultValue="10"
   placeholder="봉사료를 입력하세요"
   section="data"
+  isEncrypted={true}
 />
 
 <ApiParameterCard
