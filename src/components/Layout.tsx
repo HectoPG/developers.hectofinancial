@@ -59,16 +59,8 @@ export default function Layout({ children, leftSidebar, rightSidebar, mobileSide
 
   // API 사이드바 렌더링 함수
   const renderApiSidebar = (isMobile: boolean) => {
-    const apiData = (window as any)?.apiLayoutData;
-    if (!apiData) return <div className="p-4 text-gray-500">API 데이터 로딩 중...</div>;
-
     return (
       <ApiSidebar
-        expandedServices={apiData.expandedServices}
-        expandedSubcategories={apiData.expandedSubcategories}
-        onApiSelect={apiData.setSelectedApi}
-        onToggleService={apiData.toggleService}
-        onToggleSubcategory={apiData.toggleSubcategory}
         onMobileClose={isMobile ? () => setMobileSidebarOpen(false) : undefined}
       />
     );
@@ -76,12 +68,9 @@ export default function Layout({ children, leftSidebar, rightSidebar, mobileSide
 
   // API 테스트 패널 렌더링 함수
   const renderApiTestPanel = () => {
-    const apiData = (window as any)?.apiLayoutData;
-    
-    // API 데이터가 없어도 테스트 패널을 렌더링 (기본 상태로)
     return (
-      <ApiTestProvider>
-        <ApiTestPanel selectedApi={apiData?.selectedApi || null} />
+      <ApiTestProvider key={location.pathname}>
+        <ApiTestPanel key={location.pathname} />
       </ApiTestProvider>
     );
   };
