@@ -6,7 +6,8 @@
   method: "POST",
   testUrl: "https://tbnpg.settlebank.co.kr/card/main.do",
   prodUrl: "https://npg.settlebank.co.kr/card/main.do",
-  contentType: "application/x-www-form-urlencoded"
+  contentType: "application/x-www-form-urlencoded",
+  isPaymentForm: true // Form submit 방식으로 팝업 호출
 };
 
 # 신용카드 결제 (UI)

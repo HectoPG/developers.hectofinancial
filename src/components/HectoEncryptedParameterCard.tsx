@@ -58,8 +58,12 @@ const hectoDecrypt = (encryptedText: string, key: string): string => {
     const ciphertext = CryptoJS.enc.Base64.parse(encryptedText);
     
     // AES-256/ECB/PKCS5Padding 복호화
+    const cipherParams = CryptoJS.lib.CipherParams.create({
+      ciphertext: ciphertext
+    });
+    
     const decrypted = CryptoJS.AES.decrypt(
-      { ciphertext: ciphertext },
+      cipherParams,
       keyBytes,
       {
         mode: CryptoJS.mode.ECB,
@@ -111,7 +115,6 @@ const HectoEncryptedParameterCard: React.FC<HectoEncryptedParameterCardProps> = 
   hashKey = "ST1009281328226982205" // PG 테스트용 해시키 (실제로는 상점별 고유값)
 }) => {
   const location = useLocation();
-  const [plainValue, setPlainValue] = useState('');
   const [encryptedValue, setEncryptedValue] = useState('');
   const [isGeneratingHash, setIsGeneratingHash] = useState(false);
 
@@ -153,16 +156,13 @@ const HectoEncryptedParameterCard: React.FC<HectoEncryptedParameterCardProps> = 
       try {
         const decrypted = hectoDecrypt(initialValue, encryptionKey);
         if (decrypted !== initialValue && decrypted.length > 0) {
-          setPlainValue(decrypted);
           setEncryptedValue(initialValue);
         } else {
           // 평문인 경우 암호화
           const encrypted = hectoEncrypt(initialValue, encryptionKey);
-          setPlainValue(initialValue);
           setEncryptedValue(encrypted);
         }
       } catch {
-        setPlainValue(initialValue);
         setEncryptedValue(initialValue);
       }
     }
@@ -200,7 +200,6 @@ const HectoEncryptedParameterCard: React.FC<HectoEncryptedParameterCardProps> = 
       // 암호화 필드: 입력값을 암호화해서 전달
       const encrypted = hectoEncrypt(value, encryptionKey);
       setEncryptedValue(encrypted);
-      setPlainValue(value);
       if (hasContext) {
         updateParameter?.(name, encrypted, type, required, section);
       }
