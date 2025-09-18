@@ -91,6 +91,52 @@ const ApiRequestForm: React.FC<ApiRequestFormProps> = ({ apiInfo, currentApiPath
     return curl;
   };
 
+  // HTML Form 코드 생성 (Payment Form인 경우)
+  const generateHtmlFormCode = () => {
+    const url = getCurrentUrl();
+    const formData = new URLSearchParams(requestBody);
+    
+    // 파라미터들을 알파벳 순으로 정렬
+    const sortedParams = Array.from(formData.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+    
+    const lines = [
+      '<!DOCTYPE html>',
+      '<html lang="ko">',
+      '<head>',
+      '    <meta charset="UTF-8">',
+      '    <meta name="viewport" content="width=device-width, initial-scale=1.0">',
+      '    <title>결제하기</title>',
+      '</head>',
+      '<body>',
+      '    <form method="POST" action="' + url + '" target="_blank">'
+    ];
+    
+    // 파라미터들 추가
+    for (const [key, value] of sortedParams) {
+      lines.push(`        <input type="hidden" name="${key}" value="${value}" />`);
+    }
+    
+    // 버튼 추가
+    lines.push('        <button type="submit" style="');
+    lines.push('            background-color: #ff6b35;');
+    lines.push('            color: white;');
+    lines.push('            padding: 12px 24px;');
+    lines.push('            border: none;');
+    lines.push('            border-radius: 6px;');
+    lines.push('            font-size: 16px;');
+    lines.push('            font-weight: bold;');
+    lines.push('            cursor: pointer;');
+    lines.push('            margin-top: 20px;');
+    lines.push('        ">');
+    lines.push('            결제창 호출');
+    lines.push('        </button>');
+    lines.push('    </form>');
+    lines.push('</body>');
+    lines.push('</html>');
+    
+    return lines.join('\n');
+  };
+
   const getCurrentUrl = () => {
     if (apiInfo && apiInfo.testUrl && apiInfo.prodUrl) {
       return selectedEnvironment === 'test' ? apiInfo.testUrl : apiInfo.prodUrl;
@@ -212,12 +258,14 @@ const ApiRequestForm: React.FC<ApiRequestFormProps> = ({ apiInfo, currentApiPath
             />
           </div>
 
-          {/* cURL 명령어 */}
+          {/* cURL 명령어 또는 HTML Form 코드 */}
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="text-sm font-medium text-gray-700">cURL 명령어</label>
+              <label className="text-sm font-medium text-gray-700">
+                {apiInfo?.isPaymentForm ? 'HTML Form 코드' : 'cURL 명령어'}
+              </label>
               <button
-                onClick={() => copyToClipboard(generateCurlCommand())}
+                onClick={() => copyToClipboard(apiInfo?.isPaymentForm ? generateHtmlFormCode() : generateCurlCommand())}
                 className="text-xs text-gray-500 hover:text-gray-700 flex items-center"
               >
                 {copied ? <Check className="w-3 h-3 mr-1" /> : <Copy className="w-3 h-3 mr-1" />}
@@ -225,8 +273,18 @@ const ApiRequestForm: React.FC<ApiRequestFormProps> = ({ apiInfo, currentApiPath
               </button>
             </div>
             <div className="bg-gray-900 text-gray-100 p-3 rounded-md text-xs font-mono overflow-x-auto">
-              <pre className="whitespace-pre-wrap">{generateCurlCommand()}</pre>
+              <pre className="whitespace-pre" style={{ 
+                whiteSpace: 'pre',
+                lineHeight: '1.4'
+              }}>
+                {apiInfo?.isPaymentForm ? generateHtmlFormCode() : generateCurlCommand()}
+              </pre>
             </div>
+            {apiInfo?.isPaymentForm && (
+              <p className="text-xs text-gray-500 mt-2">
+                💡 이 HTML 코드를 웹페이지에 삽입하면 결제창이 팝업으로 열립니다.
+              </p>
+            )}
           </div>
           </div>
         </div>
