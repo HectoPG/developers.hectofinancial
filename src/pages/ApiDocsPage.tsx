@@ -21,8 +21,7 @@ const ApiDocsPage: React.FC = () => {
     const loadApiDocuments = async () => {
       try {
         // 먼저 스캔을 완료한 후 문서 목록을 가져옴
-        await getApiDocumentationConfig();
-        const docs = getAllApiDocuments();
+        const docs = await getAllApiDocuments();
         setApiDocuments(docs);
       } catch (error) {
         console.error('Failed to load API documents:', error);
@@ -35,29 +34,33 @@ const ApiDocsPage: React.FC = () => {
 
   // URL에 따라 API 선택
   useEffect(() => {
-    if (apiDocuments.length > 0) {
-      // 현재 URL로 특정 API 찾기
-      const targetApi = getApiDocumentByPath(location.pathname);
-      
-      if (targetApi) {
-        setSelectedApi(targetApi);
-        setLoading(false);
-        return;
+    const selectApiByPath = async () => {
+      if (apiDocuments.length > 0) {
+        // 현재 URL로 특정 API 찾기
+        const targetApi = await getApiDocumentByPath(location.pathname);
+        
+        if (targetApi) {
+          setSelectedApi(targetApi);
+          setLoading(false);
+          return;
+        }
+        
+        // 현재 URL이 /docs/api인 경우 첫 번째 API 선택하고 URL 변경
+        if (location.pathname === '/docs/api') {
+          const firstApi = apiDocuments[0];
+          setSelectedApi(firstApi);
+          navigate(firstApi.path, { replace: true }); // URL 변경 (히스토리 대체)
+          setLoading(false);
+          return;
+        }
+        
+        // 특정 API를 찾지 못한 경우 첫 번째 API 선택
+        setSelectedApi(apiDocuments[0]);
       }
-      
-      // 현재 URL이 /docs/api인 경우 첫 번째 API 선택하고 URL 변경
-      if (location.pathname === '/docs/api') {
-        const firstApi = apiDocuments[0];
-        setSelectedApi(firstApi);
-        navigate(firstApi.path, { replace: true }); // URL 변경 (히스토리 대체)
-        setLoading(false);
-        return;
-      }
-      
-      // 특정 API를 찾지 못한 경우 첫 번째 API 선택
-      setSelectedApi(apiDocuments[0]);
-    }
-    setLoading(false);
+      setLoading(false);
+    };
+
+    selectApiByPath();
   }, [location.pathname, apiDocuments]);
 
   // 선택된 API가 변경될 때 컴포넌트 로드

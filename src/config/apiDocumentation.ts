@@ -47,7 +47,21 @@ export const getApiDocumentationConfigSync = (): ApiCategory[] => {
 };
 
 // 유틸리티 함수들
-export const getAllApiDocuments = (): ApiDocument[] => {
+export const getAllApiDocuments = async (): Promise<ApiDocument[]> => {
+  const config = await getApiDocumentationConfig();
+  const allDocs: ApiDocument[] = [];
+
+  config.forEach(category => {
+    category.subcategories.forEach(subcategory => {
+      allDocs.push(...subcategory.documents);
+    });
+  });
+
+  return allDocs.sort((a, b) => (a.order || 0) - (b.order || 0));
+};
+
+// 동기 버전 (이미 로드된 경우)
+export const getAllApiDocumentsSync = (): ApiDocument[] => {
   const config = getApiDocumentationConfigSync();
   const allDocs: ApiDocument[] = [];
 
@@ -60,7 +74,22 @@ export const getAllApiDocuments = (): ApiDocument[] => {
   return allDocs.sort((a, b) => (a.order || 0) - (b.order || 0));
 };
 
-export const getApiCategoryByPath = (path: string): ApiCategory | null => {
+export const getApiCategoryByPath = async (path: string): Promise<ApiCategory | null> => {
+  const config = await getApiDocumentationConfig();
+  return config.find(category =>
+    category.subcategories.some(sub =>
+      sub.documents.some(doc => path.startsWith(doc.path))
+    )
+  ) || null;
+};
+
+export const getApiDocumentByPath = async (path: string): Promise<ApiDocument | null> => {
+  const allDocs = await getAllApiDocuments();
+  return allDocs.find(doc => doc.path === path) || null;
+};
+
+// 동기 버전들 (이미 로드된 경우)
+export const getApiCategoryByPathSync = (path: string): ApiCategory | null => {
   const config = getApiDocumentationConfigSync();
   return config.find(category =>
     category.subcategories.some(sub =>
@@ -69,8 +98,8 @@ export const getApiCategoryByPath = (path: string): ApiCategory | null => {
   ) || null;
 };
 
-export const getApiDocumentByPath = (path: string): ApiDocument | null => {
-  const allDocs = getAllApiDocuments();
+export const getApiDocumentByPathSync = (path: string): ApiDocument | null => {
+  const allDocs = getAllApiDocumentsSync();
   return allDocs.find(doc => doc.path === path) || null;
 };
 
